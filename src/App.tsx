@@ -106,6 +106,7 @@ export default function App() {
 
 
 function SignedIn() {
+  const saveEvent = useMutation(api.myFunctions.createNewEvent);
   const addUser = useMutation(api.myFunctions.addUser);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -116,6 +117,7 @@ function SignedIn() {
 
 
   const addNumber = useMutation(api.myFunctions.addNumber);
+  
   //function that creates a new event
   function CreateEvent() {
     const [newEvent, setNewEvent] = useState("")
@@ -141,7 +143,7 @@ function SignedIn() {
                 : "You must enter an event first"
             }
             onClick={async () => {
-            await saveEvent({ idea: newEvent.trim(), random: false })
+            await saveEvent({ event: newEvent.trim(), random: false })
             setNewEvent("")
             }}
             className="min-w-fit"

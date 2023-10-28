@@ -170,3 +170,32 @@ export const addMemberToGroup = mutation({
     console.log("Added group members: ", taskId);
   },
 });
+
+//Probably not working yet:
+//creating a new event 
+export const createNewEvent = mutation({
+  args: {
+    name: v.string(),
+    id: v.number(),
+    groupMembers: v.array(v.number()),
+  },
+  handler: async (ctx, args) => {
+    const user = await ctx.auth.getUserIdentity();
+
+    // const userQuery = await ctx.db
+    //   .query("users")
+    //   .filter((q) => q.eq(q.field("id"), user?.subject))
+    //   .take(1);
+
+    if (user) {
+      const randomID = generateRandomID();
+
+      const taskId = await ctx.db.insert("events", {
+        name: args.name,
+        id: randomID,
+        groupMembers: [],
+      });
+      console.log("Task id: ", taskId);
+    }
+  },
+});
