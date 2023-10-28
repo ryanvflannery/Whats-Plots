@@ -73,7 +73,7 @@ export const myAction = action({
     });
   },
 });
-
+// add a new user to convex database once logged in
 export const addUser = mutation({
   args: {},
   handler: async (ctx, args) => {
@@ -87,6 +87,7 @@ export const addUser = mutation({
       console.log("New user added to table");
       const taskId = await ctx.db.insert("users", {
         name: user.name,
+        email: user.email,
         id: user.subject,
       });
     } else {
@@ -95,6 +96,7 @@ export const addUser = mutation({
   },
 });
 
+// create a new group, add an array of user ids to the group
 export const createNewGroup = mutation({
   args: {
     name: v.string(),

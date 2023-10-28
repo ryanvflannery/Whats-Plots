@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { SignInButton, UserButton } from "@clerk/clerk-react";
 import {
   Authenticated,
@@ -33,6 +34,8 @@ export default function App() {
         <div>
           Hello, {userId} your current active session is {sessionId}
         </div>
+        <Input placeholder="Group Name"></Input>
+        <Input></Input>
         <Button onClick={handleCreateGroup}>create new group</Button>
       </Authenticated>
       <Unauthenticated>
