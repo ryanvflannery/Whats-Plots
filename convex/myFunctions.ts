@@ -19,7 +19,7 @@ export const listNumbers = query({
     const numbers = await ctx.db.query("numbers").take(args.count);
     return {
       viewer: JSON.stringify(await ctx.auth.getUserIdentity()),
-      numbers: numbers.map((number) => number.value + 10000),
+      numbers: numbers.map((number) => number.value),
       user: await ctx.auth.getUserIdentity(),
     };
   },
@@ -96,6 +96,9 @@ export const addUser = mutation({
   },
 });
 
+function generateRandomID() {
+  return Math.floor(Math.random() * 10000000000); // 10 digits
+}
 // create a new group, add an array of user ids to the group
 export const createNewGroup = mutation({
   args: {
@@ -105,18 +108,41 @@ export const createNewGroup = mutation({
   },
   handler: async (ctx, args) => {
     const user = await ctx.auth.getUserIdentity();
+
     // const userQuery = await ctx.db
     //   .query("users")
     //   .filter((q) => q.eq(q.field("id"), user?.subject))
     //   .take(1);
 
     if (user) {
+      const randomID = generateRandomID();
+
       const taskId = await ctx.db.insert("groups", {
         name: args.name,
-        id: user.subject,
-        groupMembers: args.groupMembers,
+        id: randomID,
+        groupMembers: [],
       });
       console.log("Task id: ", taskId);
     }
+  },
+});
+
+// not working yet:
+// create a new group, add an array of user ids to the group
+export const getAllGroupsForUser = mutation({
+  args: {},
+  handler: async (ctx, args) => {
+    const user = await ctx.auth.getUserIdentity();
+    // const userQuery = await ctx.db
+    //   .query("users")
+    //   .filter((q) => q.eq(q.field("id"), user?.subject))
+    //   .take(1);
+    console.log("user", user);
+    const groups = await ctx.db
+      .query("groups")
+      .filter((q) => q.eq(q.field("groupMembers"), [user?.subject]))
+      .take(50);
+
+    console.log("Groups: ", groups);
   },
 });

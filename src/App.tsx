@@ -9,19 +9,40 @@ import {
 } from "convex/react";
 import { api } from "../convex/_generated/api";
 import { useAuth } from "@clerk/clerk-react";
-import { useEffect } from "react";
+import { useEffect, useState, ChangeEvent } from "react";
 
 export default function App() {
   const { isLoaded, userId, sessionId, getToken } = useAuth();
+  const [groupName, setGroupName] = useState("");
+
+  // const [groupMemberEmail, setGroupMemberEmail] = useState("");
+  // const [groupMembersAdded, setGroupMembersAdded] = useState<string[]>([]);
 
   const createGroup = useMutation(api.myFunctions.createNewGroup);
+  const GetAllGroupsForUser = useMutation(api.myFunctions.getAllGroupsForUser);
+
+  const handleGroupNameChange = (
+    event: ChangeEvent<HTMLInputElement>
+  ): void => {
+    setGroupName(event.target.value);
+  };
+
+  // const handleGroupMemberChange = (
+  //   event: ChangeEvent<HTMLInputElement>
+  // ): void => {
+  //   setGroupMemberEmail(event.target.value);
+  // };
 
   const handleCreateGroup = () => {
     void createGroup({
-      name: "test",
+      name: groupName,
       id: 12341241231231,
       groupMembers: [1, 2, 4],
     });
+  };
+
+  const handleGetAllGroupsForUser = () => {
+    void GetAllGroupsForUser();
   };
 
   return (
@@ -34,10 +55,32 @@ export default function App() {
         <div>
           Hello, {userId} your current active session is {sessionId}
         </div>
-        <Input placeholder="Group Name"></Input>
-        <Input placeholder=""></Input>
+        <Input
+          value={groupName}
+          onChange={handleGroupNameChange}
+          placeholder="Group Name"
+        ></Input>
+        {/* <Input
+          value={groupMemberEmail}
+          onChange={handleGroupMemberChange}
+          placeholder="Add group member by email"
+        ></Input>
+        <Button
+          onClick={() => {
+            setGroupMembersAdded([...groupMembersAdded, groupMemberEmail]);
+          }}
+        >
+          Add Group Member
+        </Button>
+        <p>Group Members Added:</p> */}
+
         <Button onClick={handleCreateGroup}>create new group</Button>
+        <h1>groups</h1>
+        <Button onClick={handleGetAllGroupsForUser}>
+          Get all groups for user call
+        </Button>
       </Authenticated>
+      2
       <Unauthenticated>
         <div className="flex justify-center">
           <SignInButton mode="modal">
@@ -67,45 +110,17 @@ function SignedIn() {
 
   return (
     <>
-      <p>Welcome {viewer}!</p>
       <p className="flex gap-4 items-center">
         This is you:
         <UserButton afterSignOutUrl="#" />
       </p>
-      <p>
-        Click the button below and open this page in another window - this data
-        is persisted in the Convex cloud database!
-      </p>
+
       <p>Add a random number</p>
       <p>
         Numbers:{" "}
         {numbers?.length === 0
           ? "Click the button!"
           : numbers?.join(", ") ?? "..."}
-      </p>
-      <p>
-        Edit{" "}
-        <code className="relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold">
-          convex/myFunctions.ts
-        </code>{" "}
-        to change your backend
-      </p>
-      <p>
-        Edit{" "}
-        <code className="relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold">
-          src/App.tsx
-        </code>{" "}
-        to change your frontend
-      </p>
-      <p>
-        Check out{" "}
-        <a
-          className="font-medium text-primary underline underline-offset-4"
-          target="_blank"
-          href="https://docs.convex.dev/home"
-        >
-          Convex docs
-        </a>
       </p>
     </>
   );
