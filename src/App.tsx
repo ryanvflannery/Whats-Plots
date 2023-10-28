@@ -89,6 +89,8 @@ export default function App() {
             </li>
           ))}
         </ul>
+
+        <p>Space for Create Event</p>
       </Authenticated>
       2
       <Unauthenticated>
@@ -102,10 +104,10 @@ export default function App() {
   );
 }
 
-// Hello, user_2XN7QfLhJ59BwroHaq7PLzEpGsd your current active session is sess_2XNJ9gUkNTM3wocshpzyEtbT685
 
 function SignedIn() {
   const addUser = useMutation(api.myFunctions.addUser);
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     void addUser();
@@ -114,8 +116,14 @@ function SignedIn() {
 
 
   const addNumber = useMutation(api.myFunctions.addNumber);
+  //function that creates a new event
   function CreateEvent() {
     const [newEvent, setNewEvent] = useState("")
+
+    // function saveEvent(arg0: { idea: string; random: boolean; }) {
+    //   throw new Error("Function not implemented.");
+    // }
+
     return(
         <>
         <div className="flex gap-2">
@@ -153,6 +161,15 @@ function SignedIn() {
         This is you:
         <UserButton afterSignOutUrl="#" />
       </p>
+      <div>
+      {!isOpen ? (<></>) : (<><CreateEvent/></>)}
+      <Button onClick={() => setIsOpen(!isOpen)}>
+        {isOpen ? "Close" : "Create Event"}
+      </Button>
+      </div>
+
+
+
 
     </>
   );
