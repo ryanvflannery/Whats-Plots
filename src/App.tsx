@@ -7,8 +7,11 @@ import {
   useQuery,
 } from "convex/react";
 import { api } from "../convex/_generated/api";
+import { useAuth } from "@clerk/clerk-react";
+import { useEffect } from "react";
 
 export default function App() {
+  const { isLoaded, userId, sessionId, getToken } = useAuth();
   return (
     <main className="container max-w-2xl flex flex-col gap-8">
       <h1 className="text-4xl font-extrabold my-8 text-center">
@@ -16,6 +19,9 @@ export default function App() {
       </h1>
       <Authenticated>
         <SignedIn />
+        <div>
+          Hello, {userId} your current active session is {sessionId}
+        </div>
       </Authenticated>
       <Unauthenticated>
         <div className="flex justify-center">
@@ -28,7 +34,15 @@ export default function App() {
   );
 }
 
+// Hello, user_2XN7QfLhJ59BwroHaq7PLzEpGsd your current active session is sess_2XNJ9gUkNTM3wocshpzyEtbT685
+
 function SignedIn() {
+  const addUser = useMutation(api.myFunctions.addUser);
+
+  useEffect(() => {
+    void addUser();
+  }, []);
+
   const { numbers, viewer } =
     useQuery(api.myFunctions.listNumbers, {
       count: 10,
@@ -54,6 +68,7 @@ function SignedIn() {
         >
           Add a random number
         </Button>
+        {/* START CODE HERE */}
         <Button>create new group</Button>
       </p>
       <p>

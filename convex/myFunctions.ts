@@ -18,8 +18,9 @@ export const listNumbers = query({
     //// See https://docs.convex.dev/database/reading-data.
     const numbers = await ctx.db.query("numbers").take(args.count);
     return {
-      viewer: (await ctx.auth.getUserIdentity())?.name,
-      numbers: numbers.map((number) => number.value),
+      viewer: JSON.stringify(await ctx.auth.getUserIdentity()),
+      numbers: numbers.map((number) => number.value + 10000),
+      user: await ctx.auth.getUserIdentity(),
     };
   },
 });
@@ -70,5 +71,26 @@ export const myAction = action({
     await ctx.runMutation(api.myFunctions.addNumber, {
       value: args.first,
     });
+  },
+});
+
+export const addUser = mutation({
+  args: {},
+  handler: async (ctx, args) => {
+    const user = await ctx.auth.getUserIdentity();
+    const userQuery = await ctx.db
+      .query("users")
+      .filter((q) => q.eq(q.field("id"), user?.subject))
+      .take(1);
+
+    if (userQuery.length === 0 && user) {
+      console.log("New user added to table");
+      const taskId = await ctx.db.insert("users", {
+        name: user.name,
+        id: user.subject,
+      });
+    } else {
+      console.log("no user added to table");
+    }
   },
 });
