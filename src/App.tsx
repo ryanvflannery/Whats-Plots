@@ -12,6 +12,17 @@ import { useEffect } from "react";
 
 export default function App() {
   const { isLoaded, userId, sessionId, getToken } = useAuth();
+
+  const createGroup = useMutation(api.myFunctions.createNewGroup);
+
+  const handleCreateGroup = () => {
+    void createGroup({
+      name: "test",
+      id: 12341241231231,
+      groupMembers: [1, 2, 4],
+    });
+  };
+
   return (
     <main className="container max-w-2xl flex flex-col gap-8">
       <h1 className="text-4xl font-extrabold my-8 text-center">
@@ -22,6 +33,7 @@ export default function App() {
         <div>
           Hello, {userId} your current active session is {sessionId}
         </div>
+        <Button onClick={handleCreateGroup}>create new group</Button>
       </Authenticated>
       <Unauthenticated>
         <div className="flex justify-center">
@@ -47,6 +59,7 @@ function SignedIn() {
     useQuery(api.myFunctions.listNumbers, {
       count: 10,
     }) ?? {};
+
   const addNumber = useMutation(api.myFunctions.addNumber);
 
   return (
@@ -60,17 +73,7 @@ function SignedIn() {
         Click the button below and open this page in another window - this data
         is persisted in the Convex cloud database!
       </p>
-      <p>
-        <Button
-          onClick={() => {
-            void addNumber({ value: Math.floor(Math.random() * 10) });
-          }}
-        >
-          Add a random number
-        </Button>
-        {/* START CODE HERE */}
-        <Button>create new group</Button>
-      </p>
+      <p>Add a random number</p>
       <p>
         Numbers:{" "}
         {numbers?.length === 0
