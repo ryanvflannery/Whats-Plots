@@ -26,7 +26,7 @@ export const listNumbers = query({
 });
 
 //query for events
-export const get = query({
+export const getEvents = query({
   args: {},
   handler: async (ctx) => {
     return await ctx.db.query("events").collect();

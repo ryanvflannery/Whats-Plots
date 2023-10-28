@@ -21,6 +21,7 @@ export default function App() {
   // const [groupMembersAdded, setGroupMembersAdded] = useState<string[]>([]);
   const createGroup = useMutation(api.myFunctions.createNewGroup);
   const getAllGroupsForUser = useMutation(api.myFunctions.getAllGroupsForUser);
+  const events = useQuery(api.myFunctions.getEvents);
 
   useEffect(() => {
     const fetchGroups = async () => {
@@ -65,19 +66,6 @@ export default function App() {
           onChange={handleGroupNameChange}
           placeholder="Group Name"
         ></Input>
-        {/* <Input
-          value={groupMemberEmail}
-          onChange={handleGroupMemberChange}
-          placeholder="Add group member by email"
-        ></Input>
-        <Button
-          onClick={() => {
-            setGroupMembersAdded([...groupMembersAdded, groupMemberEmail]);
-          }}
-        >
-          Add Group Member
-        </Button>
-        <p>Group Members Added:</p> */}
 
         <Button onClick={handleCreateGroup}>create new group</Button>
         <h1>All Groups</h1>
