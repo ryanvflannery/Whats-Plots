@@ -177,23 +177,18 @@ export const createNewEvent = mutation({
   args: {
     name: v.string(),
     id: v.number(),
-    groupMembers: v.array(v.number()),
+    date:v.number(),
   },
   handler: async (ctx, args) => {
     const user = await ctx.auth.getUserIdentity();
 
-    // const userQuery = await ctx.db
-    //   .query("users")
-    //   .filter((q) => q.eq(q.field("id"), user?.subject))
-    //   .take(1);
-
     if (user) {
       const randomID = generateRandomID();
-
       const taskId = await ctx.db.insert("events", {
         name: args.name,
         id: randomID,
-        groupMembers: [],
+        //the value args.date is def wrong
+        date: args.date,
       });
       console.log("Task id: ", taskId);
     }

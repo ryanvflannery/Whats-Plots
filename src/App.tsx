@@ -117,7 +117,7 @@ function SignedIn() {
 
 
   const addNumber = useMutation(api.myFunctions.addNumber);
-  
+
   //function that creates a new event
   function CreateEvent() {
     const [newEvent, setNewEvent] = useState("")
@@ -143,7 +143,7 @@ function SignedIn() {
                 : "You must enter an event first"
             }
             onClick={async () => {
-            await saveEvent({ event: newEvent.trim(), random: false })
+            await saveEvent({ event: newEvent.trim() })
             setNewEvent("")
             }}
             className="min-w-fit"
