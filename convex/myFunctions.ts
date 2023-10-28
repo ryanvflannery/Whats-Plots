@@ -189,6 +189,7 @@ export const createNewEvent = mutation({
     name: v.string(),
     id: v.number(),
     date:v.number(),
+    //groupId:v.id('groups'),
   },
   handler: async (ctx, args) => {
     const user = await ctx.auth.getUserIdentity();
@@ -200,6 +201,7 @@ export const createNewEvent = mutation({
         id: randomID,
         //the value args.date is def wrong
         date: args.date,
+        //groupId: args.groupId,
       });
       console.log("Task id: ", taskId);
     }
@@ -207,8 +209,7 @@ export const createNewEvent = mutation({
 });
 
 //Removing Event
-
-export const deleteTask = mutation({
+export const deleteEvents = mutation({
   args: { id: v.id("tasks") },
   handler: async (ctx, args) => {
     await ctx.db.delete(args.id);
