@@ -10,16 +10,25 @@ import {
 import { api } from "../convex/_generated/api";
 import { useAuth } from "@clerk/clerk-react";
 import { useEffect, useState, ChangeEvent } from "react";
+import { getAllGroupsForUser } from "convex/myFunctions";
 
 export default function App() {
   const { isLoaded, userId, sessionId, getToken } = useAuth();
   const [groupName, setGroupName] = useState("");
+  const [allGroups, setAllGroups] = useState<any[]>([]);
 
   // const [groupMemberEmail, setGroupMemberEmail] = useState("");
   // const [groupMembersAdded, setGroupMembersAdded] = useState<string[]>([]);
-
   const createGroup = useMutation(api.myFunctions.createNewGroup);
-  const GetAllGroupsForUser = useMutation(api.myFunctions.getAllGroupsForUser);
+  const getAllGroupsForUser = useMutation(api.myFunctions.getAllGroupsForUser);
+
+  useEffect(() => {
+    const fetchGroups = async () => {
+      const groups = await getAllGroupsForUser();
+      setAllGroups(groups);
+    };
+    fetchGroups();
+  }, []);
 
   const handleGroupNameChange = (
     event: ChangeEvent<HTMLInputElement>
@@ -39,10 +48,6 @@ export default function App() {
       id: 12341241231231,
       groupMembers: [1, 2, 4],
     });
-  };
-
-  const handleGetAllGroupsForUser = () => {
-    void GetAllGroupsForUser();
   };
 
   return (
@@ -75,10 +80,15 @@ export default function App() {
         <p>Group Members Added:</p> */}
 
         <Button onClick={handleCreateGroup}>create new group</Button>
-        <h1>groups</h1>
-        <Button onClick={handleGetAllGroupsForUser}>
-          Get all groups for user call
-        </Button>
+        <h1>All Groups</h1>
+        <ul>
+          {allGroups.map((group, index) => (
+            <li key={index}>
+              {/* Display the group details here */}
+              Group Name: {group.name}
+            </li>
+          ))}
+        </ul>
       </Authenticated>
       2
       <Unauthenticated>

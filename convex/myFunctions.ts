@@ -144,5 +144,7 @@ export const getAllGroupsForUser = mutation({
       .take(50);
 
     console.log("Groups: ", groups);
+
+    return groups;
   },
 });
