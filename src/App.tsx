@@ -21,7 +21,6 @@ export default function App() {
   // const [groupMembersAdded, setGroupMembersAdded] = useState<string[]>([]);
   const createGroup = useMutation(api.myFunctions.createNewGroup);
   const getAllGroupsForUser = useMutation(api.myFunctions.getAllGroupsForUser);
-  const events = useQuery(api.myFunctions.getEvents);
 
   useEffect(() => {
     const fetchGroups = async () => {
@@ -58,9 +57,9 @@ export default function App() {
       </h1>
       <Authenticated>
         <SignedIn />
-        <div>
+        {/* <div>
           Hello, {userId} your current active session is {sessionId}
-        </div>
+        </div> */}
         <Input
           value={groupName}
           onChange={handleGroupNameChange}
@@ -80,7 +79,7 @@ export default function App() {
 
         <p>Space for Create Event</p>
       </Authenticated>
-      2
+      
       <Unauthenticated>
         <div className="flex justify-center">
           <SignInButton mode="modal">
@@ -97,6 +96,7 @@ function SignedIn() {
   const saveEvent = useMutation(api.myFunctions.createNewEvent);
   const addUser = useMutation(api.myFunctions.addUser);
   const [isOpen, setIsOpen] = useState(false);
+  const events = useQuery(api.myFunctions.getEvents);
 
   useEffect(() => {
     void addUser();
@@ -108,11 +108,9 @@ function SignedIn() {
 
   //function that creates a new event
   function CreateEvent() {
-    const [newEvent, setNewEvent] = useState("")
 
-    // function saveEvent(arg0: { idea: string; random: boolean; }) {
-    //   throw new Error("Function not implemented.");
-    // }
+    const [newEvent, setNewEvent] = useState("")
+    console.log(events);
 
     return(
         <>
@@ -140,6 +138,12 @@ function SignedIn() {
             Save the Event
         </Button>
         </div>
+
+        {/* <div className="">
+        {events?.map(({ _id, name }) => (
+        <div key={_id}>{name}</div>
+        ))}
+        </div> */}
         
         </>
 
@@ -158,6 +162,11 @@ function SignedIn() {
         {isOpen ? "Close" : "Create Event"}
       </Button>
       </div>
+      <div className="">
+        {events?.map(({ _id, name }) => (
+        <div key={_id}>{name}</div>
+        ))}
+        </div>
 
 
 
