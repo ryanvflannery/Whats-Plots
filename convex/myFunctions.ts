@@ -148,3 +148,25 @@ export const getAllGroupsForUser = mutation({
     return groups;
   },
 });
+
+//adding member to existing group
+export const addMemberToGroup = mutation({
+  args: {
+    groupID: v.number(),
+    userID: v.number(),
+  },
+  handler: async (ctx, args) => {
+    const user = await ctx.auth.getUserIdentity();
+    const groupSelection = await ctx.db
+      .query("groups")
+      .filter((q) => q.eq(q.field("id"), args.groupID))
+      .take(1);
+
+    console.log("New user added to table");
+    const taskId = await ctx.db.insert("groupMembers", {
+      groupMembers: groupSelection.push(args.userID),
+    });
+
+    console.log("Added group members: ", taskId);
+  },
+});
