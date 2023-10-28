@@ -54,6 +54,7 @@ function SignedIn() {
         >
           Add a random number
         </Button>
+        <Button>create new group</Button>
       </p>
       <p>
         Numbers:{" "}
