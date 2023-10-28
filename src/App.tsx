@@ -136,17 +136,18 @@ function SignedIn() {
             placeholder="Type your event here"
         />
         <Button
-            disabled={!newEvent}
-            title={
-            newEvent
-                ? "Save your event to the database"
-                : "You must enter an event first"
-            }
-            onClick={async () => {
-            await saveEvent({ event: newEvent.trim() })
-            setNewEvent("")
-            }}
-            className="min-w-fit"
+          disabled={!newEvent}
+          title={
+          newEvent
+            ? "Save your event to the database"
+            : "You must enter an event first"
+          }
+          onClick={async () => {
+          //you may want to change type name to event
+          await saveEvent({ name: newEvent.trim(), id: 0, date: Date.now() })
+          setNewEvent("")
+          }}
+          className="min-w-fit"
         >
             Save the Event
         </Button>

@@ -25,6 +25,17 @@ export const listNumbers = query({
   },
 });
 
+//query for events
+export const get = query({
+  args: {},
+  handler: async (ctx) => {
+    return await ctx.db.query("events").collect();
+  },
+});
+
+
+
+
 // You can write data to the database via a mutation:
 export const addNumber = mutation({
   // Validators for arguments.
@@ -192,5 +203,14 @@ export const createNewEvent = mutation({
       });
       console.log("Task id: ", taskId);
     }
+  },
+});
+
+//Removing Event
+
+export const deleteTask = mutation({
+  args: { id: v.id("tasks") },
+  handler: async (ctx, args) => {
+    await ctx.db.delete(args.id);
   },
 });
