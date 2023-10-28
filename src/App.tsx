@@ -1,32 +1,38 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { SignInButton, UserButton } from "@clerk/clerk-react";
-import { Authenticated, Unauthenticated, useMutation, useQuery } from "convex/react";
+import {
+  Authenticated,
+  Unauthenticated,
+  useMutation,
+  useQuery,
+} from "convex/react";
 import { api } from "../convex/_generated/api";
 import { useAuth } from "@clerk/clerk-react";
 import { useEffect, useState, ChangeEvent } from "react";
+import { getAllGroupsForUser } from "convex/myFunctions";
 
 export default function App() {
   const { isLoaded, userId, sessionId, getToken } = useAuth();
   const [groupName, setGroupName] = useState("");
-  const [allGroups, setAllGroups] = useState<any[]>([]);
-  const [alertMessage, setAlertMessage] = useState<string | null>(null);
-  const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
+  const allGroups = useQuery(api.myFunctions.getAllGroupsForUser) || [];
 
+  // const [groupMemberEmail, setGroupMemberEmail] = useState("");
+  // const [groupMembersAdded, setGroupMembersAdded] = useState<string[]>([]);
   const createGroup = useMutation(api.myFunctions.createNewGroup);
-  const getAllGroupsForUser = useMutation(api.myFunctions.getAllGroupsForUser);
+  const addMemberToGroup = useMutation(api.myFunctions.addMemberToGroup);
 
-  useEffect(() => {
-    const fetchGroups = async () => {
-      const groups = await getAllGroupsForUser();
-      setAllGroups(groups);
-    };
-    fetchGroups();
-  }, []);
-
-  const handleGroupNameChange = (event: ChangeEvent<HTMLInputElement>): void => {
+  const handleGroupNameChange = (
+    event: ChangeEvent<HTMLInputElement>
+  ): void => {
     setGroupName(event.target.value);
   };
+
+  // const handleGroupMemberChange = (
+  //   event: ChangeEvent<HTMLInputElement>
+  // ): void => {
+  //   setGroupMemberEmail(event.target.value);
+  // };
 
   const handleCreateGroup = () => {
     void createGroup({
@@ -36,31 +42,44 @@ export default function App() {
     });
   };
 
+  const handleAddMemberToGroup = () => {
+    void addMemberToGroup({
+      groupID: "45xxzkj37860r6mpwsy3cakq9k5dv6g",
+      userID: 1283612783,
+    });
+  };
+
   return (
     <main className="container max-w-2xl flex flex-col gap-8">
       <h1 className="text-4xl font-extrabold my-8 text-center">
         Welcome to Plots
       </h1>
       <Authenticated>
-        <div>
+        <SignedIn />
+        {/* <div>
           Hello, {userId} your current active session is {sessionId}
-        </div>
+        </div> */}
         <Input
           value={groupName}
           onChange={handleGroupNameChange}
           placeholder="Group Name"
-        />
-        <Button onClick={handleCreateGroup}>Create New Group</Button>
+        ></Input>
+
+        <Button onClick={handleCreateGroup}>create new group</Button>
         <h1>All Groups</h1>
         <ul>
           {allGroups.map((group, index) => (
             <li key={index}>
+              {/* Display the group details here */}
               Group Name: {group.name}
             </li>
           ))}
         </ul>
+        <Button onClick={handleAddMemberToGroup}>Add member to group</Button>
+
         <p>Space for Create Event</p>
       </Authenticated>
+
       <Unauthenticated>
         <div className="flex justify-center">
           <SignInButton mode="modal">
@@ -68,7 +87,6 @@ export default function App() {
           </SignInButton>
         </div>
       </Unauthenticated>
-      <SignedIn />
     </main>
   );
 }
@@ -83,9 +101,10 @@ function SignedIn() {
     void addUser();
   }, []);
 
-  // Function to create a new event
+  //function that creates a new event
   function CreateEvent() {
     const [newEvent, setNewEvent] = useState("");
+    console.log(events);
 
     return (
       <>
@@ -104,7 +123,12 @@ function SignedIn() {
                 : "You must enter an event first"
             }
             onClick={async () => {
-              await saveEvent({ name: newEvent.trim(), id: 0, date: Date.now() });
+              //you may want to change type name to event
+              await saveEvent({
+                name: newEvent.trim(),
+                id: 0,
+                date: Date.now(),
+              });
               setNewEvent("");
             }}
             className="min-w-fit"
@@ -112,6 +136,12 @@ function SignedIn() {
             Save the Event
           </Button>
         </div>
+
+        {/* <div className="">
+        {events?.map(({ _id, name }) => (
+        <div key={_id}>{name}</div>
+        ))}
+        </div> */}
       </>
     );
   }
@@ -123,7 +153,13 @@ function SignedIn() {
         <UserButton afterSignOutUrl="#" />
       </p>
       <div>
-        {!isOpen ? <></> : <CreateEvent />}
+        {!isOpen ? (
+          <></>
+        ) : (
+          <>
+            <CreateEvent />
+          </>
+        )}
         <Button onClick={() => setIsOpen(!isOpen)}>
           {isOpen ? "Close" : "Create Event"}
         </Button>
