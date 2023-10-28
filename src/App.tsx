@@ -117,6 +117,38 @@ function SignedIn() {
     }) ?? {};
 
   const addNumber = useMutation(api.myFunctions.addNumber);
+  function CreateEvent() {
+    const [newEvent, setNewEvent] = useState("")
+    return(
+        <>
+        <div className="flex gap-2">
+        <Input
+            type="text"
+            value={newEvent}
+            onChange={(event) => setNewEvent(event.target.value)}
+            placeholder="Type your event here"
+        />
+        <Button
+            disabled={!newEvent}
+            title={
+            newEvent
+                ? "Save your event to the database"
+                : "You must enter an event first"
+            }
+            onClick={async () => {
+            await saveEvent({ idea: newEvent.trim(), random: false })
+            setNewEvent("")
+            }}
+            className="min-w-fit"
+        >
+            Save the Event
+        </Button>
+        </div>
+        
+        </>
+
+
+    )};
 
   return (
     <>
@@ -125,13 +157,6 @@ function SignedIn() {
         <UserButton afterSignOutUrl="#" />
       </p>
 
-      <p>Add a random number</p>
-      <p>
-        Numbers:{" "}
-        {numbers?.length === 0
-          ? "Click the button!"
-          : numbers?.join(", ") ?? "..."}
-      </p>
     </>
   );
 }
