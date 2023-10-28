@@ -111,10 +111,7 @@ function SignedIn() {
     void addUser();
   }, []);
 
-  const { numbers, viewer } =
-    useQuery(api.myFunctions.listNumbers, {
-      count: 10,
-    }) ?? {};
+
 
   const addNumber = useMutation(api.myFunctions.addNumber);
   function CreateEvent() {
