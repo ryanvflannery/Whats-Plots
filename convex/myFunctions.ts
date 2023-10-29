@@ -195,8 +195,8 @@ export const removeUserFromGroup = mutation({
 //creating a new event
 export const createNewEvent = mutation({
   args: {
+    id: v.number(),
     name: v.string(),
-    // id: v.number(),
     date: v.number(),
   },
   handler: async (ctx, args) => {
