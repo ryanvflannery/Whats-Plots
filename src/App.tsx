@@ -60,6 +60,7 @@ import { EditEvent, deleteEvents } from "convex/myFunctions";
 import { set } from "date-fns";
 import { Checkbox } from "@/components/ui/checkbox";
 import LandingPage from "./LandingPage";
+import { AiFillCheckCircle, AiFillCloseCircle } from "react-icons/ai";
 
 function formatDateFromMillis(milliseconds: number): string {
   const date = new Date(milliseconds);
@@ -217,7 +218,7 @@ function GroupComponent() {
                 <CardDescription>
                   <div className="flex flex-row items-start justify-start pb-5">
                     {group.groupMembers.map((item: any) => (
-                      <p>{item}</p>
+                      <p>{item},</p>
                     ))}
                   </div>
                   <AddGroupMember data={group._id} />{" "}
@@ -595,6 +596,23 @@ function SignedIn() {
   const [isOpen, setIsOpen] = useState(false);
   const events = useQuery(api.myFunctions.getEvents);
 
+  const [checkHovered, setCheckHovered] = useState(false);
+  const [closeHovered, setCloseHovered] = useState(false);
+  const [checkClicked, setCheckClicked] = useState(false);
+  const [closeClicked, setCloseClicked] = useState(false);
+
+  const handleCheckClick = () => {
+    setCheckClicked(!checkClicked);
+  };
+
+  const handleCloseClick = () => {
+    setCloseClicked(!closeClicked);
+  };
+
+  const handleDenyEvent = () => {};
+
+  const handleConfirmEvent = () => {};
+
   useEffect(() => {
     void addUser();
   }, []);
@@ -621,8 +639,43 @@ function SignedIn() {
                     <div key={_id}>
                       <div className="flex flex-row items-start justify-start pb-5">
                         <Card className="p-2">
-                          <button>Attending</button>
-                          <button>Not Attending</button>
+                          <div className="flex items-center">
+                            <div
+                              className="m-1"
+                              onMouseEnter={() => setCheckHovered(true)}
+                              onMouseLeave={() => setCheckHovered(false)}
+                              onClick={handleCheckClick}
+                            >
+                              <AiFillCheckCircle
+                                size="25"
+                                style={{
+                                  color: checkClicked
+                                    ? "blue"
+                                    : checkHovered
+                                    ? "green"
+                                    : "white",
+                                }}
+                              />
+                            </div>
+                            <div
+                              className="m-1"
+                              onMouseEnter={() => setCloseHovered(true)}
+                              onMouseLeave={() => setCloseHovered(false)}
+                              onClick={handleCloseClick}
+                            >
+                              <AiFillCloseCircle
+                                size="25"
+                                style={{
+                                  color: closeClicked
+                                    ? "orange"
+                                    : closeHovered
+                                    ? "red"
+                                    : "white",
+                                }}
+                              />
+                            </div>
+                          </div>
+
                           <div className="flex flex-col">
                             <p>Name: {name}</p>
                             <p>Date: {formatDateFromMillis(date)}</p>
@@ -665,10 +718,18 @@ function SignedIn() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-2">
-              {/* <div className="space-y-1">
-              <Label htmlFor="current">Current password</Label>
-              <Input id="current" type="password" />
-            </div> */}
+              <Card className="p-4">
+                <div className="flex flex-col">
+                  <p>Name: Haunted House</p>
+                  <p>Date: October 21, 2023 at 010:00:00 PM</p>
+                </div>
+              </Card>
+              <Card className="p-4">
+                <div className="flex flex-col">
+                  <p>Name: Bowling</p>
+                  <p>Date: October 2, 2023 at 04:00:00 PM</p>
+                </div>
+              </Card>
             </CardContent>
             <CardFooter></CardFooter>
           </Card>
