@@ -52,7 +52,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-
+import { ToastAction } from "@/components/ui/toast";
+import { useToast } from "@/components/ui/use-toast";
 import { EditEvent, deleteEvents } from "convex/myFunctions";
 import { set } from "date-fns";
 
@@ -170,37 +171,32 @@ function GroupComponent() {
       ) : (
         <>
           <div className="justify-center">
-            <AddGroup />
-
             <Card>
               <Table>
                 {/* <TableCaption></TableCaption> */}
 
                 <TableHeader>
-                  <TableRow>
-                    <TableHead className="w-[100px]">Groups</TableHead>
-                    <TableHead></TableHead>
-                    <TableHead className="text-right"></TableHead>
+                  <TableRow className="justify-between">
+                    <TableHead className="w-[400px]">Groups</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {allGroups.map((group, index) => (
+                  {allGroups.map((group) => (
                     <TableRow
                       className="h-[75px]"
                       onClick={() => handleRowClick(group)}
                     >
-                      <TableCell className="font-medium">
-                        {group.name}
-                      </TableCell>
-                      <TableCell>
-                        <ul>
-                          {group.groupMembers.map(
-                            (member: { name: string }, memberIndex: number) => (
-                              <li key={memberIndex}>{member.name}</li>
-                            )
-                          )}
-                        </ul>
-                      </TableCell>
+                      <TableCell className="text-lg">{group.name}</TableCell>
+                      {group.groupMembers.map((item: any, index: any) => (
+                        <>
+                          <TableCell
+                            key={index}
+                            className="align-middle justify-end"
+                          >
+                            <p className="text-xs">{item}</p>
+                          </TableCell>
+                        </>
+                      ))}
                       <TableCell className="text-right">
                         {/* Add next event details */}
                       </TableCell>
@@ -302,6 +298,7 @@ function AddGroupMember({ data }: React.PropsWithChildren<any>) {
   const [emailAddressAddUser, setEmailAddressAddUser] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [group, setGroup] = useState<any>(null);
+  const { toast } = useToast();
 
   useEffect(() => {
     setGroup(data);
@@ -381,8 +378,11 @@ function NavBar() {
   return (
     <>
       <nav className="bg-white-800 text-white p-10">
-        <ul className="flex justify-right">
+        <ul className="flex justify-between">
           <UserButton afterSignOutUrl="#" />
+          <div className="ml-auto">
+            <AddGroup />
+          </div>
         </ul>
       </nav>
     </>

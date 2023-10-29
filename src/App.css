@@ -48,3 +48,8 @@
 .hoverRow:hover {
   background-color: #f0f0f0; /* Change this color to your desired highlight color */
 }
+
+.Box {
+  flex-direction: row;
+  height: 50px;
+}
