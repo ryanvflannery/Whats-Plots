@@ -416,8 +416,8 @@ function AddGroup() {
           {" "}
           <Card className="w-[350px]">
             <CardHeader>
-              <CardTitle>Create A New Group</CardTitle>
-              <CardDescription>Make A New Group In One Click</CardDescription>
+              <CardTitle>Create a new group</CardTitle>
+              <CardDescription>Make a new group in one click</CardDescription>
             </CardHeader>
             <CardContent>
               <form>
