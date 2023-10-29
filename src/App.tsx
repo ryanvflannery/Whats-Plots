@@ -36,6 +36,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 // import {
 //   Select,
 //   SelectContent,
@@ -82,9 +83,9 @@ export default function App() {
 
   return (
     <>
-      <NavBar />
       <main className="container  flex flex-col gap-1">
         <Authenticated>
+          <NavBar />
           <GroupComponent></GroupComponent>
         </Authenticated>
 
@@ -559,7 +560,46 @@ function SignedIn() {
 
   return (
     <>
-      <div>
+      <Tabs defaultValue="account" className="w-[400px]">
+        <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger value="account">Account</TabsTrigger>
+          <TabsTrigger value="password">Password</TabsTrigger>
+        </TabsList>
+        <TabsContent value="account">
+          <Card>
+            <CardHeader>
+              <CardTitle>Account</CardTitle>
+              <CardDescription>
+                Make changes to your account here. Click save when you're done.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-2"></CardContent>
+            <CardFooter>
+              <Button>Save changes</Button>
+            </CardFooter>
+          </Card>
+        </TabsContent>
+        <TabsContent value="password">
+          <Card>
+            <CardHeader>
+              <CardTitle>Password</CardTitle>
+              <CardDescription>
+                Change your password here. After saving, you'll be logged out.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-2">
+              {/* <div className="space-y-1">
+                <Label htmlFor="current">Current password</Label>
+                <Input id="current" type="password" />
+              </div> */}
+            </CardContent>
+            <CardFooter>
+              <Button>Save password</Button>
+            </CardFooter>
+          </Card>
+        </TabsContent>
+      </Tabs>
+      {/* <div className="mt-2">
         {!isOpen ? (
           <></>
         ) : (
@@ -571,18 +611,25 @@ function SignedIn() {
           {isOpen ? "Close" : "Create Event"}
         </Button>
       </div>
-      <div>
+      <div className="mt-10">
+        <p>New Events</p>
         {events?.map(({ _id, name, date }) => (
           <div key={_id}>
             <div className="flex flex-row items-start justify-start pb-5">
-              {name} - {formatDateFromMillis(date)}
-              <Card className="width-[500px]">
-                <Checkbox />
+              <Card className="p-10">
+                <Button>Attending</Button>
+                <Button>Not Attending</Button>
+                <div className="flex flex-col">
+                  <p>Name: {name}</p>
+                  <p>Date: {formatDateFromMillis(date)}</p>
+                </div>
               </Card>
             </div>
           </div>
         ))}
       </div>
+      <p>Upcoming Events</p>
+      <p>Past Events</p> */}
     </>
   );
 }
