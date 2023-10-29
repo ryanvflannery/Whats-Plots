@@ -86,7 +86,7 @@ export default function App() {
 
   return (
     <>
-      <main className="container flex flex-col gap-1">
+      <main className="container bg-black flex flex-col gap-1 min-h-screen">
         <Authenticated>
           <NavBar />
           <GroupComponent></GroupComponent>
@@ -103,7 +103,7 @@ export default function App() {
                 <a href="#" className="-m-1.5 p-1.5">
                   <span className="sr-only">Your Company</span>
                   <img
-                    className="h-8 w-auto"
+                    className="h-8 w-auto ml-10"
                     src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
                     alt=""
                   />
@@ -123,7 +123,7 @@ export default function App() {
               <div className="hidden lg:flex lg:flex-1 lg:justify-end">
                 <a
                   href="#"
-                  className="text-sm font-semibold leading-6 text-gray-900"
+                  className="text-sm font-semibold leading-6 text-gray-900 mr-10"
                 >
                   <SignInButton mode="modal" />
                   <span aria-hidden="true">&rarr;</span>

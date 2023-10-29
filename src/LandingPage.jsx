@@ -22,6 +22,8 @@ export default function LandingPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   return (
+
+    <div className="bg-white">
     <div>
 
 
@@ -95,5 +97,6 @@ export default function LandingPage() {
         </div>
       </div>
     </div>
+  </div>
   )
 }
