@@ -33,9 +33,6 @@ export const getEvents = query({
   },
 });
 
-
-
-
 // You can write data to the database via a mutation:
 export const addNumber = mutation({
   // Validators for arguments.
@@ -127,20 +124,19 @@ export const createNewGroup = mutation({
 
     if (user) {
       const randomID = generateRandomID();
-
       const taskId = await ctx.db.insert("groups", {
         name: args.name,
         id: randomID,
-        groupMembers: [],
+        groupMembers: [user.subject],
       });
-      console.log("Task id: ", taskId);
+      // console.log("Task id: ", taskId);
     }
   },
 });
 
 // not working yet:
 // create a new group, add an array of user ids to the group
-export const getAllGroupsForUser = mutation({
+export const getAllGroupsForUser = query({
   args: {},
   handler: async (ctx, args) => {
     const user = await ctx.auth.getUserIdentity();
@@ -149,10 +145,11 @@ export const getAllGroupsForUser = mutation({
     //   .filter((q) => q.eq(q.field("id"), user?.subject))
     //   .take(1);
     console.log("user", user);
-    const groups = await ctx.db
-      .query("groups")
-      .filter((q) => q.eq(q.field("groupMembers"), [user?.subject]))
-      .take(50);
+    const groups = await ctx.db.query("groups").collect();
+
+    const groupsUserIsIn = groups.filter((group) => {
+      return group.groupMembers.includes(user?.subject);
+    });
 
     console.log("Groups: ", groups);
 
@@ -163,45 +160,45 @@ export const getAllGroupsForUser = mutation({
 //adding member to existing group
 export const addMemberToGroup = mutation({
   args: {
-    groupID: v.number(),
+    groupID: v.string(),
     userID: v.number(),
   },
   handler: async (ctx, args) => {
-    const user = await ctx.auth.getUserIdentity();
     const groupSelection = await ctx.db
       .query("groups")
-      .filter((q) => q.eq(q.field("id"), args.groupID))
-      .take(1);
+      .filter((q) => q.eq(q.field("_id"), args.groupID))
+      .first();
 
-    console.log("New user added to table");
+    console.log("group Selection: ", groupSelection);
+    groupSelection.groupMembers.push(args.userID);
+    ctx.db.replace(groupSelection._id, groupSelection);
+
+    /*
     const taskId = await ctx.db.insert("groupMembers", {
-      groupMembers: groupSelection.push(args.userID),
+      groupMembers: args.userID,
     });
-
-    console.log("Added group members: ", taskId);
+    */
   },
 });
 
 //Probably not working yet:
-//creating a new event 
+//creating a new event
 export const createNewEvent = mutation({
   args: {
     name: v.string(),
-    id: v.number(),
-    date:v.number(),
-    //groupId:v.id('groups'),
+    // id: v.number(),
+    date: v.number(),
   },
   handler: async (ctx, args) => {
     const user = await ctx.auth.getUserIdentity();
 
     if (user) {
-      const randomID = generateRandomID();
+      // const randomID = generateRandomID();
       const taskId = await ctx.db.insert("events", {
         name: args.name,
-        id: randomID,
+        // id: randomID,
         //the value args.date is def wrong
         date: args.date,
-        //groupId: args.groupId,
       });
       console.log("Task id: ", taskId);
     }
@@ -209,8 +206,8 @@ export const createNewEvent = mutation({
 });
 
 //Removing Event
-export const removeEvent = mutation({
-  args: { id: v.id("events") },
+export const deleteTask = mutation({
+  args: { id: v.id("tasks") },
   handler: async (ctx, args) => {
     await ctx.db.delete(args.id);
   },
