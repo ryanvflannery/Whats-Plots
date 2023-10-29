@@ -573,8 +573,7 @@ function SignedIn() {
               <CardDescription>
                 Upcoming Events Will Appear Here. Click on an event to confirm
                 or deny attendance.{" "}
-                <div className="mt-10">
-                  <p>New Events</p>
+                <div className="mt-5">
                   {events?.map(({ _id, name, date }) => (
                     <div key={_id}>
                       <div className="flex flex-row items-start justify-start pb-5">
