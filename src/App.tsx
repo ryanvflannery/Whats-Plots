@@ -131,24 +131,39 @@ function GroupComponent() {
           <div className="flex items-center justify-center h-screen">
             <Card className="w-[800px] h-[700px]">
               <CardHeader>
-                <CardTitle>Group</CardTitle>
+                <CardTitle
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <p style={{ fontSize: "1.5rem", margin: 0 }}>
+                    Group Name Here
+                  </p>
+                  <Button
+                    onClick={handleClose}
+                    variant="outline"
+                    className="w-[50px]"
+                  >
+                    Exit
+                  </Button>
+                </CardTitle>
+
                 <CardDescription>
                   <div>
-                    <p>members</p>
-                    <ul>
-                      {group.groupMembers.map((item: any, index: any) => (
-                        <li key={index}>{item}</li>
-                      ))}
-                    </ul>
+                    {group.groupMembers.map((item: any, index: any) => (
+                      <p key={index}>{item}</p>
+                    ))}
                     <AddGroupMember data={group._id} />{" "}
                     {/* <RemoveGroupMember></RemoveGroupMember> */}
                     <h1>Events</h1>
                     <SignedIn></SignedIn>
                   </div>
                 </CardDescription>
-              </CardHeader>
-              <CardContent>
-                {/* <form>
+
+                <CardContent>
+                  {/* <form>
                 <div className="grid w-full items-center gap-4">
                   <div className="flex flex-col space-y-1.5">
                     <Label htmlFor="name">Name</Label>
@@ -159,12 +174,9 @@ function GroupComponent() {
                   </div>
                 </div>
               </form> */}
-              </CardContent>
-              <CardFooter className="flex justify-between">
-                <Button onClick={handleClose} variant="outline">
-                  Exit
-                </Button>
-              </CardFooter>
+                </CardContent>
+                <CardFooter className="flex justify-between"></CardFooter>
+              </CardHeader>
             </Card>
           </div>
         </>
