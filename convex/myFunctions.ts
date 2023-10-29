@@ -48,7 +48,7 @@ export const addNumber = mutation({
 
     const id = await ctx.db.insert("numbers", { value: args.value });
 
-    console.log("Added new document with id:", id);
+    // console.log("Added new document with id:", id);
     // Optionally, return a value from your mutation.
     // return id;
   },
@@ -73,7 +73,7 @@ export const myAction = action({
     const data = await ctx.runQuery(api.myFunctions.listNumbers, {
       count: 10,
     });
-    console.log(data);
+    // console.log(data);
 
     //// Write data by running Convex mutations.
     await ctx.runMutation(api.myFunctions.addNumber, {
@@ -92,7 +92,6 @@ export const addUser = mutation({
       .take(1);
 
     if (userQuery.length === 0 && user) {
-      console.log("New user added to table");
       const taskId = await ctx.db.insert("users", {
         name: user.name,
         email: user.email,
@@ -123,7 +122,6 @@ export const createNewGroup = mutation({
         name: args.name,
         groupMembers: [user.email],
       });
-      console.log("Task id: ", taskId);
     }
   },
 });
@@ -138,16 +136,36 @@ export const getAllGroupsForUser = query({
     //   .query("users")
     //   .filter((q) => q.eq(q.field("id"), user?.subject))
     //   .take(1);
-    console.log("user", user);
     const groups = await ctx.db.query("groups").collect();
 
     const groupsUserIsIn = groups.filter((group) => {
       return group.groupMembers.includes(user?.email);
     });
 
-    console.log("Groups: ", groups);
+    // console.log("Groups: ", groups);
 
     return groups;
+  },
+});
+
+export const getGroupByID = query({
+  args: {},
+  handler: async (ctx, args) => {
+    const user = await ctx.auth.getUserIdentity();
+    // const userQuery = await ctx.db
+    //   .query("users")
+    //   .filter((q) => q.eq(q.field("id"), user?.subject))
+    //   .take(1);
+    // console.log("user", user);
+    const groups = await ctx.db.query("groups").collect();
+
+    const groupsByID = groups.filter((group) => {
+      return group.includes(user?.email);
+    });
+
+    // console.log("Groups: ", groups);
+
+    return group;
   },
 });
 
@@ -163,7 +181,7 @@ export const addMemberToGroup = mutation({
       .filter((q) => q.eq(q.field("_id"), args.groupID))
       .first();
 
-    console.log("group Selection: ", groupSelection);
+    // console.log("group Selection: ", groupSelection);
     groupSelection.groupMembers.push(args.userID);
     ctx.db.replace(groupSelection._id, groupSelection);
   },
@@ -179,7 +197,7 @@ export const removeUserFromGroup = mutation({
       .filter((q) => q.eq(q.field("_id"), args.groupID))
       .first();
 
-    console.log("group Selection BEFORE: ", groupSelection);
+    // console.log("group Selection BEFORE: ", groupSelection);
 
     groupSelection.groupMembers = groupSelection.groupMembers.filter(
       (element: string) => element !== args.userID
@@ -187,7 +205,7 @@ export const removeUserFromGroup = mutation({
 
     ctx.db.replace(groupSelection._id, groupSelection);
 
-    console.log("After Remove: ", groupSelection);
+    // console.log("After Remove: ", groupSelection);
   },
 });
 
@@ -195,8 +213,8 @@ export const removeUserFromGroup = mutation({
 //creating a new event
 export const createNewEvent = mutation({
   args: {
+    id: v.number(),
     name: v.string(),
-    // id: v.number(),
     date: v.number(),
   },
   handler: async (ctx, args) => {
@@ -210,13 +228,13 @@ export const createNewEvent = mutation({
         //the value args.date is def wrong
         date: args.date,
       });
-      console.log("Task id: ", taskId);
+      // console.log("Task id: ", taskId);
     }
   },
 });
 
 //Removing Event
-export const deleteEvents = mutation({
+export const DeleteEvents = mutation({
   args: { id: v.id("events") },
   handler: async (ctx, args) => {
     await ctx.db.delete(args.id);

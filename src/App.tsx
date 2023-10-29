@@ -4,6 +4,11 @@ import {
   ChangeEvent,
   SetStateAction,
   Fragment,
+  JSXElementConstructor,
+  Key,
+  ReactElement,
+  ReactNode,
+  ReactPortal,
 } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,6 +21,23 @@ import {
 } from "convex/react";
 import { api } from "../convex/_generated/api";
 import { useAuth } from "@clerk/clerk-react";
+
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css"; // Import the CSS
+
+function formatDateFromMillis(milliseconds: number): string {
+  const date = new Date(milliseconds);
+  const options: Intl.DateTimeFormatOptions = {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: true,
+  };
+  return date.toLocaleDateString(undefined, options);
+}
 import {
   Card,
   CardContent,
@@ -45,6 +67,9 @@ import {
 } from "@/components/ui/table";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
+import { EditEvent, deleteEvents } from "convex/myFunctions";
+import { set } from "date-fns";
+
 const tags = Array.from({ length: 50 }).map(
   (_, i, a) => `v1.2.0-beta.${a.length - i}`
 );
@@ -55,9 +80,9 @@ export default function App() {
   return (
     <>
       <NavBar />
-      <main className="container max-w-2xl flex flex-col gap-8">
-        <h1 className="text-4xl font-extrabold my-8 text-center">
-          Welcome Back {userId}
+      <main className="container  flex flex-col gap-1">
+        <h1 className="text-3xl font-extrabold my-8 text-center">
+          Whats The Plots
         </h1>
 
         <Authenticated>
@@ -194,50 +219,122 @@ function NavBar() {
 }
 
 function GroupComponent() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [group, setGroup] = useState<any>(null);
+
   const allGroups = useQuery(api.myFunctions.getAllGroupsForUser) || [];
 
-  const handleRowClick = (groupId) => {
+  const handleRowClick = (group: any) => {
     // Perform an action when a row is clicked, for example, navigate to a specific group or perform an action with the groupId
-    console.log(`Clicked group ID: ${groupId}`);
+    console.log(`Clicked group ID: ${group}`);
+    setGroup(group);
+    console.log("GROUP: ", group.groupMembers);
+    setIsOpen(true);
+
     // Add your logic here, like navigating to a group page or performing an action with the group ID
   };
 
+  const handleClose = () => {
+    setIsOpen(false);
+  };
+  // useEffect(() => {
+  //   setIsOpen(true);
+  // }, []);
+
   return (
     <>
-      {" "}
-      <>
-        <p>Your Groups</p>
-        <Table>
-          {/* <TableCaption></TableCaption> */}
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-[100px]">Name</TableHead>
-              <TableHead>Members</TableHead>
-              <TableHead className="text-right">Next Event</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {allGroups.map((group, index) => (
-              <TableRow key={index} onClick={handleRowClick}>
-                <TableCell className="font-medium">{group.name}</TableCell>
-                <TableCell>
-                  <ul>
-                    {group.groupMembers.map(
-                      (member: { name: string }, memberIndex: number) => (
-                        <li key={memberIndex}>{member.name}</li>
-                      )
-                    )}
-                  </ul>
-                </TableCell>
-                <TableCell className="text-right">
-                  {/* Add next event details */}
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </>
+      {isOpen ? (
+        <>
+          <div className="flex items-center justify-center h-screen">
+            <Card className="w-[1000px] h-[700px]">
+              <CardHeader>
+                <CardTitle>Group</CardTitle>
+                <CardDescription>
+                  <div>
+                    <p>members</p>
+                    <ul>
+                      {group.groupMembers.map(
+                        (
+                          item:
+                            | string
+                            | number
+                            | boolean
+                            | ReactElement<
+                                any,
+                                string | JSXElementConstructor<any>
+                              >
+                            | Iterable<ReactNode>
+                            | ReactPortal
+                            | null
+                            | undefined,
+                          index: Key | null | undefined
+                        ) => (
+                          <li key={index}>{item}</li>
+                        )
+                      )}
+                    </ul>
+                    <p>events</p>
+                  </div>
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                {/* <form>
+                <div className="grid w-full items-center gap-4">
+                  <div className="flex flex-col space-y-1.5">
+                    <Label htmlFor="name">Name</Label>
+                    <Input id="name" placeholder="Name of your project" />
+                  </div>
+                  <div className="flex flex-col space-y-1.5">
+                    <Label htmlFor="framework">Framework</Label>
+                  </div>
+                </div>
+              </form> */}
+              </CardContent>
+              <CardFooter className="flex justify-between">
+                <Button onClick={handleClose} variant="outline">
+                  Exit
+                </Button>
+              </CardFooter>
+            </Card>
+          </div>
+        </>
+      ) : (
+        <>
+          <>
+            <Table>
+              {/* <TableCaption></TableCaption> */}
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-[100px]">Name</TableHead>
+                  <TableHead>Members</TableHead>
+                  <TableHead className="text-right">Next Event</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {allGroups.map((group, index) => (
+                  <TableRow key={index} onClick={() => handleRowClick(group)}>
+                    <TableCell className="font-medium">{group.name}</TableCell>
+                    <TableCell>
+                      <ul>
+                        {group.groupMembers.map(
+                          (member: { name: string }, memberIndex: number) => (
+                            <li key={memberIndex}>{member.name}</li>
+                          )
+                        )}
+                      </ul>
+                    </TableCell>
+                    <TableCell className="text-right">
+                      {/* Add next event details */}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </>
+        </>
+      )}
     </>
+
     // <>
     //   <h1>Groups:</h1>
     //   <Table>
@@ -329,6 +426,7 @@ function SignedIn() {
 
   //function that creates a new event
   function CreateEvent() {
+    const [startDate, setStartDate] = useState<Date | null>(null);
     const [newEvent, setNewEvent] = useState("");
     console.log(events);
 
@@ -342,25 +440,36 @@ function SignedIn() {
             placeholder="Type your event here"
           />
           <Button
-            disabled={!newEvent}
+            disabled={!newEvent || !startDate}
             title={
               newEvent
                 ? "Save your event to the database"
                 : "You must enter an event first"
             }
             onClick={async () => {
-              //you may want to change type name to event
-              await saveEvent({
-                name: newEvent.trim(),
-                id: 0,
-                date: Date.now(),
-              });
-              setNewEvent("");
+              if (startDate) {
+                await saveEvent({
+                  name: newEvent.trim(),
+                  id: 0,
+                  date: startDate.getTime(),
+                });
+                setNewEvent("");
+              }
             }}
             className="min-w-fit"
           >
             Save the Event
           </Button>
+          <div style={{ color: "black" }}>
+            <DatePicker
+              selected={startDate}
+              onChange={(date: Date) => setStartDate(date as Date)}
+              showTimeSelect
+              timeFormat="hh:mm aa"
+              timeIntervals={30}
+              dateFormat="MMMM d, yyyy h:mm aa"
+            />
+          </div>
         </div>
       </>
     );
@@ -368,6 +477,10 @@ function SignedIn() {
 
   return (
     <>
+      <p className="flex gap-4 items-center">
+        This is you:
+        <UserButton afterSignOutUrl="#" />
+      </p>
       <div>
         {!isOpen ? (
           <></>
@@ -381,12 +494,9 @@ function SignedIn() {
         </Button>
       </div>
       <div className="">
-        {events?.map(({ _id, name }) => (
+        {events?.map(({ _id, name, date }) => (
           <div key={_id}>
-            {name}
-            <Card></Card>
-            <p>Edit</p>
-            <p>Delete</p>
+            {name} - {formatDateFromMillis(date)}
           </div>
         ))}
       </div>

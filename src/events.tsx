@@ -35,9 +35,31 @@ function CreateEvent() {
     );
   }
 
-  function EditEvent(){
+//Edit Event
+export const EditEvent = mutation({
+    args: { id: v.id("edit") },
+    handler: async (ctx, args) => {
+      const { id } = args;
+      console.log(await ctx.db.get(id));
+      // { text: "foo", status: { done: true }, _id: ... }
+  
+      // Add `tag` and overwrite `status`:
+      await ctx.db.patch(id, { tag: "bar", status: { archived: true } });
+      console.log(await ctx.db.get(id));
+      // { text: "foo", tag: "bar", status: { archived: true }, _id: ... }
+  
+      // Unset `tag` by setting it to `undefined`
+      await ctx.db.patch(id, { tag: undefined });
+      console.log(await ctx.db.get(id));
+      // { text: "foo", status: { archived: true }, _id: ... }
+    },
+  });
 
-    
-  }
-
+  //Removing Event
+export const DeleteEvents = mutation({
+    args: { id: v.id("events") },
+    handler: async (ctx, args) => {
+      await ctx.db.delete(args.id);
+    },
+  });
 
