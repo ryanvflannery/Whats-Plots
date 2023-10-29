@@ -287,7 +287,12 @@ function SignedIn() {
       </div>
       <div className="">
         {events?.map(({ _id, name }) => (
-          <div key={_id}>{name}</div>
+  
+          <div key={_id}>{name}
+          <Card></Card>
+            <p>Edit</p>
+            <p>Delete</p>
+          </div>
         ))}
       </div>
     </>

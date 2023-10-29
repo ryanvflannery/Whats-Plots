@@ -216,8 +216,8 @@ export const createNewEvent = mutation({
 });
 
 //Removing Event
-export const deleteTask = mutation({
-  args: { id: v.id("tasks") },
+export const deleteEvents = mutation({
+  args: { id: v.id("events") },
   handler: async (ctx, args) => {
     await ctx.db.delete(args.id);
   },
