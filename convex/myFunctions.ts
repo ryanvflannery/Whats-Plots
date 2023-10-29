@@ -87,19 +87,17 @@ export const addUser = mutation({
   args: {},
   handler: async (ctx, args) => {
     const user = await ctx.auth.getUserIdentity();
-    const userQuery = await ctx.db
-      .query("users")
-      .filter((q) => q.eq(q.field("id"), user?.subject))
-      .take(1);
+    if (user) {
+      const userQuery = await ctx.db
+        .query("users")
+        .filter((q) => q.eq(q.field("id"), user.subject))
+        .take(1);
 
-    if (userQuery.length === 0 && user) {
       const taskId = await ctx.db.insert("users", {
         name: user.name,
         email: user.email,
         id: user.subject,
       });
-    } else {
-      console.log("no user added to table");
     }
   },
 });
