@@ -10,6 +10,19 @@ import {
 } from "convex/react";
 import { api } from "../convex/_generated/api";
 import { useAuth } from "@clerk/clerk-react";
+
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css"; // Import the CSS
+
+function formatDateFromMillis(milliseconds: number): string {
+  const date = new Date(milliseconds);
+  const options: Intl.DateTimeFormatOptions = {
+    year: 'numeric', month: 'long', day: 'numeric',
+    hour: '2-digit', minute: '2-digit', second: '2-digit',
+    hour12: true,
+  };
+  return date.toLocaleDateString(undefined, options);
+}
 import {
   Card,
   CardContent,
@@ -351,6 +364,8 @@ function SignedIn() {
 
   //function that creates a new event
   function CreateEvent() {
+
+    const [startDate, setStartDate] = useState<Date | null>(null);
     const [newEvent, setNewEvent] = useState("");
     console.log(events);
 
@@ -362,58 +377,61 @@ function SignedIn() {
             value={newEvent}
             onChange={(event) => setNewEvent(event.target.value)}
             placeholder="Type your event here"
-          />
-          <Button
-            disabled={!newEvent}
-            title={
-              newEvent
-                ? "Save your event to the database"
-                : "You must enter an event first"
-            }
-            onClick={async () => {
-              //you may want to change type name to event
-              await saveEvent({
-                name: newEvent.trim(),
-                id: 0,
-                date: Date.now(),
-              });
+
+        />
+        <Button
+          disabled={!newEvent || !startDate}
+          title={
+          newEvent
+            ? "Save your event to the database"
+            : "You must enter an event first"
+          }
+          onClick={async () => {
+            if(startDate) {
+              await saveEvent({ name: newEvent.trim(), id: 0, date: startDate.getTime() });
               setNewEvent("");
-            }}
-            className="min-w-fit"
-          >
+            }
+          }}
+    
+          className="min-w-fit"
+        >
             Save the Event
+        </Button>
+        <div style={{color: "black"}}>
+            <DatePicker
+              selected={startDate}
+              onChange={date => setStartDate(date as Date)}
+              showTimeSelect
+              timeFormat="hh:mm aa"
+              timeIntervals={30}
+              dateFormat="MMMM d, yyyy h:mm aa"
+            />
+          </div>
+        </div>
+      
+        </>
+    )};
+
+    return (
+      <>
+        <p className="flex gap-4 items-center">
+          This is you:
+          <UserButton afterSignOutUrl="#" />
+        </p>
+        <div>
+          {!isOpen ? (<></>) : (<><CreateEvent/></>)}
+          <Button onClick={() => setIsOpen(!isOpen)}>
+            {isOpen ? "Close" : "Create Event"}
           </Button>
+        </div>
+        <div className="">
+          {events?.map(({ _id, name, date }) => (
+            <div key={_id}>
+              {name} - {formatDateFromMillis(date)}
+            </div>
+          ))}
         </div>
       </>
     );
   }
 
-  return (
-    <>
-      <div>
-        {!isOpen ? (
-          <></>
-        ) : (
-          <>
-            <CreateEvent />
-          </>
-        )}
-        <Button onClick={() => setIsOpen(!isOpen)}>
-          {isOpen ? "Close" : "Create Event"}
-        </Button>
-      </div>
-      <div className="">
-        {events?.map(({ _id, name }) => (
-  
-            <div key={_id}>{name}
-            <Card></Card>
-            <button onClick={() => EditEvent(_id,name)}>Edit</button>
-            <button onClick={() => deleteEvents(_id, name)}>Delete</button>
-            </div>
-
-
-        ))}
-      </div>
-    </>
-  );
-}
