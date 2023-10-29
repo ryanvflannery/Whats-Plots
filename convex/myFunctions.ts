@@ -104,14 +104,10 @@ export const addUser = mutation({
   },
 });
 
-function generateRandomID() {
-  return Math.floor(Math.random() * 10000000000); // 10 digits
-}
 // create a new group, add an array of user ids to the group
 export const createNewGroup = mutation({
   args: {
     name: v.string(),
-    id: v.number(),
     groupMembers: v.array(v.number()),
   },
   handler: async (ctx, args) => {
@@ -123,13 +119,11 @@ export const createNewGroup = mutation({
     //   .take(1);
 
     if (user) {
-      const randomID = generateRandomID();
       const taskId = await ctx.db.insert("groups", {
         name: args.name,
-        id: randomID,
-        groupMembers: [user.subject],
+        groupMembers: [user.email],
       });
-      // console.log("Task id: ", taskId);
+      console.log("Task id: ", taskId);
     }
   },
 });
@@ -148,7 +142,7 @@ export const getAllGroupsForUser = query({
     const groups = await ctx.db.query("groups").collect();
 
     const groupsUserIsIn = groups.filter((group) => {
-      return group.groupMembers.includes(user?.subject);
+      return group.groupMembers.includes(user?.email);
     });
 
     console.log("Groups: ", groups);
@@ -161,7 +155,7 @@ export const getAllGroupsForUser = query({
 export const addMemberToGroup = mutation({
   args: {
     groupID: v.string(),
-    userID: v.number(),
+    userID: v.string(),
   },
   handler: async (ctx, args) => {
     const groupSelection = await ctx.db
@@ -172,12 +166,28 @@ export const addMemberToGroup = mutation({
     console.log("group Selection: ", groupSelection);
     groupSelection.groupMembers.push(args.userID);
     ctx.db.replace(groupSelection._id, groupSelection);
+  },
+});
+export const removeUserFromGroup = mutation({
+  args: {
+    groupID: v.string(),
+    userID: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const groupSelection = await ctx.db
+      .query("groups")
+      .filter((q) => q.eq(q.field("_id"), args.groupID))
+      .first();
 
-    /*
-    const taskId = await ctx.db.insert("groupMembers", {
-      groupMembers: args.userID,
-    });
-    */
+    console.log("group Selection BEFORE: ", groupSelection);
+
+    groupSelection.groupMembers = groupSelection.groupMembers.filter(
+      (element: string) => element !== args.userID
+    );
+
+    ctx.db.replace(groupSelection._id, groupSelection);
+
+    console.log("After Remove: ", groupSelection);
   },
 });
 

@@ -9,18 +9,20 @@ import {
 } from "convex/react";
 import { api } from "../convex/_generated/api";
 import { useAuth } from "@clerk/clerk-react";
-import { useEffect, useState, ChangeEvent } from "react";
-import { getAllGroupsForUser } from "convex/myFunctions";
+import { useEffect, useState, ChangeEvent, SetStateAction } from "react";
 
 export default function App() {
   const { isLoaded, userId, sessionId, getToken } = useAuth();
   const [groupName, setGroupName] = useState("");
   const allGroups = useQuery(api.myFunctions.getAllGroupsForUser) || [];
+  const [emailAddressAddUser, setEmailAddressAddUser] = useState("");
+  const [emailAddressRemoveUser, setEmailAddressRemoveUser] = useState("");
 
-  // const [groupMemberEmail, setGroupMemberEmail] = useState("");
-  // const [groupMembersAdded, setGroupMembersAdded] = useState<string[]>([]);
   const createGroup = useMutation(api.myFunctions.createNewGroup);
   const addMemberToGroup = useMutation(api.myFunctions.addMemberToGroup);
+  const removeMemberFromGroup = useMutation(
+    api.myFunctions.removeUserFromGroup
+  );
 
   const handleGroupNameChange = (
     event: ChangeEvent<HTMLInputElement>
@@ -28,24 +30,38 @@ export default function App() {
     setGroupName(event.target.value);
   };
 
-  // const handleGroupMemberChange = (
-  //   event: ChangeEvent<HTMLInputElement>
-  // ): void => {
-  //   setGroupMemberEmail(event.target.value);
-  // };
+  const handleEmailAddChange = (e: {
+    target: { value: SetStateAction<string> };
+  }) => {
+    // Assuming this function is handling the change of the email input
+    setEmailAddressAddUser(e.target.value);
+  };
+
+  const handleEmailRemoveChange = (e: {
+    target: { value: SetStateAction<string> };
+  }) => {
+    // Assuming this function is handling the change of the email input
+    setEmailAddressRemoveUser(e.target.value);
+  };
 
   const handleCreateGroup = () => {
     void createGroup({
       name: groupName,
-      id: 12341241231231,
-      groupMembers: [1, 2, 4],
+      groupMembers: [],
     });
   };
 
   const handleAddMemberToGroup = () => {
     void addMemberToGroup({
-      groupID: "45xxzkj37860r6mpwsy3cakq9k5dv6g",
-      userID: 1283612783,
+      groupID: "457dhkw7rbdmabkgdbjnxyhp9k510f8",
+      userID: emailAddressAddUser,
+    });
+  };
+
+  const handleRemoveMemberGroup = () => {
+    void removeMemberFromGroup({
+      groupID: "457dhkw7rbdmabkgdbjnxyhp9k510f8",
+      userID: emailAddressRemoveUser,
     });
   };
 
@@ -56,9 +72,9 @@ export default function App() {
       </h1>
       <Authenticated>
         <SignedIn />
-        {/* <div>
+        <div>
           Hello, {userId} your current active session is {sessionId}
-        </div> */}
+        </div>
         <Input
           value={groupName}
           onChange={handleGroupNameChange}
@@ -75,9 +91,20 @@ export default function App() {
             </li>
           ))}
         </ul>
+        <Input
+          value={emailAddressAddUser}
+          onChange={handleEmailAddChange}
+          placeholder="Enter Email Address To Add To Group"
+        ></Input>
         <Button onClick={handleAddMemberToGroup}>Add member to group</Button>
-
-        <p>Space for Create Event</p>
+        <Input
+          value={emailAddressRemoveUser}
+          onChange={handleEmailRemoveChange}
+          placeholder="Enter Email Address To Remove From Group"
+        ></Input>
+        <Button onClick={handleRemoveMemberGroup}>
+          Remove Member From Group
+        </Button>
       </Authenticated>
 
       <Unauthenticated>
@@ -136,12 +163,6 @@ function SignedIn() {
             Save the Event
           </Button>
         </div>
-
-        {/* <div className="">
-        {events?.map(({ _id, name }) => (
-        <div key={_id}>{name}</div>
-        ))}
-        </div> */}
       </>
     );
   }
