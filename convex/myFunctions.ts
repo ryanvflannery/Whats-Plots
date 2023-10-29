@@ -270,22 +270,21 @@ export const SendReminder = internalAction({
 });
 
 // Define a function to mark the event as "Can attend"
-export const CanAttend = action({
+export const markEventAsCanAttend = mutation({
   args: { eventId: v.id("events") },
   handler: async (ctx, args) => {
-    // Perform the logic to mark the event as "Can attend"
-    // You can use the eventId to identify and update the event
-    console.log(`Marked event with ID ${args.eventId} as 'Can attend'`);
+    // Set the CanAttend column to true for the specified event
+    const test = await ctx.db.patch(args.eventId, { CanAttend: true });
+
+    console.log("markeventasCanAttend", test);
   },
 });
 
-// Define a function to mark the event as "Can't attend"
-export const CantAttend = action({
+export const markEventAsCantAttend = mutation({
   args: { eventId: v.id("events") },
   handler: async (ctx, args) => {
-    // Perform the logic to mark the event as "Can't attend"
-    // You can use the eventId to identify and update the event
-    console.log(`Marked event with ID ${args.eventId} as 'Can't attend'`);
+    // Set the CantAttend column to true for the specified event
+    const test = await ctx.db.patch(args.eventId, { CantAttend: false });
   },
 });
 

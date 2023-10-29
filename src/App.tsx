@@ -195,8 +195,8 @@ function GroupComponent() {
     <>
       {isOpen ? (
         <>
-          <div className="flex items-center justify-center h-screen">
-            <Card className="w-[800px] h-[700px]">
+          <div className="flex items-center justify-center ">
+            <Card className="w-[800px]">
               <CardHeader>
                 <CardTitle
                   style={{
@@ -469,12 +469,14 @@ function AddGroupMember({ data }: React.PropsWithChildren<any>) {
 function NavBar() {
   return (
     <>
-      <nav className="bg-white-800 text-white p-10">
-        <ul className="flex justify-between">
-          <UserButton afterSignOutUrl="#" />
-          <div className="ml-auto"></div>
-        </ul>
-      </nav>
+      <div className="mb-5">
+        <nav className="bg-white-800 text-white p-10">
+          <ul className="flex justify-between">
+            <UserButton afterSignOutUrl="#" />
+            <div className="ml-auto"></div>
+          </ul>
+        </nav>
+      </div>
     </>
   );
 }
@@ -592,21 +594,34 @@ function CreateEvent() {
 }
 
 function SignedIn() {
-  const addUser = useMutation(api.myFunctions.addUser);
   const [isOpen, setIsOpen] = useState(false);
+
+  const [upcomingEvents, setUpcominEvents] = useState([]);
+  const [confirmedEvents, setConfirmedEvents] = useState([]);
+
   const events = useQuery(api.myFunctions.getEvents);
+  const addUser = useMutation(api.myFunctions.addUser);
+  const markEventAsCanAttend = useMutation(
+    api.myFunctions.markEventAsCanAttend
+  );
+  const markEventAsCantAttend = useMutation(
+    api.myFunctions.markEventAsCantAttend
+  );
 
-  const [checkHovered, setCheckHovered] = useState(false);
-  const [closeHovered, setCloseHovered] = useState(false);
-  const [checkClicked, setCheckClicked] = useState(false);
-  const [closeClicked, setCloseClicked] = useState(false);
+  useEffect(() => {}, [events]);
 
-  const handleCheckClick = () => {
-    setCheckClicked(!checkClicked);
+  const handleNotAttend = (props: any) => {
+    // console.log("props, ", props);
+    void markEventAsCantAttend({
+      eventId: props,
+    });
   };
 
-  const handleCloseClick = () => {
-    setCloseClicked(!closeClicked);
+  const handleAttend = (props: any) => {
+    // console.log("props, ", props);
+    void markEventAsCanAttend({
+      eventId: props,
+    });
   };
 
   const handleDenyEvent = () => {};
@@ -640,38 +655,16 @@ function SignedIn() {
                       <div className="flex flex-row items-start justify-start pb-5">
                         <Card className="p-2">
                           <div className="flex items-center">
-                            <div
-                              className="m-1"
-                              onMouseEnter={() => setCheckHovered(true)}
-                              onMouseLeave={() => setCheckHovered(false)}
-                              onClick={handleCheckClick}
-                            >
+                            <div className="m-1">
                               <AiFillCheckCircle
+                                onClick={handleAttend}
                                 size="25"
-                                style={{
-                                  color: checkClicked
-                                    ? "blue"
-                                    : checkHovered
-                                    ? "green"
-                                    : "white",
-                                }}
                               />
                             </div>
-                            <div
-                              className="m-1"
-                              onMouseEnter={() => setCloseHovered(true)}
-                              onMouseLeave={() => setCloseHovered(false)}
-                              onClick={handleCloseClick}
-                            >
+                            <div className="m-1">
                               <AiFillCloseCircle
                                 size="25"
-                                style={{
-                                  color: closeClicked
-                                    ? "orange"
-                                    : closeHovered
-                                    ? "red"
-                                    : "white",
-                                }}
+                                onClick={() => handleNotAttend(_id)}
                               />
                             </div>
                           </div>
@@ -726,8 +719,20 @@ function SignedIn() {
               </Card>
               <Card className="p-4">
                 <div className="flex flex-col">
+                  <p>Name: Dinner</p>
+                  <p>Date: October 4, 2023 at 06:00:00 PM</p>
+                </div>
+              </Card>
+              <Card className="p-4">
+                <div className="flex flex-col">
                   <p>Name: Bowling</p>
                   <p>Date: October 2, 2023 at 04:00:00 PM</p>
+                </div>
+              </Card>
+              <Card className="p-4">
+                <div className="flex flex-col">
+                  <p>Name: Surfing</p>
+                  <p>Date: October 1, 2023 at 011:00:00 AM</p>
                 </div>
               </Card>
             </CardContent>
