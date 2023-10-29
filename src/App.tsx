@@ -103,8 +103,11 @@ export default function App() {
 function GroupComponent() {
   const [isOpen, setIsOpen] = useState(false);
   const [group, setGroup] = useState<any>(null);
+  const [editingGroup, setEditingGroup] = useState<any>(null); //Delete group and edit group
+  const [groupName, setGroupName] = useState("");
 
   const allGroups = useQuery(api.myFunctions.getAllGroupsForUser) || [];
+  const deleteGroupMutation = useMutation(api.myFunctions.deleteGroup); // Assuming this is your delete group mutation
 
   useEffect(() => {
     setGroup(group);
@@ -118,12 +121,27 @@ function GroupComponent() {
     // Add your logic here, like navigating to a group page or performing an action with the group ID
   };
 
+  const handleDeleteGroup = async (groupId: string) => {
+    try {
+      await deleteGroupMutation({ groupID: String(groupId) });
+      // Here, after successful deletion, update the local state:
+      // setGroups((prevGroups: any[]) => prevGroups.filter((group: any) => group._id !== groupId));
+    } catch (error) {
+      console.error("Failed to delete group:", error);
+    }
+  };
   const handleClose = () => {
     setIsOpen(false);
   };
   // useEffect(() => {
   //   setIsOpen(true);
   // }, []);
+
+  const handleGroupNameChange = (
+    event: ChangeEvent<HTMLInputElement>
+  ): void => {
+    setGroupName(event.target.value);
+  };
 
   return (
     <>
@@ -195,11 +213,13 @@ function GroupComponent() {
                 </TableHeader>
                 <TableBody>
                   {allGroups.map((group) => (
-                    <TableRow
-                      className="h-[75px]"
-                      onClick={() => handleRowClick(group)}
-                    >
-                      <TableCell className="text-lg">{group.name}</TableCell>
+                    <TableRow className="h-[75px]">
+                      <TableCell
+                        onClick={() => handleRowClick(group)}
+                        className="text-lg"
+                      >
+                        {group.name}
+                      </TableCell>
                       {group.groupMembers.map((item: any, index: any) => (
                         <>
                           <TableCell
@@ -211,7 +231,21 @@ function GroupComponent() {
                         </>
                       ))}
                       <TableCell className="text-right">
-                        {/* Add next event details */}
+                        {editingGroup === group ? (
+                          <Input
+                            defaultValue={group.name}
+                            onChange={(e) => handleGroupNameChange(e, group)} // You'll need to implement the handleGroupNameChange function
+                          />
+                        ) : (
+                          <Fragment>
+                            {/* <Button onClick={() => handleEditGroup(group)}>Edit</Button> */}
+                            <Button
+                              onClick={() => handleDeleteGroup(group._id)}
+                            >
+                              Delete
+                            </Button>
+                          </Fragment>
+                        )}
                       </TableCell>
                     </TableRow>
                   ))}

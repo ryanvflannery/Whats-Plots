@@ -288,3 +288,28 @@ export const CantAttend = action({
     console.log(`Marked event with ID ${args.eventId} as 'Can't attend'`);
   },
 });
+
+export const deleteGroup = mutation({
+  args: {
+    groupID: v.string(), // the ID of the group to delete
+  },
+  handler: async (ctx, args) => {
+    // Fetch the group by ID
+    console.log("group ID: " + args.groupID);
+    const groupSelection = await ctx.db
+      .query("groups")
+      .filter((q) => q.eq(q.field("_id"), args.groupID))
+      .first();
+
+    // Check if the group exists
+    console.log("group Selection: " + groupSelection);
+
+    if (groupSelection) {
+      // Delete the group from the database
+      await ctx.db.delete(groupSelection._id);
+      console.log("Group deleted:", groupSelection._id);
+    } else {
+      console.log("Group not found:", args.groupID);
+    }
+  },
+});
