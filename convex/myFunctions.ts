@@ -260,3 +260,5 @@ export const EditEvent = mutation({
     // { text: "foo", status: { archived: true }, _id: ... }
   },
 });
+
+//send Reminder Function
