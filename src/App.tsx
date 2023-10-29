@@ -607,8 +607,21 @@ function SignedIn() {
   const markEventAsCantAttend = useMutation(
     api.myFunctions.markEventAsCantAttend
   );
+  const getUpcomingEvents = useQuery(api.myFunctions.getUpcomingEvents);
 
-  useEffect(() => {}, [events]);
+  useEffect(() => {
+    const fetchUpcomingEvents = async () => {
+      // try {
+      //   const events = await getUpcomingEvents({}); // You can pass necessary arguments if required
+      //   setUpcomingEvents(events);
+      // } catch (error) {
+      //   // Handle errors, e.g., set an error state or display an error message
+      //   console.error('Error fetching upcoming events:', error);
+      // }
+    };
+
+    fetchUpcomingEvents();
+  }, []);
 
   const handleNotAttend = (props: any) => {
     // console.log("props, ", props);
