@@ -24,20 +24,6 @@ import { useAuth } from "@clerk/clerk-react";
 
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css"; // Import the CSS
-
-function formatDateFromMillis(milliseconds: number): string {
-  const date = new Date(milliseconds);
-  const options: Intl.DateTimeFormatOptions = {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-    hour12: true,
-  };
-  return date.toLocaleDateString(undefined, options);
-}
 import {
   Card,
   CardContent,
@@ -70,6 +56,20 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { EditEvent, deleteEvents } from "convex/myFunctions";
 import { set } from "date-fns";
 
+function formatDateFromMillis(milliseconds: number): string {
+  const date = new Date(milliseconds);
+  const options: Intl.DateTimeFormatOptions = {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: true,
+  };
+  return date.toLocaleDateString(undefined, options);
+}
+
 const tags = Array.from({ length: 50 }).map(
   (_, i, a) => `v1.2.0-beta.${a.length - i}`
 );
@@ -81,10 +81,6 @@ export default function App() {
     <>
       <NavBar />
       <main className="container  flex flex-col gap-1">
-        <h1 className="text-3xl font-extrabold my-8 text-center">
-          Whats Plots
-        </h1>
-
         <Authenticated>
           <GroupComponent></GroupComponent>
         </Authenticated>
@@ -108,11 +104,13 @@ function GroupComponent() {
 
   const allGroups = useQuery(api.myFunctions.getAllGroupsForUser) || [];
 
+  useEffect(() => {
+    setGroup(group);
+  });
+
   const handleRowClick = (group: any) => {
     // Perform an action when a row is clicked, for example, navigate to a specific group or perform an action with the groupId
-    console.log(`Clicked group ID: ${group}`);
     setGroup(group);
-    console.log("GROUP: ", group.groupMembers);
     setIsOpen(true);
 
     // Add your logic here, like navigating to a group page or performing an action with the group ID
@@ -137,28 +135,11 @@ function GroupComponent() {
                   <div>
                     <p>members</p>
                     <ul>
-                      {group.groupMembers.map(
-                        (
-                          item:
-                            | string
-                            | number
-                            | boolean
-                            | ReactElement<
-                                any,
-                                string | JSXElementConstructor<any>
-                              >
-                            | Iterable<ReactNode>
-                            | ReactPortal
-                            | null
-                            | undefined,
-                          index: Key | null | undefined
-                        ) => (
-                          <li key={index}>{item}</li>
-                        )
-                      )}
+                      {group.groupMembers.map((item: any, index: any) => (
+                        <li key={index}>{item}</li>
+                      ))}
                     </ul>
-
-                    <AddGroupMember></AddGroupMember>
+                    <AddGroupMember data={group._id} />{" "}
                     {/* <RemoveGroupMember></RemoveGroupMember> */}
                     <h1>Events</h1>
                     <SignedIn></SignedIn>
@@ -189,7 +170,7 @@ function GroupComponent() {
       ) : (
         <>
           <div className="justify-center">
-            <AddGroup></AddGroup>
+            <AddGroup />
 
             <Card>
               <Table>
@@ -197,14 +178,17 @@ function GroupComponent() {
 
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="w-[100px]">Name</TableHead>
-                    <TableHead>Members</TableHead>
-                    <TableHead className="text-right">Next Event</TableHead>
+                    <TableHead className="w-[100px]">Groups</TableHead>
+                    <TableHead></TableHead>
+                    <TableHead className="text-right"></TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {allGroups.map((group, index) => (
-                    <TableRow key={index} onClick={() => handleRowClick(group)}>
+                    <TableRow
+                      className="h-[75px]"
+                      onClick={() => handleRowClick(group)}
+                    >
                       <TableCell className="font-medium">
                         {group.name}
                       </TableCell>
@@ -314,9 +298,14 @@ function RemoveGroupMember() {
   );
 }
 
-function AddGroupMember() {
+function AddGroupMember({ data }: React.PropsWithChildren<any>) {
   const [emailAddressAddUser, setEmailAddressAddUser] = useState("");
   const [isOpen, setIsOpen] = useState(false);
+  const [group, setGroup] = useState<any>(null);
+
+  useEffect(() => {
+    setGroup(data);
+  }, [data]);
 
   const addMemberToGroup = useMutation(api.myFunctions.addMemberToGroup);
 
@@ -329,10 +318,11 @@ function AddGroupMember() {
 
   const handleAddMemberToGroup = () => {
     void addMemberToGroup({
-      groupID: "457dhkw7rbdmabkgdbjnxyhp9k510f8",
+      groupID: group,
       userID: emailAddressAddUser,
     });
     setIsOpen(false);
+    alert(`${emailAddressAddUser}, has been added to the group`);
   };
 
   return (
@@ -390,7 +380,7 @@ function AddGroupMember() {
 function NavBar() {
   return (
     <>
-      <nav className="bg-white-800 text-white p-4">
+      <nav className="bg-white-800 text-white p-10">
         <ul className="flex justify-right">
           <UserButton afterSignOutUrl="#" />
         </ul>
