@@ -19,6 +19,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Separator } from "@/components/ui/separator";
 // import {
 //   Select,
 //   SelectContent,
@@ -26,6 +28,64 @@ import { Label } from "@/components/ui/label";
 //   SelectTrigger,
 //   SelectValue,
 // } from "@/components/ui/select";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+
+const tags = Array.from({ length: 50 }).map(
+  (_, i, a) => `v1.2.0-beta.${a.length - i}`
+);
+
+const invoices = [
+  {
+    invoice: "INV001",
+    paymentStatus: "Paid",
+    totalAmount: "$250.00",
+    paymentMethod: "Credit Card",
+  },
+  {
+    invoice: "INV002",
+    paymentStatus: "Pending",
+    totalAmount: "$150.00",
+    paymentMethod: "PayPal",
+  },
+  {
+    invoice: "INV003",
+    paymentStatus: "Unpaid",
+    totalAmount: "$350.00",
+    paymentMethod: "Bank Transfer",
+  },
+  {
+    invoice: "INV004",
+    paymentStatus: "Paid",
+    totalAmount: "$450.00",
+    paymentMethod: "Credit Card",
+  },
+  {
+    invoice: "INV005",
+    paymentStatus: "Paid",
+    totalAmount: "$550.00",
+    paymentMethod: "PayPal",
+  },
+  {
+    invoice: "INV006",
+    paymentStatus: "Pending",
+    totalAmount: "$200.00",
+    paymentMethod: "Bank Transfer",
+  },
+  {
+    invoice: "INV007",
+    paymentStatus: "Unpaid",
+    totalAmount: "$300.00",
+    paymentMethod: "Credit Card",
+  },
+];
 
 export default function App() {
   const { isLoaded, userId, sessionId, getToken } = useAuth();
@@ -35,14 +95,14 @@ export default function App() {
       <h1 className="text-4xl font-extrabold my-8 text-center">
         Welcome to Plots
       </h1>
+      <UserButton afterSignOutUrl="#" />
       <Authenticated>
         <SignedIn />
-        <div>
-          Hello, {userId} your current active session is {sessionId}
-        </div>
+        <div>Hello, {userId}</div>
         <AddGroup></AddGroup>
         <RemoveGroupMember></RemoveGroupMember>
         <AddGroupMember></AddGroupMember>
+        <GroupComponent></GroupComponent>
       </Authenticated>
 
       <Unauthenticated>
@@ -100,9 +160,7 @@ function RemoveGroupMember() {
         </CardContent>
         <CardFooter className="flex justify-between">
           <Button variant="outline">Cancel</Button>
-          <Button onClick={handleRemoveMemberGroup}>
-            Remove Member From Group
-          </Button>
+          <Button onClick={handleRemoveMemberGroup}>Remove</Button>
         </CardFooter>
       </Card>
     </>
@@ -152,16 +210,88 @@ function AddGroupMember() {
         </CardContent>
         <CardFooter className="flex justify-between">
           <Button variant="outline">Cancel</Button>
-          <Button onClick={handleAddMemberToGroup}>create new group</Button>
+          <Button onClick={handleAddMemberToGroup}>Add</Button>
         </CardFooter>
       </Card>
     </>
   );
 }
 
+function GroupComponent() {
+  const allGroups = useQuery(api.myFunctions.getAllGroupsForUser) || [];
+
+  return (
+    <>
+      <h1>Groups:</h1>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="w-[100px]">Name</TableHead>
+            <TableHead></TableHead>
+
+            <TableHead>Members</TableHead>
+            {/* <TableHead className="text-right">Amount</TableHead> */}
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {allGroups.map((group, index) => (
+            <TableRow key={index}>
+              <TableCell className="font-medium">{group.name}</TableCell>
+              <TableCell>{}</TableCell>
+
+              <TableCell>{group.groupMembers.length}</TableCell>
+              <TableCell className="text-right">{}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+      {/* <ScrollArea className="h-72 w-48 rounded-md border">
+        <div className="p-4">
+          <h4 className="mb-4 text-sm font-medium leading-none">Groups</h4>
+          {allGroups.map((group, index) => (
+            <>
+              <li key={index}>
+                {" "}
+                <Card className="w-[100px] h-[100px]">
+                  <CardHeader>
+                    <CardTitle>{group.name}</CardTitle>
+                  </CardHeader>
+                  <CardContent></CardContent>
+                </Card>
+              </li>
+              <Separator className="my-2" />
+            </>
+          ))}
+        </div>
+      </ScrollArea> */}
+      {/* <form>
+        <div className="grid w-full items-center gap-4">
+          <Label className="items-center" htmlFor="name">
+            Name
+          </Label>
+        </div>
+        <h1>All Groups</h1>
+        <></>
+        <ul>
+          {allGroups.map((group, index) => (
+            <li key={index}>
+              {" "}
+              <Card className="w-[150px] h-[150px]">
+                <CardHeader>
+                  <CardTitle>{group.name}</CardTitle>
+                </CardHeader>
+                <CardContent></CardContent>
+              </Card>
+            </li>
+          ))}
+        </ul>
+      </form> */}
+    </>
+  );
+}
+
 function AddGroup() {
   const [groupName, setGroupName] = useState("");
-  const allGroups = useQuery(api.myFunctions.getAllGroupsForUser) || [];
   const createGroup = useMutation(api.myFunctions.createNewGroup);
 
   const handleGroupNameChange = (
@@ -201,19 +331,9 @@ function AddGroup() {
         </CardContent>
         <CardFooter className="flex justify-between">
           <Button variant="outline">Cancel</Button>
-          <Button onClick={handleCreateGroup}>create new group</Button>
+          <Button onClick={handleCreateGroup}>Create</Button>
         </CardFooter>
       </Card>
-
-      <h1>All Groups</h1>
-      <ul>
-        {allGroups.map((group, index) => (
-          <li key={index}>
-            {/* Display the group details here */}
-            Group Name: {group.name}
-          </li>
-        ))}
-      </ul>
     </>
   );
 }
@@ -269,10 +389,6 @@ function SignedIn() {
 
   return (
     <>
-      <p className="flex gap-4 items-center">
-        This is you:
-        <UserButton afterSignOutUrl="#" />
-      </p>
       <div>
         {!isOpen ? (
           <></>
