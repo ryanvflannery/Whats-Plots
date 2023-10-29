@@ -221,7 +221,7 @@ function GroupComponent() {
                     ))}
                   </div>
                   <AddGroupMember data={group._id} />{" "}
-                  {/* <RemoveGroupMember></RemoveGroupMember> */}
+                  <RemoveGroupMember></RemoveGroupMember>
                   <SignedIn></SignedIn>
                 </CardDescription>
 
@@ -357,31 +357,56 @@ function RemoveGroupMember() {
 
   return (
     <>
-      <Card className="w-[350px]">
-        <CardHeader>
-          <CardTitle>Remove A Group Member</CardTitle>
-          <CardDescription>Input An Email Address To Remove</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form>
-            <div className="grid w-full items-center gap-4">
-              <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="name">Email</Label>
-                <Input
-                  id="name"
-                  value={emailAddressRemoveUser}
-                  onChange={handleEmailRemoveChange}
-                  placeholder="Enter Email Address To Remove From Group"
-                />
-              </div>
-            </div>
-          </form>
-        </CardContent>
-        <CardFooter className="flex justify-between">
-          <Button variant="outline">Cancel</Button>
-          <Button onClick={handleRemoveMemberGroup}>Remove</Button>
-        </CardFooter>
-      </Card>
+      {isOpen ? (
+        <>
+          {" "}
+          <Card className="w-[350px]">
+            <CardHeader>
+              <CardTitle>Remove A Group Member</CardTitle>
+              <CardDescription>
+                Input An Email Address To Remove
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <form>
+                <div className="grid w-full items-center gap-4">
+                  <div className="flex flex-col space-y-1.5">
+                    <Label htmlFor="name">Email</Label>
+                    <Input
+                      id="name"
+                      value={emailAddressRemoveUser}
+                      onChange={handleEmailRemoveChange}
+                      placeholder="Enter Email Address To Remove From Group"
+                    />
+                  </div>
+                </div>
+              </form>
+            </CardContent>
+            <CardFooter className="flex justify-between">
+              <Button
+                onClick={() => {
+                  setIsOpen(!isOpen);
+                }}
+                variant="outline"
+              >
+                Cancel
+              </Button>
+              <Button onClick={handleRemoveMemberGroup}>Remove</Button>
+            </CardFooter>
+          </Card>
+        </>
+      ) : (
+        <>
+          {" "}
+          <Button
+            onClick={() => {
+              setIsOpen(!isOpen);
+            }}
+          >
+            Remove Group Member
+          </Button>
+        </>
+      )}
     </>
   );
 }
@@ -668,8 +693,8 @@ function SignedIn() {
                           </div>
 
                           <div className="flex flex-col">
-                            <p>Name: {name}</p>
-                            <p>Date: {formatDateFromMillis(date)}</p>
+                            <p>{name}</p>
+                            <p>{formatDateFromMillis(date)}</p>
                           </div>
                         </Card>
                       </div>
@@ -695,8 +720,8 @@ function SignedIn() {
                       <div className="flex flex-row items-start justify-start pb-5">
                         <Card className="p-2">
                           <div className="flex flex-col">
-                            <p>Name: {name}</p>
-                            <p>Date: {formatDateFromMillis(date)}</p>
+                            <p>{name}</p>
+                            <p>{formatDateFromMillis(date)}</p>
                           </div>
                         </Card>
                       </div>
@@ -723,10 +748,48 @@ function SignedIn() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-2">
-              {/* <div className="space-y-1">
-                <Label htmlFor="current">Current password</Label>
-                <Input id="current" type="password" />
-              </div> */}
+              <div className="mt-5">
+                <div>
+                  <div className="flex flex-row items-start justify-start pb-5">
+                    <Card className="p-2">
+                      <div className="flex flex-col">
+                        <p>Shopping</p>
+                        <p>October 25, 2023 at 5:00:00 PM</p>
+                      </div>
+                    </Card>
+                  </div>
+                  <div>
+                    <div className="flex flex-row items-start justify-start pb-5">
+                      <Card className="p-2">
+                        <div className="flex flex-col">
+                          <p>Picnic</p>
+                          <p>October 15, 2023 at 8:00:00 PM</p>
+                        </div>
+                      </Card>
+                    </div>
+                  </div>
+                  <div>
+                    <div className="flex flex-row items-start justify-start pb-5">
+                      <Card className="p-2">
+                        <div className="flex flex-col">
+                          <p>Franks Birthday</p>
+                          <p>October 6, 2023 at 9:00:00 AM</p>
+                        </div>
+                      </Card>
+                    </div>
+                  </div>
+                  <div>
+                    <div className="flex flex-row items-start justify-start pb-5">
+                      <Card className="p-2">
+                        <div className="flex flex-col">
+                          <p>Picnic</p>
+                          <p>August 26, 2023 at 11:00:00 AM</p>
+                        </div>
+                      </Card>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </CardContent>
             <CardFooter></CardFooter>
           </Card>
