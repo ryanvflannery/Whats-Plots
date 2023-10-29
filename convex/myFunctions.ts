@@ -1,6 +1,7 @@
 import { v } from "convex/values";
-import { query, mutation, action } from "./_generated/server";
+import { query, mutation, action, internalAction } from "./_generated/server";
 import { api } from "./_generated/api";
+import { sendExpiringMessage } from "./messages";
 
 // Write your Convex functions in any file inside this directory (`convex`).
 // See https://docs.convex.dev/functions for more.
@@ -262,3 +263,10 @@ export const EditEvent = mutation({
 });
 
 //send Reminder Function
+export const SendReminder = internalAction({
+  args: {},
+  handler: async (ctx) => {
+    // Call the sendExpiringMessage function here
+    await sendExpiringMessage();
+  },
+});
