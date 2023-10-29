@@ -40,3 +40,11 @@
 .read-the-docs {
   color: #888;
 }
+
+.hoverRow {
+  transition: background-color 0.3s ease;
+}
+
+.hoverRow:hover {
+  background-color: #f0f0f0; /* Change this color to your desired highlight color */
+}
