@@ -216,7 +216,7 @@ export const createNewEvent = mutation({
 });
 
 //Removing Event
-export const deleteEvents = mutation({
+export const DeleteEvents = mutation({
   args: { id: v.id("events") },
   handler: async (ctx, args) => {
     await ctx.db.delete(args.id);
@@ -242,3 +242,6 @@ export const EditEvent = mutation({
     // { text: "foo", status: { archived: true }, _id: ... }
   },
 });
+
+
+

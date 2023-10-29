@@ -37,6 +37,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { EditEvent, deleteEvents } from "convex/myFunctions";
 
 const tags = Array.from({ length: 50 }).map(
   (_, i, a) => `v1.2.0-beta.${a.length - i}`
@@ -404,11 +405,13 @@ function SignedIn() {
       <div className="">
         {events?.map(({ _id, name }) => (
   
-          <div key={_id}>{name}
-          <Card></Card>
-            <p>Edit</p>
-            <p>Delete</p>
-          </div>
+            <div key={_id}>{name}
+            <Card></Card>
+            <button onClick={() => EditEvent(_id,name)}>Edit</button>
+            <button onClick={() => deleteEvents(_id, name)}>Delete</button>
+            </div>
+
+
         ))}
       </div>
     </>
