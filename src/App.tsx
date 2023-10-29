@@ -1,3 +1,4 @@
+import { IconName } from "react-icons/bi";
 import {
   useEffect,
   useState,
@@ -531,9 +532,9 @@ function SignedIn() {
           <div key={_id}>
             {name} - {formatDateFromMillis(date)}
             {/* Can Attend */}
-            <button><img src='' /></button>
+            <button><img src='BiCheck' /></button>
             {/* Can't attend */}
-            <button>Can't attend</button>
+            <button><img src='BiX'/></button>
           </div>
         ))}
       </div>
