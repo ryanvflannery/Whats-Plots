@@ -59,6 +59,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { EditEvent, deleteEvents } from "convex/myFunctions";
 import { set } from "date-fns";
 import { Checkbox } from "@/components/ui/checkbox";
+import LandingPage from "./LandingPage";
 
 function formatDateFromMillis(milliseconds: number): string {
   const date = new Date(milliseconds);
@@ -80,24 +81,62 @@ const tags = Array.from({ length: 50 }).map(
 
 export default function App() {
   const { isLoaded, userId, sessionId, getToken } = useAuth();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+
 
   return (
     <>
-      <main className="container  flex flex-col gap-1">
+      <main className="container flex flex-col gap-1">
         <Authenticated>
           <NavBar />
           <GroupComponent></GroupComponent>
+          <GroupOperations></GroupOperations>
         </Authenticated>
 
-        <Unauthenticated>
-          <div className="flex justify-center">
-            <SignInButton mode="modal">
-              <Button>Sign in</Button>
-            </SignInButton>
+        <Unauthenticated  >
+        <header className="absolute inset-x-0 top-0 z-50">
+        <nav className="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
+          <div className="flex lg:flex-1">
+            <a href="#" className="-m-1.5 p-1.5">
+              <span className="sr-only">Your Company</span>
+              <img
+                className="h-8 w-auto"
+                src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+                alt=""
+              />
+            </a>
           </div>
+          <div className="flex lg:hidden">
+            <button
+              type="button"
+              className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
+              onClick={() => setMobileMenuOpen(true)}
+            >
+              <span className="sr-only">Open main menu</span>
+              {/* <Bars3Icon className="h-6 w-6" aria-hidden="true" /> */}
+            </button>
+          </div>
+                     
+          <div className="hidden lg:flex lg:flex-1 lg:justify-end">
+            <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
+            <SignInButton mode="modal"/><span aria-hidden="true">&rarr;</span>
+            </a>
+          </div>
+        </nav>
+      </header>
+      <LandingPage/>
         </Unauthenticated>
       </main>
     </>
+  );
+}
+
+function GroupOperations() {
+  return (
+    <div className="mt-4 px-6">
+      <h2 className="text-xl font-bold mb-3">My Groups</h2>
+      <AddGroup />
+    </div>
   );
 }
 
@@ -427,7 +466,6 @@ function NavBar() {
         <ul className="flex justify-between">
           <UserButton afterSignOutUrl="#" />
           <div className="ml-auto">
-            <AddGroup />
           </div>
         </ul>
       </nav>
@@ -560,48 +598,31 @@ function SignedIn() {
 
   return (
     <>
-      <Tabs defaultValue="Upcoming Events" className="w-[100%]">
-        <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="upcoming">Upcoming Events</TabsTrigger>
-          <TabsTrigger value="confirmed">Confirmed Events</TabsTrigger>
-          <TabsTrigger value="past">Past Events</TabsTrigger>
+      <Tabs defaultValue="account" className="w-[400px]">
+        <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger value="account">Account</TabsTrigger>
+          <TabsTrigger value="password">Password</TabsTrigger>
         </TabsList>
-        <TabsContent value="upcoming">
+        <TabsContent value="account">
           <Card>
             <CardHeader>
-              <CardTitle>Upcoming </CardTitle>
+              <CardTitle>Account</CardTitle>
               <CardDescription>
-                Upcoming Events Will Appear Here. Click on an event to confirm
-                or deny attendance.{" "}
-                <div className="mt-5">
-                  {events?.map(({ _id, name, date }) => (
-                    <div key={_id}>
-                      <div className="flex flex-row items-start justify-start pb-5">
-                        <Card className="p-2">
-                          <button>Attending</button>
-                          <button>Not Attending</button>
-                          <div className="flex flex-col">
-                            <p>Name: {name}</p>
-                            <p>Date: {formatDateFromMillis(date)}</p>
-                          </div>
-                        </Card>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                Make changes to your account here. Click save when you're done.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-2"></CardContent>
-            <CardFooter></CardFooter>
+            <CardFooter>
+              <Button>Save changes</Button>
+            </CardFooter>
           </Card>
         </TabsContent>
-        <TabsContent value="confirmed">
+        <TabsContent value="password">
           <Card>
             <CardHeader>
-              <CardTitle>Confirmed</CardTitle>
+              <CardTitle>Password</CardTitle>
               <CardDescription>
-                Confirmed Events Will Appear Here. View Upcoming Events You Are
-                Attending.
+                Change your password here. After saving, you'll be logged out.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-2">
@@ -610,28 +631,13 @@ function SignedIn() {
                 <Input id="current" type="password" />
               </div> */}
             </CardContent>
-            <CardFooter></CardFooter>
-          </Card>
-        </TabsContent>
-        <TabsContent value="past">
-          <Card>
-            <CardHeader>
-              <CardTitle>Past Events</CardTitle>
-              <CardDescription>
-                Past Events You Have Attended Will Appear Here
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-2">
-              {/* <div className="space-y-1">
-                <Label htmlFor="current">Current password</Label>
-                <Input id="current" type="password" />
-              </div> */}
-            </CardContent>
-            <CardFooter></CardFooter>
+            <CardFooter>
+              <Button>Save password</Button>
+            </CardFooter>
           </Card>
         </TabsContent>
       </Tabs>
-      <div className="mt-2">
+      {/* <div className="mt-2">
         {!isOpen ? (
           <></>
         ) : (
@@ -643,6 +649,25 @@ function SignedIn() {
           {isOpen ? "Close" : "Create Event"}
         </Button>
       </div>
+      <div className="mt-10">
+        <p>New Events</p>
+        {events?.map(({ _id, name, date }) => (
+          <div key={_id}>
+            <div className="flex flex-row items-start justify-start pb-5">
+              <Card className="p-10">
+                <Button>Attending</Button>
+                <Button>Not Attending</Button>
+                <div className="flex flex-col">
+                  <p>Name: {name}</p>
+                  <p>Date: {formatDateFromMillis(date)}</p>
+                </div>
+              </Card>
+            </div>
+          </div>
+        ))}
+      </div>
+      <p>Upcoming Events</p>
+      <p>Past Events</p> */}
     </>
   );
 }
