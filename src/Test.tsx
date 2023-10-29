@@ -10,7 +10,6 @@ import {
 import { api } from "../convex/_generated/api";
 import { useAuth } from "@clerk/clerk-react";
 import { useEffect, useState, ChangeEvent } from "react";
-import { getAllGroupsForUser } from "convex/myFunctions";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css"; // Import the CSS
 
@@ -28,9 +27,6 @@ export default function App() {
   const { isLoaded, userId, sessionId, getToken } = useAuth();
   const [groupName, setGroupName] = useState("");
   const [allGroups, setAllGroups] = useState<any[]>([]);
-
-  // const [groupMemberEmail, setGroupMemberEmail] = useState("");
-  // const [groupMembersAdded, setGroupMembersAdded] = useState<string[]>([]);
   const createGroup = useMutation(api.myFunctions.createNewGroup);
   const getAllGroupsForUser = useMutation(api.myFunctions.getAllGroupsForUser);
 
@@ -48,12 +44,6 @@ export default function App() {
     setGroupName(event.target.value);
   };
 
-  // const handleGroupMemberChange = (
-  //   event: ChangeEvent<HTMLInputElement>
-  // ): void => {
-  //   setGroupMemberEmail(event.target.value);
-  // };
-
   const handleCreateGroup = () => {
     void createGroup({
       name: groupName,
@@ -69,26 +59,18 @@ export default function App() {
       </h1>
       <Authenticated>
         <SignedIn />
-        {/* <div>
-          Hello, {userId} your current active session is {sessionId}
-        </div> */}
         <Input
           value={groupName}
           onChange={handleGroupNameChange}
           placeholder="Group Name"
         ></Input>
-
-        <Button onClick={handleCreateGroup}>create new group</Button>
+        <Button onClick={handleCreateGroup}>Create new group</Button>
         <h1>All Groups</h1>
         <ul>
           {allGroups.map((group, index) => (
-            <li key={index}>
-              {/* Display the group details here */}
-              Group Name: {group.name}
-            </li>
+            <li key={index}>Group Name: {group.name}</li>
           ))}
         </ul>
-
         <p>Space for Create Event</p>
       </Authenticated>
       
@@ -103,7 +85,6 @@ export default function App() {
   );
 }
 
-
 function SignedIn() {
   const saveEvent = useMutation(api.myFunctions.createNewEvent);
   const addUser = useMutation(api.myFunctions.addUser);
@@ -114,45 +95,37 @@ function SignedIn() {
     void addUser();
   }, []);
 
-
-
-  const addNumber = useMutation(api.myFunctions.addNumber);
-
-  //function that creates a new event
   function CreateEvent() {
-
     const [startDate, setStartDate] = useState<Date | null>(null);
-    const [newEvent, setNewEvent] = useState("")
-    console.log(events);
-
-    return(
-        <>
+    const [newEvent, setNewEvent] = useState("");
+  
+    return (
+      <>
         <div className="flex gap-2">
-        <Input
+          <Input
             type="text"
             value={newEvent}
             onChange={(event) => setNewEvent(event.target.value)}
             placeholder="Type your event here"
-        />
-        <Button
-          disabled={!newEvent || !startDate}
-          title={
-          newEvent
-            ? "Save your event to the database"
-            : "You must enter an event first"
-          }
-          onClick={async () => {
-            if(startDate) {
-              await saveEvent({ name: newEvent.trim(), id: 0, date: startDate.getTime() });
-              setNewEvent("");
+          />
+          <Button
+            disabled={!newEvent || !startDate}
+            title={
+              newEvent
+                ? "Save your event to the database"
+                : "You must enter an event first"
             }
-          }}
-    
-          className="min-w-fit"
-        >
+            onClick={async () => {
+              if(startDate) {
+                await saveEvent({ name: newEvent.trim(), id: 0, date: startDate.getTime() });
+                setNewEvent("");
+              }
+            }}
+            className="min-w-fit"
+          >
             Save the Event
-        </Button>
-        <div style={{color: "black"}}>
+          </Button>
+          <div style={{color: "black"}}>
             <DatePicker
               selected={startDate}
               onChange={date => setStartDate(date as Date)}
@@ -163,29 +136,29 @@ function SignedIn() {
             />
           </div>
         </div>
-      
-        </>
-    )};
-
-    return (
-      <>
-        <p className="flex gap-4 items-center">
-          This is you:
-          <UserButton afterSignOutUrl="#" />
-        </p>
-        <div>
-          {!isOpen ? (<></>) : (<><CreateEvent/></>)}
-          <Button onClick={() => setIsOpen(!isOpen)}>
-            {isOpen ? "Close" : "Create Event"}
-          </Button>
-        </div>
-        <div className="">
-          {events?.map(({ _id, name, date }) => (
-            <div key={_id}>
-              {name} - {formatDateFromMillis(date)}
-            </div>
-          ))}
-        </div>
       </>
     );
   }
+
+  return (
+    <>
+      <p className="flex gap-4 items-center">
+        This is you:
+        <UserButton afterSignOutUrl="#" />
+      </p>
+      <div>
+        {!isOpen ? (<></>) : (<><CreateEvent/></>)}
+        <Button onClick={() => setIsOpen(!isOpen)}>
+          {isOpen ? "Close" : "Create Event"}
+        </Button>
+      </div>
+      <div className="">
+        {events?.map(({ _id, name, date }) => (
+          <div key={_id}>
+            {name} - {formatDateFromMillis(date)}
+          </div>
+        ))}
+      </div>
+    </>
+  );
+}
