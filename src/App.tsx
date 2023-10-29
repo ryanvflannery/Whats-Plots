@@ -57,6 +57,7 @@ import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
 import { EditEvent, deleteEvents } from "convex/myFunctions";
 import { set } from "date-fns";
+import { Checkbox } from "@/components/ui/checkbox";
 
 function formatDateFromMillis(milliseconds: number): string {
   const date = new Date(milliseconds);
@@ -157,9 +158,7 @@ function GroupComponent() {
                     alignItems: "center",
                   }}
                 >
-                  <p style={{ fontSize: "1.5rem", margin: 0 }}>
-                    Group Name Here
-                  </p>
+                  <p style={{ fontSize: "1.5rem", margin: 0 }}>{group.name}</p>
                   <Button
                     onClick={handleClose}
                     variant="outline"
@@ -170,15 +169,14 @@ function GroupComponent() {
                 </CardTitle>
 
                 <CardDescription>
-                  <div>
-                    {group.groupMembers.map((item: any, index: any) => (
-                      <p key={index}>{item}</p>
+                  <div className="flex flex-row items-start justify-start pb-5">
+                    {group.groupMembers.map((item: any) => (
+                      <p>{item}</p>
                     ))}
-                    <AddGroupMember data={group._id} />{" "}
-                    {/* <RemoveGroupMember></RemoveGroupMember> */}
-                    <h1>Events</h1>
-                    <SignedIn></SignedIn>
                   </div>
+                  <AddGroupMember data={group._id} />{" "}
+                  {/* <RemoveGroupMember></RemoveGroupMember> */}
+                  <SignedIn></SignedIn>
                 </CardDescription>
 
                 <CardContent>
@@ -573,18 +571,15 @@ function SignedIn() {
           {isOpen ? "Close" : "Create Event"}
         </Button>
       </div>
-      <div className="">
+      <div>
         {events?.map(({ _id, name, date }) => (
           <div key={_id}>
-            {name} - {formatDateFromMillis(date)}
-            {/* Can Attend */}
-            <button>
-              <img src="BiCheck" />
-            </button>
-            {/* Can't attend */}
-            <button>
-              <img src="BiX" />
-            </button>
+            <div className="flex flex-row items-start justify-start pb-5">
+              {name} - {formatDateFromMillis(date)}
+              <Card className="width-[500px]">
+                <Checkbox />
+              </Card>
+            </div>
           </div>
         ))}
       </div>
