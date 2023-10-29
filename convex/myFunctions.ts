@@ -313,30 +313,42 @@ export const deleteGroup = mutation({
   },
 });
 
+export const getConfirmedEvents = query({
+  args: {},
+  handler: async (ctx, args) => {
+    try {
+      const events = await ctx.db.query("events").collect();
+
+      const eventsByAttend = events.filter((event) => {
+        return event.CanAttend == true;
+      });
+
+      console.log("events:", eventsByAttend);
+
+      return eventsByAttend;
+    } catch (error) {
+      console.error("Error in getUpcomingEvents:", error);
+      return []; // Return an empty array or handle the error as needed
+    }
+  },
+});
+
 export const getUpcomingEvents = query({
   args: {},
   handler: async (ctx, args) => {
-    const user = await ctx.auth.getUserIdentity();
-    // const userQuery = await ctx.db
-    //   .query("users")
-    //   .filter((q) => q.eq(q.field("id"), user?.subject))
-    //   .take(1);
-    // console.log("user", user);
-    const events = await ctx.db.query("groups").collect();
+    try {
+      const events = await ctx.db.query("groups").collect();
 
-    const eventsByAttend = events.filter((q) =>
-      q.eq(q.field("cantAttend"), "undefined")
-    );
-    // const groupsByID = events.filter((event) => {
-    //   return event.includes(user?.email);
-    // });
+      const eventsByAttend = events.filter((event) => {
+        return event;
+      });
 
-    // console.log("Groups: ", groups);
+      console.log("events:", eventsByAttend);
 
-    console.log("events, ", eventsByAttend);
-
-    if (eventsByAttend.length > 0) {
       return eventsByAttend;
+    } catch (error) {
+      console.error("Error in getUpcomingEvents:", error);
+      return []; // Return an empty array or handle the error as needed
     }
   },
 });

@@ -89,8 +89,6 @@ export default function App() {
       <main className="container bg-black flex flex-col gap-1 min-h-screen">
         <Authenticated>
           <NavBar />
-          <GroupOperations></GroupOperations>
-
           <GroupComponent></GroupComponent>
         </Authenticated>
 
@@ -141,8 +139,8 @@ export default function App() {
 
 function GroupOperations() {
   return (
-    <div className="mt-4 px-6">
-      <h2 className="text-xl font-bold mb-3">My Groups</h2>
+    <div className="m-5 px-6">
+      {/* <h2 className="text-xl font-bold mb-3">My Groups</h2> */}
       <AddGroup />
     </div>
   );
@@ -248,6 +246,7 @@ function GroupComponent() {
       ) : (
         <>
           <div className="justify-center">
+            <GroupOperations />
             <Card>
               <Table>
                 {/* <TableCaption></TableCaption> */}
@@ -596,10 +595,6 @@ function CreateEvent() {
 
 function SignedIn() {
   const [isOpen, setIsOpen] = useState(false);
-
-  const [upcomingEvents, setUpcominEvents] = useState([]);
-  const [confirmedEvents, setConfirmedEvents] = useState([]);
-
   const events = useQuery(api.myFunctions.getEvents);
   const addUser = useMutation(api.myFunctions.addUser);
   const markEventAsCanAttend = useMutation(
@@ -608,28 +603,21 @@ function SignedIn() {
   const markEventAsCantAttend = useMutation(
     api.myFunctions.markEventAsCantAttend
   );
-  // const getUpcomingEvents = useQuery(api.myFunctions.getUpcomingEvents);
+  const UpcomingEvents = useQuery(api.myFunctions.getUpcomingEvents) || [];
+  const [confirmedEvents, setConfirmedEvents] = useState<any>(null);
+
+  const confirmedEventsQuery = useQuery(api.myFunctions.getConfirmedEvents);
 
   useEffect(() => {
-    const fetchUpcomingEvents = async () => {
-      // try {
-      //   const events = await getUpcomingEvents({}); // You can pass necessary arguments if required
-      //   setUpcomingEvents(events);
-      // } catch (error) {
-      //   // Handle errors, e.g., set an error state or display an error message
-      //   console.error('Error fetching upcoming events:', error);
-      // }
-    };
+    setConfirmedEvents(confirmedEventsQuery || []);
+  }, [confirmedEventsQuery]);
 
-    fetchUpcomingEvents();
-  }, []);
-
-  const handleNotAttend = (props: any) => {
-    // console.log("props, ", props);
-    void markEventAsCantAttend({
-      eventId: props,
-    });
-  };
+  // const handleNotAttend = (props: any) => {
+  //   // console.log("props, ", props);
+  //   void markEventAsCantAttend({
+  //     eventId: props,
+  //   });
+  // };
 
   const handleAttend = (props: any) => {
     // console.log("props, ", props);
@@ -637,10 +625,6 @@ function SignedIn() {
       eventId: props,
     });
   };
-
-  const handleDenyEvent = () => {};
-
-  const handleConfirmEvent = () => {};
 
   useEffect(() => {
     void addUser();
@@ -662,7 +646,7 @@ function SignedIn() {
               <CardTitle>Upcoming </CardTitle>
               <CardDescription>
                 Upcoming Events Will Appear Here. Click on an event to confirm
-                or deny attendance.{" "}
+                attendance.{" "}
                 <div className="mt-5">
                   {events?.map(({ _id, name, date }) => (
                     <div key={_id}>
@@ -671,16 +655,16 @@ function SignedIn() {
                           <div className="flex items-center">
                             <div className="m-1">
                               <AiFillCheckCircle
-                                onClick={handleAttend}
+                                onClick={() => handleAttend(_id)}
                                 size="25"
                               />
                             </div>
-                            <div className="m-1">
+                            {/* <div className="m-1">
                               <AiFillCloseCircle
-                                size="25"
                                 onClick={() => handleNotAttend(_id)}
+                                size="25"
                               />
-                            </div>
+                            </div> */}
                           </div>
 
                           <div className="flex flex-col">
@@ -705,13 +689,27 @@ function SignedIn() {
               <CardDescription>
                 Confirmed Events Will Appear Here. View Upcoming Events You Are
                 Attending.
+                <div className="mt-5">
+                  {confirmedEvents?.map(({ _id, name, date }) => (
+                    <div key={_id}>
+                      <div className="flex flex-row items-start justify-start pb-5">
+                        <Card className="p-2">
+                          <div className="flex flex-col">
+                            <p>Name: {name}</p>
+                            <p>Date: {formatDateFromMillis(date)}</p>
+                          </div>
+                        </Card>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-2">
               {/* <div className="space-y-1">
-              <Label htmlFor="current">Current password</Label>
-              <Input id="current" type="password" />
-            </div> */}
+                <Label htmlFor="current">Current password</Label>
+                <Input id="current" type="password" />
+              </div> */}
             </CardContent>
             <CardFooter></CardFooter>
           </Card>
@@ -725,30 +723,10 @@ function SignedIn() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-2">
-              <Card className="p-4">
-                <div className="flex flex-col">
-                  <p>Name: Haunted House</p>
-                  <p>Date: October 21, 2023 at 010:00:00 PM</p>
-                </div>
-              </Card>
-              <Card className="p-4">
-                <div className="flex flex-col">
-                  <p>Name: Dinner</p>
-                  <p>Date: October 4, 2023 at 06:00:00 PM</p>
-                </div>
-              </Card>
-              <Card className="p-4">
-                <div className="flex flex-col">
-                  <p>Name: Bowling</p>
-                  <p>Date: October 2, 2023 at 04:00:00 PM</p>
-                </div>
-              </Card>
-              <Card className="p-4">
-                <div className="flex flex-col">
-                  <p>Name: Surfing</p>
-                  <p>Date: October 1, 2023 at 011:00:00 AM</p>
-                </div>
-              </Card>
+              {/* <div className="space-y-1">
+                <Label htmlFor="current">Current password</Label>
+                <Input id="current" type="password" />
+              </div> */}
             </CardContent>
             <CardFooter></CardFooter>
           </Card>
