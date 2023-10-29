@@ -560,31 +560,49 @@ function SignedIn() {
 
   return (
     <>
-      <Tabs defaultValue="account" className="w-[400px]">
-        <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="account">Account</TabsTrigger>
-          <TabsTrigger value="password">Password</TabsTrigger>
+      <Tabs defaultValue="Upcoming Events" className="w-[100%]">
+        <TabsList className="grid w-full grid-cols-3">
+          <TabsTrigger value="upcoming">Upcoming Events</TabsTrigger>
+          <TabsTrigger value="confirmed">Confirmed Events</TabsTrigger>
+          <TabsTrigger value="past">Past Events</TabsTrigger>
         </TabsList>
-        <TabsContent value="account">
+        <TabsContent value="upcoming">
           <Card>
             <CardHeader>
-              <CardTitle>Account</CardTitle>
+              <CardTitle>Upcoming </CardTitle>
               <CardDescription>
-                Make changes to your account here. Click save when you're done.
+                Upcoming Events Will Appear Here. Click on an event to confirm
+                or deny attendance.{" "}
+                <div className="mt-10">
+                  <p>New Events</p>
+                  {events?.map(({ _id, name, date }) => (
+                    <div key={_id}>
+                      <div className="flex flex-row items-start justify-start pb-5">
+                        <Card className="p-2">
+                          <button>Attending</button>
+                          <button>Not Attending</button>
+                          <div className="flex flex-col">
+                            <p>Name: {name}</p>
+                            <p>Date: {formatDateFromMillis(date)}</p>
+                          </div>
+                        </Card>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-2"></CardContent>
-            <CardFooter>
-              <Button>Save changes</Button>
-            </CardFooter>
+            <CardFooter></CardFooter>
           </Card>
         </TabsContent>
-        <TabsContent value="password">
+        <TabsContent value="confirmed">
           <Card>
             <CardHeader>
-              <CardTitle>Password</CardTitle>
+              <CardTitle>Confirmed</CardTitle>
               <CardDescription>
-                Change your password here. After saving, you'll be logged out.
+                Confirmed Events Will Appear Here. View Upcoming Events You Are
+                Attending.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-2">
@@ -593,13 +611,28 @@ function SignedIn() {
                 <Input id="current" type="password" />
               </div> */}
             </CardContent>
-            <CardFooter>
-              <Button>Save password</Button>
-            </CardFooter>
+            <CardFooter></CardFooter>
+          </Card>
+        </TabsContent>
+        <TabsContent value="past">
+          <Card>
+            <CardHeader>
+              <CardTitle>Past Events</CardTitle>
+              <CardDescription>
+                Past Events You Have Attended Will Appear Here
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-2">
+              {/* <div className="space-y-1">
+                <Label htmlFor="current">Current password</Label>
+                <Input id="current" type="password" />
+              </div> */}
+            </CardContent>
+            <CardFooter></CardFooter>
           </Card>
         </TabsContent>
       </Tabs>
-      {/* <div className="mt-2">
+      <div className="mt-2">
         {!isOpen ? (
           <></>
         ) : (
@@ -611,25 +644,6 @@ function SignedIn() {
           {isOpen ? "Close" : "Create Event"}
         </Button>
       </div>
-      <div className="mt-10">
-        <p>New Events</p>
-        {events?.map(({ _id, name, date }) => (
-          <div key={_id}>
-            <div className="flex flex-row items-start justify-start pb-5">
-              <Card className="p-10">
-                <Button>Attending</Button>
-                <Button>Not Attending</Button>
-                <div className="flex flex-col">
-                  <p>Name: {name}</p>
-                  <p>Date: {formatDateFromMillis(date)}</p>
-                </div>
-              </Card>
-            </div>
-          </div>
-        ))}
-      </div>
-      <p>Upcoming Events</p>
-      <p>Past Events</p> */}
     </>
   );
 }
