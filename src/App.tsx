@@ -560,7 +560,7 @@ function SignedIn() {
 
   return (
     <>
-      <Tabs defaultValue="Upcoming Events" className="w-[100%]">
+      <Tabs defaultValue="upcoming" className="w-[100%]">
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="upcoming">Upcoming Events</TabsTrigger>
           <TabsTrigger value="confirmed">Confirmed Events</TabsTrigger>
