@@ -53,7 +53,7 @@ import {
 } from "@/components/ui/table";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
-import { EditEvent, deleteEvents } from "convex/myFunctions";
+import { CanAttend, CantAttend, EditEvent, deleteEvents } from "convex/myFunctions";
 import { set } from "date-fns";
 
 function formatDateFromMillis(milliseconds: number): string {
@@ -530,6 +530,10 @@ function SignedIn() {
         {events?.map(({ _id, name, date }) => (
           <div key={_id}>
             {name} - {formatDateFromMillis(date)}
+            {/* Can Attend */}
+            <button><img src='' /></button>
+            {/* Can't attend */}
+            <button>Can't attend</button>
           </div>
         ))}
       </div>
