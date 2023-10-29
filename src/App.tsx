@@ -59,6 +59,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { EditEvent, deleteEvents } from "convex/myFunctions";
 import { set } from "date-fns";
 import { Checkbox } from "@/components/ui/checkbox";
+import LandingPage from "./LandingPage";
 
 function formatDateFromMillis(milliseconds: number): string {
   const date = new Date(milliseconds);
@@ -80,24 +81,68 @@ const tags = Array.from({ length: 50 }).map(
 
 export default function App() {
   const { isLoaded, userId, sessionId, getToken } = useAuth();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <>
-      <main className="container  flex flex-col gap-1">
+      <main className="container flex flex-col gap-1">
         <Authenticated>
           <NavBar />
           <GroupComponent></GroupComponent>
+          <GroupOperations></GroupOperations>
         </Authenticated>
 
         <Unauthenticated>
-          <div className="flex justify-center">
-            <SignInButton mode="modal">
-              <Button>Sign in</Button>
-            </SignInButton>
-          </div>
+          <header className="absolute inset-x-0 top-0 z-50">
+            <nav
+              className="flex items-center justify-between p-6 lg:px-8"
+              aria-label="Global"
+            >
+              <div className="flex lg:flex-1">
+                <a href="#" className="-m-1.5 p-1.5">
+                  <span className="sr-only">Your Company</span>
+                  <img
+                    className="h-8 w-auto"
+                    src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+                    alt=""
+                  />
+                </a>
+              </div>
+              <div className="flex lg:hidden">
+                <button
+                  type="button"
+                  className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
+                  onClick={() => setMobileMenuOpen(true)}
+                >
+                  <span className="sr-only">Open main menu</span>
+                  {/* <Bars3Icon className="h-6 w-6" aria-hidden="true" /> */}
+                </button>
+              </div>
+
+              <div className="hidden lg:flex lg:flex-1 lg:justify-end">
+                <a
+                  href="#"
+                  className="text-sm font-semibold leading-6 text-gray-900"
+                >
+                  <SignInButton mode="modal" />
+                  <span aria-hidden="true">&rarr;</span>
+                </a>
+              </div>
+            </nav>
+          </header>
+          <LandingPage />
         </Unauthenticated>
       </main>
     </>
+  );
+}
+
+function GroupOperations() {
+  return (
+    <div className="mt-4 px-6">
+      <h2 className="text-xl font-bold mb-3">My Groups</h2>
+      <AddGroup />
+    </div>
   );
 }
 
@@ -426,9 +471,7 @@ function NavBar() {
       <nav className="bg-white-800 text-white p-10">
         <ul className="flex justify-between">
           <UserButton afterSignOutUrl="#" />
-          <div className="ml-auto">
-            <AddGroup />
-          </div>
+          <div className="ml-auto"></div>
         </ul>
       </nav>
     </>
@@ -606,9 +649,9 @@ function SignedIn() {
             </CardHeader>
             <CardContent className="space-y-2">
               {/* <div className="space-y-1">
-                <Label htmlFor="current">Current password</Label>
-                <Input id="current" type="password" />
-              </div> */}
+              <Label htmlFor="current">Current password</Label>
+              <Input id="current" type="password" />
+            </div> */}
             </CardContent>
             <CardFooter></CardFooter>
           </Card>
@@ -623,9 +666,9 @@ function SignedIn() {
             </CardHeader>
             <CardContent className="space-y-2">
               {/* <div className="space-y-1">
-                <Label htmlFor="current">Current password</Label>
-                <Input id="current" type="password" />
-              </div> */}
+              <Label htmlFor="current">Current password</Label>
+              <Input id="current" type="password" />
+            </div> */}
             </CardContent>
             <CardFooter></CardFooter>
           </Card>
