@@ -82,15 +82,11 @@ export default function App() {
       <NavBar />
       <main className="container  flex flex-col gap-1">
         <h1 className="text-3xl font-extrabold my-8 text-center">
-          Whats The Plots
+          Whats Plots
         </h1>
 
         <Authenticated>
           <GroupComponent></GroupComponent>
-          {/* <SignedIn /> */}
-          {/* <AddGroup></AddGroup>
-          <RemoveGroupMember></RemoveGroupMember>
-          <AddGroupMember></AddGroupMember> */}
         </Authenticated>
 
         <Unauthenticated>
@@ -105,8 +101,170 @@ export default function App() {
   );
 }
 
+// add group, remove group member, addgroupmember
+function GroupComponent() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [group, setGroup] = useState<any>(null);
+
+  const allGroups = useQuery(api.myFunctions.getAllGroupsForUser) || [];
+
+  const handleRowClick = (group: any) => {
+    // Perform an action when a row is clicked, for example, navigate to a specific group or perform an action with the groupId
+    console.log(`Clicked group ID: ${group}`);
+    setGroup(group);
+    console.log("GROUP: ", group.groupMembers);
+    setIsOpen(true);
+
+    // Add your logic here, like navigating to a group page or performing an action with the group ID
+  };
+
+  const handleClose = () => {
+    setIsOpen(false);
+  };
+  // useEffect(() => {
+  //   setIsOpen(true);
+  // }, []);
+
+  return (
+    <>
+      {isOpen ? (
+        <>
+          <div className="flex items-center justify-center h-screen">
+            <Card className="w-[800px] h-[700px]">
+              <CardHeader>
+                <CardTitle>Group</CardTitle>
+                <CardDescription>
+                  <div>
+                    <p>members</p>
+                    <ul>
+                      {group.groupMembers.map(
+                        (
+                          item:
+                            | string
+                            | number
+                            | boolean
+                            | ReactElement<
+                                any,
+                                string | JSXElementConstructor<any>
+                              >
+                            | Iterable<ReactNode>
+                            | ReactPortal
+                            | null
+                            | undefined,
+                          index: Key | null | undefined
+                        ) => (
+                          <li key={index}>{item}</li>
+                        )
+                      )}
+                    </ul>
+
+                    <AddGroupMember></AddGroupMember>
+                    {/* <RemoveGroupMember></RemoveGroupMember> */}
+                    <h1>Events</h1>
+                    <SignedIn></SignedIn>
+                  </div>
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                {/* <form>
+                <div className="grid w-full items-center gap-4">
+                  <div className="flex flex-col space-y-1.5">
+                    <Label htmlFor="name">Name</Label>
+                    <Input id="name" placeholder="Name of your project" />
+                  </div>
+                  <div className="flex flex-col space-y-1.5">
+                    <Label htmlFor="framework">Framework</Label>
+                  </div>
+                </div>
+              </form> */}
+              </CardContent>
+              <CardFooter className="flex justify-between">
+                <Button onClick={handleClose} variant="outline">
+                  Exit
+                </Button>
+              </CardFooter>
+            </Card>
+          </div>
+        </>
+      ) : (
+        <>
+          <div className="justify-center">
+            <AddGroup></AddGroup>
+
+            <Card>
+              <Table>
+                {/* <TableCaption></TableCaption> */}
+
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="w-[100px]">Name</TableHead>
+                    <TableHead>Members</TableHead>
+                    <TableHead className="text-right">Next Event</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {allGroups.map((group, index) => (
+                    <TableRow key={index} onClick={() => handleRowClick(group)}>
+                      <TableCell className="font-medium">
+                        {group.name}
+                      </TableCell>
+                      <TableCell>
+                        <ul>
+                          {group.groupMembers.map(
+                            (member: { name: string }, memberIndex: number) => (
+                              <li key={memberIndex}>{member.name}</li>
+                            )
+                          )}
+                        </ul>
+                      </TableCell>
+                      <TableCell className="text-right">
+                        {/* Add next event details */}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </Card>
+          </div>
+        </>
+      )}
+    </>
+
+    // <>
+    //   <h1>Groups:</h1>
+    //   <Table>
+    //     <TableHeader>
+    //       <TableRow>
+    //         <TableHead className="w-[100px]">Name</TableHead>
+    //         <TableHead>d</TableHead>
+    //         <TableHead>d</TableHead>
+    //         <TableHead className="text-right">Members</TableHead>
+    //       </TableRow>
+    //     </TableHeader>
+
+    //     <TableBody>
+    //       {allGroups.map((group, index) => (
+    //         <a key={index} onClick={() => handleRowClick(group.id)}>
+    //           <TableRow className="hoverRow">
+    //             {" "}
+    //             {/* Apply the hoverRow class here */}
+    //             <TableCell className="font-medium">{group.name}</TableCell>
+    //             <TableCell>d</TableCell>
+    //             <TableCell>d</TableCell>
+    //             <TableCell className="text-right">hi</TableCell>
+    //           </TableRow>
+    //         </a>
+    //       ))}
+    //     </TableBody>
+    //   </Table>
+    // </>
+  );
+}
+
 function RemoveGroupMember() {
   const [emailAddressRemoveUser, setEmailAddressRemoveUser] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+
   const removeMemberFromGroup = useMutation(
     api.myFunctions.removeUserFromGroup
   );
@@ -158,6 +316,7 @@ function RemoveGroupMember() {
 
 function AddGroupMember() {
   const [emailAddressAddUser, setEmailAddressAddUser] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
 
   const addMemberToGroup = useMutation(api.myFunctions.addMemberToGroup);
 
@@ -173,35 +332,57 @@ function AddGroupMember() {
       groupID: "457dhkw7rbdmabkgdbjnxyhp9k510f8",
       userID: emailAddressAddUser,
     });
+    setIsOpen(false);
   };
 
   return (
     <>
-      <Card className="w-[350px]">
-        <CardHeader>
-          <CardTitle>Add A Group Member</CardTitle>
-          <CardDescription>Input An Email Address To Add</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form>
-            <div className="grid w-full items-center gap-4">
-              <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="name">Name</Label>
-                <Input
-                  id="name"
-                  value={emailAddressAddUser}
-                  onChange={handleEmailAddChange}
-                  placeholder="Enter Email Address To Add To Group"
-                />
-              </div>
-            </div>
-          </form>
-        </CardContent>
-        <CardFooter className="flex justify-between">
-          <Button variant="outline">Cancel</Button>
-          <Button onClick={handleAddMemberToGroup}>Add</Button>
-        </CardFooter>
-      </Card>
+      {isOpen ? (
+        <>
+          <Card className="w-[350px]">
+            <CardHeader>
+              <CardTitle>Add A Group Member</CardTitle>
+              <CardDescription>Input An Email Address To Add</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <form>
+                <div className="grid w-full items-center gap-4">
+                  <div className="flex flex-col space-y-1.5">
+                    <Label htmlFor="name">Name</Label>
+                    <Input
+                      id="name"
+                      value={emailAddressAddUser}
+                      onChange={handleEmailAddChange}
+                      placeholder="Enter Email Address To Add To Group"
+                    />
+                  </div>
+                </div>
+              </form>
+            </CardContent>
+            <CardFooter className="flex justify-between">
+              <Button
+                onClick={() => {
+                  setIsOpen(!isOpen);
+                }}
+                variant="outline"
+              >
+                Cancel
+              </Button>
+              <Button onClick={handleAddMemberToGroup}>Add</Button>
+            </CardFooter>
+          </Card>
+        </>
+      ) : (
+        <>
+          <Button
+            onClick={() => {
+              setIsOpen(!isOpen);
+            }}
+          >
+            Add Group Member
+          </Button>
+        </>
+      )}
     </>
   );
 }
@@ -218,156 +399,10 @@ function NavBar() {
   );
 }
 
-function GroupComponent() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [group, setGroup] = useState<any>(null);
-
-  const allGroups = useQuery(api.myFunctions.getAllGroupsForUser) || [];
-
-  const handleRowClick = (group: any) => {
-    // Perform an action when a row is clicked, for example, navigate to a specific group or perform an action with the groupId
-    console.log(`Clicked group ID: ${group}`);
-    setGroup(group);
-    console.log("GROUP: ", group.groupMembers);
-    setIsOpen(true);
-
-    // Add your logic here, like navigating to a group page or performing an action with the group ID
-  };
-
-  const handleClose = () => {
-    setIsOpen(false);
-  };
-  // useEffect(() => {
-  //   setIsOpen(true);
-  // }, []);
-
-  return (
-    <>
-      {isOpen ? (
-        <>
-          <div className="flex items-center justify-center h-screen">
-            <Card className="w-[1000px] h-[700px]">
-              <CardHeader>
-                <CardTitle>Group</CardTitle>
-                <CardDescription>
-                  <div>
-                    <p>members</p>
-                    <ul>
-                      {group.groupMembers.map(
-                        (
-                          item:
-                            | string
-                            | number
-                            | boolean
-                            | ReactElement<
-                                any,
-                                string | JSXElementConstructor<any>
-                              >
-                            | Iterable<ReactNode>
-                            | ReactPortal
-                            | null
-                            | undefined,
-                          index: Key | null | undefined
-                        ) => (
-                          <li key={index}>{item}</li>
-                        )
-                      )}
-                    </ul>
-                    <p>events</p>
-                  </div>
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                {/* <form>
-                <div className="grid w-full items-center gap-4">
-                  <div className="flex flex-col space-y-1.5">
-                    <Label htmlFor="name">Name</Label>
-                    <Input id="name" placeholder="Name of your project" />
-                  </div>
-                  <div className="flex flex-col space-y-1.5">
-                    <Label htmlFor="framework">Framework</Label>
-                  </div>
-                </div>
-              </form> */}
-              </CardContent>
-              <CardFooter className="flex justify-between">
-                <Button onClick={handleClose} variant="outline">
-                  Exit
-                </Button>
-              </CardFooter>
-            </Card>
-          </div>
-        </>
-      ) : (
-        <>
-          <>
-            <Table>
-              {/* <TableCaption></TableCaption> */}
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="w-[100px]">Name</TableHead>
-                  <TableHead>Members</TableHead>
-                  <TableHead className="text-right">Next Event</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {allGroups.map((group, index) => (
-                  <TableRow key={index} onClick={() => handleRowClick(group)}>
-                    <TableCell className="font-medium">{group.name}</TableCell>
-                    <TableCell>
-                      <ul>
-                        {group.groupMembers.map(
-                          (member: { name: string }, memberIndex: number) => (
-                            <li key={memberIndex}>{member.name}</li>
-                          )
-                        )}
-                      </ul>
-                    </TableCell>
-                    <TableCell className="text-right">
-                      {/* Add next event details */}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </>
-        </>
-      )}
-    </>
-
-    // <>
-    //   <h1>Groups:</h1>
-    //   <Table>
-    //     <TableHeader>
-    //       <TableRow>
-    //         <TableHead className="w-[100px]">Name</TableHead>
-    //         <TableHead>d</TableHead>
-    //         <TableHead>d</TableHead>
-    //         <TableHead className="text-right">Members</TableHead>
-    //       </TableRow>
-    //     </TableHeader>
-
-    //     <TableBody>
-    //       {allGroups.map((group, index) => (
-    //         <a key={index} onClick={() => handleRowClick(group.id)}>
-    //           <TableRow className="hoverRow">
-    //             {" "}
-    //             {/* Apply the hoverRow class here */}
-    //             <TableCell className="font-medium">{group.name}</TableCell>
-    //             <TableCell>d</TableCell>
-    //             <TableCell>d</TableCell>
-    //             <TableCell className="text-right">hi</TableCell>
-    //           </TableRow>
-    //         </a>
-    //       ))}
-    //     </TableBody>
-    //   </Table>
-    // </>
-  );
-}
-
 function AddGroup() {
   const [groupName, setGroupName] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+
   const createGroup = useMutation(api.myFunctions.createNewGroup);
 
   const handleGroupNameChange = (
@@ -381,41 +416,102 @@ function AddGroup() {
       name: groupName,
       groupMembers: [],
     });
+    setIsOpen(false);
   };
 
   return (
     <>
-      <Card className="w-[350px]">
-        <CardHeader>
-          <CardTitle>Create A New Group</CardTitle>
-          <CardDescription>Make A New Group In One Click</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form>
-            <div className="grid w-full items-center gap-4">
-              <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="name">Name</Label>
-                <Input
-                  id="name"
-                  value={groupName}
-                  onChange={handleGroupNameChange}
-                  placeholder="Group Name"
-                />
-              </div>
-            </div>
-          </form>
-        </CardContent>
-        <CardFooter className="flex justify-between">
-          <Button variant="outline">Cancel</Button>
-          <Button onClick={handleCreateGroup}>Create</Button>
-        </CardFooter>
-      </Card>
+      {isOpen ? (
+        <>
+          {" "}
+          <Card className="w-[350px]">
+            <CardHeader>
+              <CardTitle>Create A New Group</CardTitle>
+              <CardDescription>Make A New Group In One Click</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <form>
+                <div className="grid w-full items-center gap-4">
+                  <div className="flex flex-col space-y-1.5">
+                    <Label htmlFor="name">Name</Label>
+                    <Input
+                      id="name"
+                      value={groupName}
+                      onChange={handleGroupNameChange}
+                      placeholder="Group Name"
+                    />
+                  </div>
+                </div>
+              </form>
+            </CardContent>
+            <CardFooter className="flex justify-between">
+              <Button onClick={() => setIsOpen(!isOpen)} variant="outline">
+                Cancel
+              </Button>
+              <Button onClick={handleCreateGroup}>Create</Button>
+            </CardFooter>
+          </Card>
+        </>
+      ) : (
+        <>
+          <Button onClick={() => setIsOpen(!isOpen)}>Create Group</Button>
+        </>
+      )}
+    </>
+  );
+}
+
+function CreateEvent() {
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [newEvent, setNewEvent] = useState("");
+  const saveEvent = useMutation(api.myFunctions.createNewEvent);
+
+  return (
+    <>
+      <div className="flex gap-2">
+        <Input
+          type="text"
+          value={newEvent}
+          onChange={(event) => setNewEvent(event.target.value)}
+          placeholder="Type your event here"
+        />
+        <Button
+          disabled={!newEvent || !startDate}
+          title={
+            newEvent
+              ? "Save your event to the database"
+              : "You must enter an event first"
+          }
+          onClick={async () => {
+            if (startDate) {
+              await saveEvent({
+                name: newEvent.trim(),
+                id: 0,
+                date: startDate.getTime(),
+              });
+              setNewEvent("");
+            }
+          }}
+          className="min-w-fit"
+        >
+          Save the Event
+        </Button>
+        <div style={{ color: "black" }}>
+          <DatePicker
+            selected={startDate}
+            onChange={(date: Date) => setStartDate(date as Date)}
+            showTimeSelect
+            timeFormat="hh:mm aa"
+            timeIntervals={30}
+            dateFormat="MMMM d, yyyy h:mm aa"
+          />
+        </div>
+      </div>
     </>
   );
 }
 
 function SignedIn() {
-  const saveEvent = useMutation(api.myFunctions.createNewEvent);
   const addUser = useMutation(api.myFunctions.addUser);
   const [isOpen, setIsOpen] = useState(false);
   const events = useQuery(api.myFunctions.getEvents);
@@ -424,63 +520,10 @@ function SignedIn() {
     void addUser();
   }, []);
 
-  //function that creates a new event
-  function CreateEvent() {
-    const [startDate, setStartDate] = useState<Date | null>(null);
-    const [newEvent, setNewEvent] = useState("");
-    console.log(events);
-
-    return (
-      <>
-        <div className="flex gap-2">
-          <Input
-            type="text"
-            value={newEvent}
-            onChange={(event) => setNewEvent(event.target.value)}
-            placeholder="Type your event here"
-          />
-          <Button
-            disabled={!newEvent || !startDate}
-            title={
-              newEvent
-                ? "Save your event to the database"
-                : "You must enter an event first"
-            }
-            onClick={async () => {
-              if (startDate) {
-                await saveEvent({
-                  name: newEvent.trim(),
-                  id: 0,
-                  date: startDate.getTime(),
-                });
-                setNewEvent("");
-              }
-            }}
-            className="min-w-fit"
-          >
-            Save the Event
-          </Button>
-          <div style={{ color: "black" }}>
-            <DatePicker
-              selected={startDate}
-              onChange={(date: Date) => setStartDate(date as Date)}
-              showTimeSelect
-              timeFormat="hh:mm aa"
-              timeIntervals={30}
-              dateFormat="MMMM d, yyyy h:mm aa"
-            />
-          </div>
-        </div>
-      </>
-    );
-  }
+  //function that creates a new even
 
   return (
     <>
-      <p className="flex gap-4 items-center">
-        This is you:
-        <UserButton afterSignOutUrl="#" />
-      </p>
       <div>
         {!isOpen ? (
           <></>
