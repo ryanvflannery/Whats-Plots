@@ -15,6 +15,7 @@ import type {
   FunctionReference,
 } from "convex/server";
 import type * as _schema from "../_schema";
+import type * as crons from "../crons";
 import type * as messages from "../messages";
 import type * as myFunctions from "../myFunctions";
 
@@ -28,6 +29,7 @@ import type * as myFunctions from "../myFunctions";
  */
 declare const fullApi: ApiFromModules<{
   _schema: typeof _schema;
+  crons: typeof crons;
   messages: typeof messages;
   myFunctions: typeof myFunctions;
 }>;

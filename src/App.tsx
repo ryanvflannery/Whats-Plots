@@ -1,3 +1,4 @@
+import { IconName } from "react-icons/bi";
 import {
   useEffect,
   useState,
@@ -428,8 +429,8 @@ function AddGroup() {
           {" "}
           <Card className="w-[350px]">
             <CardHeader>
-              <CardTitle>Create A New Group</CardTitle>
-              <CardDescription>Make A New Group In One Click</CardDescription>
+              <CardTitle>Create a new group</CardTitle>
+              <CardDescription>Make a new group in one click</CardDescription>
             </CardHeader>
             <CardContent>
               <form>
@@ -542,6 +543,14 @@ function SignedIn() {
         {events?.map(({ _id, name, date }) => (
           <div key={_id}>
             {name} - {formatDateFromMillis(date)}
+            {/* Can Attend */}
+            <button>
+              <img src="BiCheck" />
+            </button>
+            {/* Can't attend */}
+            <button>
+              <img src="BiX" />
+            </button>
           </div>
         ))}
       </div>

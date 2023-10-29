@@ -1,6 +1,7 @@
 import { v } from "convex/values";
-import { query, mutation, action } from "./_generated/server";
+import { query, mutation, action, internalAction } from "./_generated/server";
 import { api } from "./_generated/api";
+import { sendExpiringMessage } from "./messages";
 
 // Write your Convex functions in any file inside this directory (`convex`).
 // See https://docs.convex.dev/functions for more.
@@ -260,3 +261,30 @@ export const EditEvent = mutation({
 });
 
 //send Reminder Function
+export const SendReminder = internalAction({
+  args: {},
+  handler: async (ctx) => {
+    // Call the sendExpiringMessage function here
+    await sendExpiringMessage();
+  },
+});
+
+// Define a function to mark the event as "Can attend"
+export const CanAttend = action({
+  args: { eventId: v.id("events") },
+  handler: async (ctx, args) => {
+    // Perform the logic to mark the event as "Can attend"
+    // You can use the eventId to identify and update the event
+    console.log(`Marked event with ID ${args.eventId} as 'Can attend'`);
+  },
+});
+
+// Define a function to mark the event as "Can't attend"
+export const CantAttend = action({
+  args: { eventId: v.id("events") },
+  handler: async (ctx, args) => {
+    // Perform the logic to mark the event as "Can't attend"
+    // You can use the eventId to identify and update the event
+    console.log(`Marked event with ID ${args.eventId} as 'Can't attend'`);
+  },
+});
