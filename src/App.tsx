@@ -89,8 +89,9 @@ export default function App() {
       <main className="container bg-black flex flex-col gap-1 min-h-screen">
         <Authenticated>
           <NavBar />
-          <GroupComponent></GroupComponent>
           <GroupOperations></GroupOperations>
+
+          <GroupComponent></GroupComponent>
         </Authenticated>
 
         <Unauthenticated>
@@ -607,7 +608,7 @@ function SignedIn() {
   const markEventAsCantAttend = useMutation(
     api.myFunctions.markEventAsCantAttend
   );
-  const getUpcomingEvents = useQuery(api.myFunctions.getUpcomingEvents);
+  // const getUpcomingEvents = useQuery(api.myFunctions.getUpcomingEvents);
 
   useEffect(() => {
     const fetchUpcomingEvents = async () => {
