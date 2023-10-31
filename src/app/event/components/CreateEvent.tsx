@@ -10,7 +10,7 @@ import "react-datepicker/dist/react-datepicker.css"; // Import the CSS
 export default function CreateEvent() {
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [newEvent, setNewEvent] = useState("");
-  const saveEvent = useMutation(api.myFunctions.createNewEvent);
+  const saveEvent = useMutation(api.event.createNewEvent);
 
   return (
     <>

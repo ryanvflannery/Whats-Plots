@@ -31,8 +31,8 @@ export default function GroupComponent() {
   const [editingGroup, setEditingGroup] = useState<any>(null); //Delete group and edit group
   const [groupName, setGroupName] = useState("");
 
-  const allGroups = useQuery(api.myFunctions.getAllGroupsForUser) || [];
-  const deleteGroupMutation = useMutation(api.myFunctions.deleteGroup); // Assuming this is your delete group mutation
+  const allGroups = useQuery(api.group.getAllGroupsForUser) || [];
+  const deleteGroupMutation = useMutation(api.group.deleteGroup); // Assuming this is your delete group mutation
 
   useEffect(() => {
     setGroup(group);

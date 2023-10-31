@@ -9,7 +9,6 @@ export default function App() {
         <NavBar />
         <GroupComponent></GroupComponent>
       </Authenticated>
-
       <Unauthenticated>
         <SignInButton></SignInButton>
       </Unauthenticated>

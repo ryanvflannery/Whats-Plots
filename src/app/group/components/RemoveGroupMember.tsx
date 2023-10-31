@@ -19,9 +19,7 @@ export default function RemoveGroupMember() {
   const [emailAddressRemoveUser, setEmailAddressRemoveUser] = useState("");
   const [isOpen, setIsOpen] = useState(false);
 
-  const removeMemberFromGroup = useMutation(
-    api.myFunctions.removeUserFromGroup
-  );
+  const removeMemberFromGroup = useMutation(api.group.removeUserFromGroup);
 
   const handleEmailRemoveChange = (e: {
     target: { value: SetStateAction<string> };

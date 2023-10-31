@@ -16,6 +16,8 @@ import type {
 } from "convex/server";
 import type * as _schema from "../_schema";
 import type * as crons from "../crons";
+import type * as event from "../event";
+import type * as group from "../group";
 import type * as messages from "../messages";
 import type * as myFunctions from "../myFunctions";
 
@@ -30,6 +32,8 @@ import type * as myFunctions from "../myFunctions";
 declare const fullApi: ApiFromModules<{
   _schema: typeof _schema;
   crons: typeof crons;
+  event: typeof event;
+  group: typeof group;
   messages: typeof messages;
   myFunctions: typeof myFunctions;
 }>;

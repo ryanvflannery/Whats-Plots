@@ -24,7 +24,7 @@ export default function AddGroupMember({ data }: React.PropsWithChildren<any>) {
     setGroup(data);
   }, [data]);
 
-  const addMemberToGroup = useMutation(api.myFunctions.addMemberToGroup);
+  const addMemberToGroup = useMutation(api.group.addMemberToGroup);
 
   const handleEmailAddChange = (e: {
     target: { value: SetStateAction<string> };

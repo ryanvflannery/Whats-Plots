@@ -18,7 +18,7 @@ export default function AddGroup() {
   const [groupName, setGroupName] = useState("");
   const [isOpen, setIsOpen] = useState(false);
 
-  const createGroup = useMutation(api.myFunctions.createNewGroup);
+  const createGroup = useMutation(api.group.createNewGroup);
 
   const handleGroupNameChange = (
     event: ChangeEvent<HTMLInputElement>

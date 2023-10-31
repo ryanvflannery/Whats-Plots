@@ -32,18 +32,16 @@ import { AiFillCheckCircle, AiFillCloseCircle } from "react-icons/ai";
 
 export default function SignedIn() {
   const [isOpen, setIsOpen] = useState(false);
-  const events = useQuery(api.myFunctions.getEvents);
-  const addUser = useMutation(api.myFunctions.addUser);
-  const markEventAsCanAttend = useMutation(
-    api.myFunctions.markEventAsCanAttend
-  );
+  const events = useQuery(api.event.getEvents);
+  const addUser = useMutation(api.group.addUser);
+  const markEventAsCanAttend = useMutation(api.event.markEventAsCanAttend);
   // const markEventAsCantAttend = useMutation(
-  //   api.myFunctions.markEventAsCantAttend
+  //   api.event.markEventAsCantAttend
   // );
-  // const UpcomingEvents = useQuery(api.myFunctions.getUpcomingEvents) || [];
+  // const UpcomingEvents = useQuery(api.event.getUpcomingEvents) || [];
   const [confirmedEvents, setConfirmedEvents] = useState<any>(null);
 
-  const confirmedEventsQuery = useQuery(api.myFunctions.getConfirmedEvents);
+  const confirmedEventsQuery = useQuery(api.event.getConfirmedEvents);
 
   useEffect(() => {
     setConfirmedEvents(confirmedEventsQuery || []);
