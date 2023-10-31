@@ -19,7 +19,7 @@ import type * as crons from "../crons";
 import type * as event from "../event";
 import type * as group from "../group";
 import type * as messages from "../messages";
-import type * as myFunctions from "../myFunctions";
+import type * as twilio from "../twilio";
 
 /**
  * A utility for referencing Convex functions in your app's API.
@@ -35,7 +35,7 @@ declare const fullApi: ApiFromModules<{
   event: typeof event;
   group: typeof group;
   messages: typeof messages;
-  myFunctions: typeof myFunctions;
+  twilio: typeof twilio;
 }>;
 export declare const api: FilterApi<
   typeof fullApi,
