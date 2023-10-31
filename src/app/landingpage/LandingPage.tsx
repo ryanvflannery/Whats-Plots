@@ -1,10 +1,12 @@
 import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import WaterDropGrid from "./WaterDropGrid";
+import { SignInButton, UserButton } from "@clerk/clerk-react";
+import { Sign } from "crypto";
 
 const LandingPage = () => {
   return (
-    <section className="w-full px-8 py-12 grid grid-cols-1 md:grid-cols-2 items-center gap-8 max-w-6xl mx-auto">
+    <section className=" w-full h-screen px-8 grid grid-cols-1 md:grid-cols-2 items-center gap-8  mx-auto">
       <div>
         <span className="block mb-4 text-xs md:text-sm text-indigo-500 font-medium">
           Make it out of the groupchat
@@ -17,7 +19,7 @@ const LandingPage = () => {
           error repellat voluptatibus ad.
         </p>
         <button className="bg-indigo-500 text-white font-medium py-2 px-4 rounded transition-all hover:bg-indigo-600 active:scale-95">
-          Sign In
+          <SignInButton />
         </button>
       </div>
       <ShuffleGrid />
