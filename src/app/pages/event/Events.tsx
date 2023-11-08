@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 
 import { useMutation, useQuery } from "convex/react";
-import { api } from "../../../convex/_generated/api";
+import { api } from "../../../../convex/_generated/api";
 import "react-datepicker/dist/react-datepicker.css"; // Import the CSS
 import {
   Card,
@@ -30,7 +30,7 @@ function formatDateFromMillis(milliseconds: number): string {
 }
 import { AiFillCheckCircle, AiFillCloseCircle } from "react-icons/ai";
 
-export default function SignedIn() {
+export default function Events() {
   const [isOpen, setIsOpen] = useState(false);
   const events = useQuery(api.event.getEvents);
   const addUser = useMutation(api.group.addUser);

@@ -1,20 +1,18 @@
+import { SignInButton } from "@clerk/clerk-react";
 import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
-import WaterDropGrid from "./WaterDropGrid";
-import { SignInButton, UserButton } from "@clerk/clerk-react";
-import { Sign } from "crypto";
 
-const LandingPage = () => {
+const ShuffleHero = () => {
   return (
-    <section className=" w-full h-screen px-8 grid grid-cols-1 md:grid-cols-2 items-center gap-8  mx-auto">
+    <section className="w-full px-8 py-12 grid grid-cols-1 md:grid-cols-2 items-center gap-8 max-w-6xl mx-auto">
       <div>
         <span className="block mb-4 text-xs md:text-sm text-indigo-500 font-medium">
-          Make it out of the groupchat
+          Get It Out Of The Groupchat
         </span>
-        <h3 className="text-4xl text-white md:text-6xl font-semibold">
+        <h3 className="text-4xl md:text-6xl font-semibold text-white">
           Whats Plots
         </h3>
-        <p className="text-base md:text-lg text-slate-700 my-4 md:my-6">
+        <p className="text-base md:text-lg text-white my-4 md:my-6">
           Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nam nobis in
           error repellat voluptatibus ad.
         </p>
@@ -165,4 +163,4 @@ const ShuffleGrid = () => {
   );
 };
 
-export default LandingPage;
+export default ShuffleHero;

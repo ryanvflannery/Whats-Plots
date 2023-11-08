@@ -2,9 +2,9 @@ import { useState, SetStateAction } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useMutation } from "convex/react";
-import { api } from "../../../../convex/_generated/api";
+import { api } from "../../../../../convex/_generated/api";
 
-import "react-datepicker/dist/react-datepicker.css"; // Import the CSS
+import "react-datepicker/dist/react-datepicker.css";
 import {
   Card,
   CardContent,
@@ -24,7 +24,6 @@ export default function RemoveGroupMember() {
   const handleEmailRemoveChange = (e: {
     target: { value: SetStateAction<string> };
   }) => {
-    // Assuming this function is handling the change of the email input
     setEmailAddressRemoveUser(e.target.value);
   };
 
@@ -83,7 +82,7 @@ export default function RemoveGroupMember() {
               setIsOpen(!isOpen);
             }}
           >
-            Remove Group Member
+            Remove
           </Button>
         </>
       )}

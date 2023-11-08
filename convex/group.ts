@@ -64,28 +64,23 @@ export const getAllGroupsForUser = query({
 
     // console.log("Groups: ", groups);
 
-    return groups;
+    return groupsUserIsIn;
   },
 });
 
 export const getGroupByID = query({
-  args: {},
-  handler: async (ctx, args) => {
-    const user = await ctx.auth.getUserIdentity();
-    // const userQuery = await ctx.db
-    //   .query("users")
-    //   .filter((q) => q.eq(q.field("id"), user?.subject))
-    //   .take(1);
-    // console.log("user", user);
-    const groups = await ctx.db.query("groups").collect();
+  args: {
+    groupID: v.string(),
+  },
+  handler: async (ctx, args: { groupID: string }) => {
+    if (args.groupID) {
+      const groups = await ctx.db
+        .query("groups")
+        .filter((q) => q.eq(q.field("_id"), args.groupID))
+        .collect();
 
-    const groupsByID = groups.filter((group) => {
-      return group.includes(user?.email);
-    });
-
-    // console.log("Groups: ", groups);
-
-    return group;
+      return groups;
+    }
   },
 });
 
@@ -106,6 +101,7 @@ export const addMemberToGroup = mutation({
     ctx.db.replace(groupSelection._id, groupSelection);
   },
 });
+
 export const removeUserFromGroup = mutation({
   args: {
     groupID: v.string(),

@@ -1,17 +1,16 @@
 import { SignInButton, UserButton } from "@clerk/clerk-react";
 import { Authenticated, Unauthenticated } from "convex/react";
-import GroupComponent from "./app/group/GroupComponent";
-import LandingPage from "./app/landingpage/LandingPage";
+import Group from "./app/pages/group/Group";
+import LandingPage from "./app/pages/landingpage/LandingPage";
 
 export default function App() {
   return (
     <>
       <Authenticated>
         <NavBar />
-        <GroupComponent></GroupComponent>
+        <Group></Group>
       </Authenticated>
       <Unauthenticated>
-        <SignInButton></SignInButton>
         <LandingPage></LandingPage>
       </Unauthenticated>
     </>
@@ -20,7 +19,7 @@ export default function App() {
 
 function NavBar() {
   return (
-    <div className="p-10 mb-5">
+    <div className="m-10">
       <UserButton afterSignOutUrl="#" />
     </div>
   );
