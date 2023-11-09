@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import CreateEvent from "./components/CreateEvent";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 function formatDateFromMillis(milliseconds: number): string {
   const date = new Date(milliseconds);
@@ -82,12 +83,65 @@ export default function Events() {
               <CardDescription>
                 Upcoming Events Will Appear Here. Click on an event to confirm
                 attendance.{" "}
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-5">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-5 p-2.5">
                   {events?.map(({ _id, name, date }) => (
                     <button>
-                      <Card key={_id} className=" h-40 rounded-md">
-                        <p className="text-lg">{name}</p>
-                        <p className="text-lg">{formatDateFromMillis(date)}</p>
+                      <Card key={_id} className=" rounded-md">
+                        <div className="flex gap-4 m-2.5">
+                          <Avatar className="w-5 h-5">
+                            <AvatarImage
+                              src="https://github.com/shadcn.png"
+                              alt="@shadcn"
+                            />
+                            <AvatarFallback>CN</AvatarFallback>
+                          </Avatar>
+                          <Avatar className="w-5 h-5">
+                            <AvatarImage
+                              src="https://github.com/abccodes.png"
+                              alt="@shadcn"
+                            />
+                            <AvatarFallback>CN</AvatarFallback>
+                          </Avatar>
+                          <Avatar className="w-5 h-5">
+                            <AvatarImage
+                              src="https://github.com/RyanFlannery.png"
+                              alt="@shadcn"
+                            />
+                            <AvatarFallback>CN</AvatarFallback>
+                          </Avatar>
+                          <Avatar className="w-5 h-5">
+                            <AvatarImage
+                              src="https://github.com/SirKentut.png"
+                              alt="@shadcn"
+                            />
+                            <AvatarFallback>CN</AvatarFallback>
+                          </Avatar>
+                        </div>
+                        <h1 className="text-lg">{name}</h1>
+                        <p className="flex text-left text-md text-muted-foreground m-2.5">
+                          Lorem ipsum dolor sit amet consectetur adipisicing
+                          elit.Lorem ipsum dolor sit amet consectetur
+                          adipisicing elit.Lorem ipsum dolor sit amet
+                          consectetur adipisicing elit.
+                        </p>
+                        <p className="mb-5 mt-5 text-md">
+                          {formatDateFromMillis(date)}
+                        </p>
+                        <div className="m-5 grid grid-cols-2 lg:grid-cols-4 gap-5">
+                          <div className="bg-gray-50 h-10 w-10 flex items-center justify-center">
+                            <p>d</p>
+                          </div>
+                          <div className="bg-white h-10 w-10 flex items-center justify-center">
+                            <p>d</p>
+                          </div>
+                          <div className="bg-white h-10 w-10 flex items-center justify-center">
+                            <p>d</p>
+                          </div>
+                          <div className="bg-white h-10 w-10 flex items-center justify-center">
+                            <p>d</p>
+                          </div>
+                        </div>
+
                         {/* <div
                           className="w-full bg-cover bg-center opacity-50"
                           style={{

@@ -31,6 +31,13 @@ import {
 import { set } from "date-fns";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ShiftingCountdown from "./components/ShiftingCountdown";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 export default function GroupComponent() {
   const [isOpen, setIsOpen] = useState(false);
@@ -173,12 +180,34 @@ export default function GroupComponent() {
         </Tabs>
       </div>
       <ShiftingCountdown />
-      <div className="m-10 bg-dark-foreground border border-gray-50 border-opacity-25">
+      <div className="m-5 bg-dark-foreground border border-gray-50 border-opacity-25">
         <div className="justify-center flex">
           <h1 className="m-2.5 text-2xl font-medium text-white">Your Tools</h1>
         </div>
         <AITable></AITable>
       </div>
+
+      <Accordion type="single" collapsible className="m-10">
+        <AccordionItem value="item-1">
+          <AccordionTrigger>Is it accessible?</AccordionTrigger>
+          <AccordionContent>
+            Yes. It adheres to the WAI-ARIA design pattern.
+          </AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="item-2">
+          <AccordionTrigger>Is it styled?</AccordionTrigger>
+          <AccordionContent>
+            Yes. It comes with default styles that matches the other
+            components&apos; aesthetic.
+          </AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="item-3">
+          <AccordionTrigger>Is it animated?</AccordionTrigger>
+          <AccordionContent>
+            Yes. It's animated by default, but you can disable it if you prefer.
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
       {/* <div>
         <Card className="m-10 justify-center flex">
           <h1 className="m-2.5 text-2xl font-medium text-white">Your Tools</h1>
