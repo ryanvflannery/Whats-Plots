@@ -6,6 +6,7 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 import { ErrorBoundary } from "./ErrorBoundary";
 import "./index.css";
+import { dark, neobrutalism, shadesOfPurple } from "@clerk/themes";
 
 const convex = new ConvexReactClient(import.meta.env.VITE_CONVEX_URL as string);
 
@@ -14,6 +15,10 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <ErrorBoundary>
       <ClerkProvider
         publishableKey={import.meta.env.VITE_CLERK_PUBLISHABLE_KEY}
+        appearance={{
+          baseTheme: dark,
+          signIn: { baseTheme: dark },
+        }}
       >
         <ConvexProviderWithClerk client={convex} useAuth={useAuth}>
           <App />

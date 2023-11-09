@@ -69,7 +69,7 @@ export default function Events() {
 
   return (
     <>
-      <Tabs defaultValue="upcoming" className="w-[100%]">
+      <Tabs defaultValue="upcoming">
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="upcoming">Upcoming Events</TabsTrigger>
           <TabsTrigger value="confirmed">Confirmed Events</TabsTrigger>
@@ -82,34 +82,28 @@ export default function Events() {
               <CardDescription>
                 Upcoming Events Will Appear Here. Click on an event to confirm
                 attendance.{" "}
-                <div className="mt-5">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-5">
                   {events?.map(({ _id, name, date }) => (
-                    <div key={_id}>
-                      <div className="flex flex-row items-start justify-start pb-5">
-                        <Card className="p-2">
-                          <div className="flex items-center">
-                            <div className="m-1">
-                              <AiFillCheckCircle
-                                onClick={() => handleAttend(_id)}
-                                size="25"
-                              />
-                            </div>
-                            {/* <div className="m-1">
-                                <AiFillCloseCircle
-                                  onClick={() => handleNotAttend(_id)}
-                                  size="25"
-                                />
-                              </div> */}
-                          </div>
-
-                          <div className="flex flex-col">
-                            <p>{name}</p>
-                            <p>{formatDateFromMillis(date)}</p>
-                          </div>
-                        </Card>
-                      </div>
-                    </div>
+                    <button>
+                      <Card key={_id} className=" h-40 rounded-md">
+                        <p className="text-lg">{name}</p>
+                        <p className="text-lg">{formatDateFromMillis(date)}</p>
+                        {/* <div
+                          className="w-full bg-cover bg-center opacity-50"
+                          style={{
+                            backgroundImage: `url(https://randompicturegenerator.com/img/national-park-generator/gafcf50a35932f2f891a05a6ab56b9d2f9604880cb201c8e34222d6afdc01ba0483c80fa80a805cfe779c84f8d2d71002_640.jpg)`,
+                            backgroundSize: "cover",
+                            backgroundPosition: "center",
+                          }}
+                        ></div> */}
+                      </Card>
+                    </button>
                   ))}
+                  {/* <Card className="h-40 rounded-md">Box 1</Card>
+                  <Card className=" h-40 rounded-md">Box 1</Card>
+                  <Card className=" h-40 rounded-md">Box 1</Card>
+                  <Card className=" h-40 rounded-md">Box 1</Card>
+                  <Card className=" h-40 rounded-md">Box 1</Card> */}
                 </div>
               </CardDescription>
             </CardHeader>
@@ -125,7 +119,7 @@ export default function Events() {
                 Confirmed Events Will Appear Here. View Upcoming Events You Are
                 Attending.
                 <div className="mt-5">
-                  {confirmedEvents?.map(({ _id, name, date }) => (
+                  {/* {confirmedEvents?.map(({ _id, name, date }) => (
                     <div key={_id}>
                       <div className="flex flex-row items-start justify-start pb-5">
                         <Card className="p-2">
@@ -136,7 +130,7 @@ export default function Events() {
                         </Card>
                       </div>
                     </div>
-                  ))}
+                  ))} */}
                 </div>
               </CardDescription>
             </CardHeader>
@@ -158,7 +152,7 @@ export default function Events() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-2">
-              <div className="mt-5">
+              {/* <div className="mt-5">
                 <div>
                   <div className="flex flex-row items-start justify-start pb-5">
                     <Card className="p-2">
@@ -199,7 +193,7 @@ export default function Events() {
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> */}
             </CardContent>
             <CardFooter></CardFooter>
           </Card>
@@ -220,3 +214,34 @@ export default function Events() {
     </>
   );
 }
+
+// Upcoming Events
+// <div className="mt-5">
+// {events?.map(({ _id, name, date }) => (
+//   <div key={_id}>
+//     <div className="flex flex-row items-start justify-start pb-5">
+//       <Card className="p-2">
+//         <div className="flex items-center">
+//           <div className="m-1">
+//             <AiFillCheckCircle
+//               onClick={() => handleAttend(_id)}
+//               size="25"
+//             />
+//           </div>
+//           {/* <div className="m-1">
+//               <AiFillCloseCircle
+//                 onClick={() => handleNotAttend(_id)}
+//                 size="25"
+//               />
+//             </div> */}
+//         </div>
+
+//         <div className="flex flex-col">
+//           <p>{name}</p>
+//           <p>{formatDateFromMillis(date)}</p>
+//         </div>
+//       </Card>
+//     </div>
+//   </div>
+// ))}
+// </div>
