@@ -1,4 +1,5 @@
 import React, { useState, ChangeEvent, Fragment } from "react";
+import { UserButton } from "@clerk/clerk-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useMutation, useQuery } from "convex/react";
@@ -10,6 +11,7 @@ import Events from "../event/Events";
 import { Separator } from "@/components/ui/separator";
 import { Label } from "@/components/ui/label";
 import "react-datepicker/dist/react-datepicker.css"; // Import the CSS
+import AITable from "./AI/AITable";
 import {
   Card,
   CardContent,
@@ -65,16 +67,15 @@ export default function GroupComponent() {
       {/* grid-cols-1 lg:grid-cols-5 gap-4 */}
       <div className="">
         <div>
-          <div className="flex justify-between">
-            <div className="m-5">
-              <h1 className="m-2.5 text-2xl font-medium text-white">
-                Upcoming Events
-              </h1>
-            </div>
-            <div className="m-10">
-              <Button>Settings</Button>
+          <div className="flex justify-between m-10 ">
+            <h1 className="text-left text-2xl font-medium text-white">
+              Upcoming Events
+            </h1>
+            <div className="text-right">
+              <UserButton />
             </div>
           </div>
+
           <div className="justify-center">
             <Separator className="w-90" orientation="horizontal" />
           </div>
@@ -90,11 +91,10 @@ export default function GroupComponent() {
           <Card className="mt-2.5 mb-2.5 bg-purple-200"></Card>
         </div>
       </div>
-      <div className="m-10 border border-gray-50 border-opacity-25">
-        <div>
-          <h1 className="grid grid-row ml-10 m-5 text-2xl font-medium text-white">
-            Groups
-          </h1>
+      <div className="m-5 bg-dark-foreground border border-gray-50 border-opacity-25">
+        <div className="flex justify-between m-10 ">
+          <h1 className="text-left text-2xl font-medium text-white">Groups</h1>
+          <p className="text-right">Options</p>
         </div>
         <div className="justify-center">
           <Separator className="w-90 mr-10 ml-10" orientation="horizontal" />
@@ -102,6 +102,7 @@ export default function GroupComponent() {
         <Tabs className="flex ml-5 m-10" defaultValue="account">
           <div>
             <TabsList className="grid mt-5 mb-5 bg-transparent ">
+              <Input type="name" placeholder="Group Search" className="mb-10" />
               <TabsTrigger
                 className="text-md hover:bg-transparent hover:underline "
                 value="account"
@@ -172,6 +173,17 @@ export default function GroupComponent() {
         </Tabs>
       </div>
       <ShiftingCountdown />
+      <div className="m-10 bg-dark-foreground border border-gray-50 border-opacity-25">
+        <div className="justify-center flex">
+          <h1 className="m-2.5 text-2xl font-medium text-white">Your Tools</h1>
+        </div>
+        <AITable></AITable>
+      </div>
+      {/* <div>
+        <Card className="m-10 justify-center flex">
+          <h1 className="m-2.5 text-2xl font-medium text-white">Your Tools</h1>
+        </Card>
+      </div> */}
     </>
   );
 }

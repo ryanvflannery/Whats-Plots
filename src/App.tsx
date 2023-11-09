@@ -7,7 +7,7 @@ export default function App() {
   return (
     <>
       <Authenticated>
-        <NavBar />
+        {/* <NavBar /> */}
         <Group></Group>
       </Authenticated>
       <Unauthenticated>

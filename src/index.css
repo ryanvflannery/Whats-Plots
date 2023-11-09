@@ -80,3 +80,7 @@
 .bg-dark-primary {
   background-color: 240 10% 3.9%;
 }
+
+.bg-dark-foreground {
+  background-color: #131313;
+}
