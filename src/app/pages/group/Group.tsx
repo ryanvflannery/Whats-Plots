@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent, Fragment } from "react";
+import { useState, ChangeEvent } from "react";
 import { UserButton } from "@clerk/clerk-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,7 +9,6 @@ import AddGroupMember from "./components/AddGroupMember";
 import AddGroup from "./components/AddGroup";
 import Events from "../event/Events";
 import { Separator } from "@/components/ui/separator";
-import { Label } from "@/components/ui/label";
 import "react-datepicker/dist/react-datepicker.css"; // Import the CSS
 import AITable from "./AI/AITable";
 import {
@@ -20,18 +19,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { set } from "date-fns";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ShiftingCountdown from "./components/ShiftingCountdown";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Accordion,
   AccordionContent,
@@ -40,17 +29,9 @@ import {
 } from "@/components/ui/accordion";
 
 export default function GroupComponent() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [group, setGroup] = useState<any>(null);
-  const [editingGroup, setEditingGroup] = useState<any>(null); //Delete group and edit group
-  const [groupName, setGroupName] = useState("");
+  const [group, setGroup] = useState<any>([]);
   const allGroups = useQuery(api.group.getAllGroupsForUser) || [];
   const deleteGroupMutation = useMutation(api.group.deleteGroup); // Assuming this is your delete group mutation
-
-  const handleRowClick = (group: any) => {
-    setGroup(group);
-    setIsOpen(true);
-  };
 
   const handleDeleteGroup = async (groupId: string) => {
     try {
@@ -59,20 +40,15 @@ export default function GroupComponent() {
       console.error("Failed to delete group:", error);
     }
   };
-  const handleClose = () => {
-    setIsOpen(false);
-  };
 
-  const handleGroupNameChange = (
-    event: ChangeEvent<HTMLInputElement>
-  ): void => {
-    setGroupName(event.target.value);
+  const handleGroupClick = () => {
+    console.log("Group Clicked");
   };
 
   return (
     <>
       {/* grid-cols-1 lg:grid-cols-5 gap-4 */}
-      <div className="">
+      <div className="pb-20">
         <div>
           <div className="flex justify-between m-10 ">
             <h1 className="text-left text-2xl font-medium text-white">
@@ -91,11 +67,11 @@ export default function GroupComponent() {
           className="grid m-5 grid-cols-5 overflow-x-auto gap-4 border-gray-50 border-opacity-50 h-screen"
           style={{ height: "30vh" }}
         >
-          <Card className="mt-2.5 mb-2.5 bg-blue-50"></Card>
-          <Card className="mt-2.5 mb-2.5 bg-green-100"></Card>
-          <Card className="mt-2.5 mb-2.5 bg-yellow-200"></Card>
-          <Card className="mt-2.5 mb-2.5 bg-red-200 "></Card>
-          <Card className="mt-2.5 mb-2.5 bg-purple-200"></Card>
+          <Card className="mt-2.5  bg-blue-50"></Card>
+          <Card className="mt-2.5  bg-green-100"></Card>
+          <Card className="mt-2.5  bg-yellow-200"></Card>
+          <Card className="mt-2.5  bg-red-200 "></Card>
+          <Card className="mt-2.5  bg-purple-200"></Card>
         </div>
       </div>
       <div className="m-5 bg-dark-foreground border border-gray-50 border-opacity-25">
@@ -110,11 +86,20 @@ export default function GroupComponent() {
           <div>
             <TabsList className="grid mt-5 mb-5 bg-transparent ">
               <Input type="name" placeholder="Group Search" className="mb-10" />
+
+              {/* {allGroups.map((group) => (
+                <TabsTrigger
+                  className="text-md hover:bg-transparent hover:underline "
+                  value="account"
+                >
+                  {group.name}
+                </TabsTrigger>
+              ))} */}
               <TabsTrigger
                 className="text-md hover:bg-transparent hover:underline "
                 value="account"
               >
-                Account
+                Baseball Team
               </TabsTrigger>
               <TabsTrigger
                 className="text-md mt-5 hover:bg-transparent hover:underline"
@@ -187,7 +172,7 @@ export default function GroupComponent() {
         <AITable></AITable>
       </div>
 
-      <Accordion type="single" collapsible className="m-10">
+      {/* <Accordion type="single" collapsible className="m-10">
         <AccordionItem value="item-1">
           <AccordionTrigger>Is it accessible?</AccordionTrigger>
           <AccordionContent>
@@ -207,7 +192,7 @@ export default function GroupComponent() {
             Yes. It's animated by default, but you can disable it if you prefer.
           </AccordionContent>
         </AccordionItem>
-      </Accordion>
+      </Accordion> */}
       {/* <div>
         <Card className="m-10 justify-center flex">
           <h1 className="m-2.5 text-2xl font-medium text-white">Your Tools</h1>
