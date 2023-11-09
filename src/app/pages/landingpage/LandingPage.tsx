@@ -3,6 +3,8 @@ import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { FiCreditCard, FiMail, FiUser, FiUsers } from "react-icons/fi";
 import { IconType } from "react-icons";
+import Testimonials from "./Testimonials";
+import Footer from "../../components/Footer";
 
 const ShuffleHero = () => {
   return (
@@ -25,6 +27,7 @@ const ShuffleHero = () => {
         </div>
         <ShuffleGrid />
       </section>
+      <Testimonials></Testimonials>
       <div className="p-20">
         {/* <p className="text-xl font-semibold mb-2">Whats Plots</p> */}
         <div className="grid gap-4 grid-cols-2 lg:grid-cols-4">
@@ -44,6 +47,7 @@ const ShuffleHero = () => {
           />
         </div>
       </div>
+      <Footer />
     </>
   );
 };

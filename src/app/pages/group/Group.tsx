@@ -27,6 +27,12 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 
 export default function GroupComponent() {
   const [group, setGroup] = useState<any>([]);
@@ -48,11 +54,11 @@ export default function GroupComponent() {
   return (
     <>
       {/* grid-cols-1 lg:grid-cols-5 gap-4 */}
-      <div className="pb-20">
+      <div className="pb-10">
         <div>
           <div className="flex justify-between m-10 ">
             <h1 className="text-left text-2xl font-medium text-white">
-              Upcoming Events
+              Dashboard
             </h1>
             <div className="text-right">
               <UserButton />
@@ -64,28 +70,32 @@ export default function GroupComponent() {
           </div>
         </div>
         <div
-          className="grid m-5 grid-cols-5 overflow-x-auto gap-4 border-gray-50 border-opacity-50 h-screen"
-          style={{ height: "30vh" }}
+          className="grid mt-5 mr-5 ml-5 grid-cols-6 overflow-x-auto gap-4 border-gray-50 border-opacity-50 h-screen"
+          style={{ height: "20vh" }}
         >
           <Card className="mt-2.5  bg-blue-50"></Card>
           <Card className="mt-2.5  bg-green-100"></Card>
           <Card className="mt-2.5  bg-yellow-200"></Card>
           <Card className="mt-2.5  bg-red-200 "></Card>
           <Card className="mt-2.5  bg-purple-200"></Card>
+          <Card className="mt-2.5  bg-purple-200"></Card>
         </div>
       </div>
       <div className="m-5 bg-dark-foreground border border-gray-50 border-opacity-25">
-        <div className="flex justify-between m-10 ">
+        {/* <div className="flex justify-between m-10 ">
           <h1 className="text-left text-2xl font-medium text-white">Groups</h1>
           <p className="text-right">Options</p>
         </div>
+        <RemoveGroupMember></RemoveGroupMember>
+        <AddGroupMember></AddGroupMember>
+        <AddGroup></AddGroup>
         <div className="justify-center">
           <Separator className="w-90 mr-10 ml-10" orientation="horizontal" />
-        </div>{" "}
-        <Tabs className="flex ml-5 m-10" defaultValue="account">
+        </div>{" "} */}
+        <Tabs className="flex " defaultValue="account">
           <div>
-            <TabsList className="grid mt-5 mb-5 bg-transparent ">
-              <Input type="name" placeholder="Group Search" className="mb-10" />
+            <TabsList className="grid gap-2 ml-5 mt-5 mb-5 bg-transparent ">
+              {/* <Input type="name" placeholder="Group Search" className="mb-10" /> */}
 
               {/* {allGroups.map((group) => (
                 <TabsTrigger
@@ -99,32 +109,102 @@ export default function GroupComponent() {
                 className="text-md hover:bg-transparent hover:underline "
                 value="account"
               >
-                Baseball Team
+                <HoverCard>
+                  <HoverCardTrigger asChild>
+                    <Avatar>
+                      <AvatarImage
+                        src="https://github.com/shadcn.png"
+                        alt="@shadcn"
+                      />
+                      <AvatarFallback>CN</AvatarFallback>
+                    </Avatar>
+                  </HoverCardTrigger>
+                  <HoverCardContent>
+                    <div className="flex justify-center pl-5 pr-5">
+                      <h4 className="text-sm font-semibold">@nextjs</h4>
+                    </div>
+                  </HoverCardContent>
+                </HoverCard>
               </TabsTrigger>
               <TabsTrigger
+                className="text-md hover:bg-transparent hover:underline "
+                value="account"
+              >
+                <HoverCard>
+                  <HoverCardTrigger asChild>
+                    <Avatar>
+                      <AvatarImage
+                        src="https://github.com/shadcn.png"
+                        alt="@shadcn"
+                      />
+                      <AvatarFallback>CN</AvatarFallback>
+                    </Avatar>
+                  </HoverCardTrigger>
+                  <HoverCardContent>
+                    <div className="flex justify-center pl-5 pr-5">
+                      <h4 className="text-sm font-semibold">@nextjs</h4>
+                    </div>
+                  </HoverCardContent>
+                </HoverCard>
+              </TabsTrigger>
+              <TabsTrigger
+                className="text-md hover:bg-transparent hover:underline "
+                value="account"
+              >
+                <HoverCard>
+                  <HoverCardTrigger asChild>
+                    <Avatar>
+                      <AvatarImage
+                        src="https://github.com/shadcn.png"
+                        alt="@shadcn"
+                      />
+                      <AvatarFallback>CN</AvatarFallback>
+                    </Avatar>
+                  </HoverCardTrigger>
+                  <HoverCardContent>
+                    <div className="flex justify-center pl-5 pr-5">
+                      <h4 className="text-sm font-semibold">@nextjs</h4>
+                    </div>
+                  </HoverCardContent>
+                </HoverCard>
+              </TabsTrigger>
+
+              {/* <TabsTrigger
                 className="text-md mt-5 hover:bg-transparent hover:underline"
                 value="a"
               >
-                Group1
+                <Avatar>
+                  <AvatarImage
+                    src="https://github.com/shadcn.png"
+                    alt="@shadcn"
+                  />
+                  <AvatarFallback>CN</AvatarFallback>
+                </Avatar>
               </TabsTrigger>
               <TabsTrigger
                 className="text-md mt-5 hover:bg-transparent hover:underline"
                 value="d"
               >
-                Group2
-              </TabsTrigger>
+                <Avatar>
+                  <AvatarImage
+                    src="https://github.com/shadcn.png"
+                    alt="@shadcn"
+                  />
+                  <AvatarFallback>CN</AvatarFallback>
+                </Avatar>
+              </TabsTrigger> */}
             </TabsList>
           </div>
 
-          <TabsContent value="account" className="w-screen ml-10">
+          <TabsContent value="account" className="w-screen">
             <div>
               <CardHeader>
-                <CardTitle>Group</CardTitle>
+                {/* <CardTitle>Group</CardTitle>
                 <CardDescription>
                   abc@gmail.com, hi@gmail.com, test@gmail.com
-                </CardDescription>
+                </CardDescription> */}
               </CardHeader>
-              <CardContent className="space-y-2">
+              <CardContent>
                 <Events></Events>
                 {/* <div className="space-y-1">
                       <Label htmlFor="name">Name</Label>
@@ -165,12 +245,12 @@ export default function GroupComponent() {
         </Tabs>
       </div>
       <ShiftingCountdown />
-      <div className="m-5 bg-dark-foreground border border-gray-50 border-opacity-25">
+      {/* <div className="m-5 bg-dark-foreground border border-gray-50 border-opacity-25">
         <div className="justify-center flex">
           <h1 className="m-2.5 text-2xl font-medium text-white">Your Tools</h1>
         </div>
         <AITable></AITable>
-      </div>
+      </div> */}
 
       {/* <Accordion type="single" collapsible className="m-10">
         <AccordionItem value="item-1">
