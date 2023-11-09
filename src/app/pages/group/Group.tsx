@@ -10,6 +10,7 @@ import AddGroup from "./components/AddGroup";
 import Events from "../event/Events";
 import { Separator } from "@/components/ui/separator";
 import "react-datepicker/dist/react-datepicker.css"; // Import the CSS
+import Friends from "../friends/Friends";
 import AITable from "./AI/AITable";
 import {
   Card,
@@ -36,6 +37,8 @@ import {
 
 export default function GroupComponent() {
   const [group, setGroup] = useState<any>([]);
+  const [name, setName] = useState<string>("");
+
   const allGroups = useQuery(api.group.getAllGroupsForUser) || [];
   const deleteGroupMutation = useMutation(api.group.deleteGroup); // Assuming this is your delete group mutation
 
@@ -54,7 +57,7 @@ export default function GroupComponent() {
   return (
     <>
       {/* grid-cols-1 lg:grid-cols-5 gap-4 */}
-      <div className="pb-10">
+      <div className="pb-5">
         <div>
           <div className="flex justify-between m-10 ">
             <h1 className="text-left text-2xl font-medium text-white">
@@ -64,6 +67,7 @@ export default function GroupComponent() {
               <UserButton />
             </div>
           </div>
+          {/* <ShiftingCountdown /> */}
 
           <div className="justify-center">
             <Separator className="w-90" orientation="horizontal" />
@@ -81,7 +85,7 @@ export default function GroupComponent() {
           <Card className="mt-2.5  bg-purple-200"></Card>
         </div>
       </div>
-      <div className="m-5 bg-dark-foreground border border-gray-50 border-opacity-25">
+      <div className="h-full m-2.5 bg-dark-foreground border border-gray-50 border-opacity-25">
         {/* <div className="flex justify-between m-10 ">
           <h1 className="text-left text-2xl font-medium text-white">Groups</h1>
           <p className="text-right">Options</p>
@@ -92,9 +96,9 @@ export default function GroupComponent() {
         <div className="justify-center">
           <Separator className="w-90 mr-10 ml-10" orientation="horizontal" />
         </div>{" "} */}
-        <Tabs className="flex " defaultValue="account">
+        <Tabs className="flex" defaultValue="account">
           <div>
-            <TabsList className="grid gap-2 ml-5 mt-5 mb-5 bg-transparent ">
+            <TabsList className="grid gap-2 bg-transparent ">
               {/* <Input type="name" placeholder="Group Search" className="mb-10" /> */}
 
               {/* {allGroups.map((group) => (
@@ -105,146 +109,97 @@ export default function GroupComponent() {
                   {group.name}
                 </TabsTrigger>
               ))} */}
-              <TabsTrigger
-                className="text-md hover:bg-transparent hover:underline "
-                value="account"
+              <button
+                onClick={() => {
+                  console.log("clicked");
+                }}
               >
-                <HoverCard>
-                  <HoverCardTrigger asChild>
-                    <Avatar>
-                      <AvatarImage
-                        src="https://github.com/shadcn.png"
-                        alt="@shadcn"
-                      />
-                      <AvatarFallback>CN</AvatarFallback>
-                    </Avatar>
-                  </HoverCardTrigger>
-                  <HoverCardContent>
-                    <div className="flex justify-center pl-5 pr-5">
-                      <h4 className="text-sm font-semibold">@nextjs</h4>
-                    </div>
-                  </HoverCardContent>
-                </HoverCard>
-              </TabsTrigger>
-              <TabsTrigger
-                className="text-md hover:bg-transparent hover:underline "
-                value="account"
-              >
-                <HoverCard>
-                  <HoverCardTrigger asChild>
-                    <Avatar>
-                      <AvatarImage
-                        src="https://github.com/shadcn.png"
-                        alt="@shadcn"
-                      />
-                      <AvatarFallback>CN</AvatarFallback>
-                    </Avatar>
-                  </HoverCardTrigger>
-                  <HoverCardContent>
-                    <div className="flex justify-center pl-5 pr-5">
-                      <h4 className="text-sm font-semibold">@nextjs</h4>
-                    </div>
-                  </HoverCardContent>
-                </HoverCard>
-              </TabsTrigger>
-              <TabsTrigger
-                className="text-md hover:bg-transparent hover:underline "
-                value="account"
-              >
-                <HoverCard>
-                  <HoverCardTrigger asChild>
-                    <Avatar>
-                      <AvatarImage
-                        src="https://github.com/shadcn.png"
-                        alt="@shadcn"
-                      />
-                      <AvatarFallback>CN</AvatarFallback>
-                    </Avatar>
-                  </HoverCardTrigger>
-                  <HoverCardContent>
-                    <div className="flex justify-center pl-5 pr-5">
-                      <h4 className="text-sm font-semibold">@nextjs</h4>
-                    </div>
-                  </HoverCardContent>
-                </HoverCard>
-              </TabsTrigger>
+                <TabsTrigger
+                  className="text-md hover:bg-transparent hover:underline "
+                  value="Friends"
+                >
+                  <HoverCard>
+                    <HoverCardTrigger asChild>
+                      <Avatar>
+                        <AvatarImage
+                          src="https://github.com/abccodes.png"
+                          alt="@shadcn"
+                        />
+                        <AvatarFallback>CN</AvatarFallback>
+                      </Avatar>
+                    </HoverCardTrigger>
+                    <HoverCardContent>
+                      <div className="flex justify-center pl-5 pr-5">
+                        <h4 className="text-sm font-semibold">Friends</h4>
+                      </div>
+                    </HoverCardContent>
+                  </HoverCard>
+                </TabsTrigger>
+              </button>
+              <Separator orientation="horizontal" />
 
-              {/* <TabsTrigger
-                className="text-md mt-5 hover:bg-transparent hover:underline"
-                value="a"
+              <TabsTrigger
+                className="text-md hover:bg-transparent hover:underline "
+                value="account"
               >
-                <Avatar>
-                  <AvatarImage
-                    src="https://github.com/shadcn.png"
-                    alt="@shadcn"
-                  />
-                  <AvatarFallback>CN</AvatarFallback>
-                </Avatar>
+                <HoverCard>
+                  <HoverCardTrigger asChild>
+                    <Avatar>
+                      <AvatarImage
+                        src="https://github.com/shadcn.png"
+                        alt="@shadcn"
+                      />
+                      <AvatarFallback>CN</AvatarFallback>
+                    </Avatar>
+                  </HoverCardTrigger>
+                  <HoverCardContent>
+                    <div className="flex justify-center pl-5 pr-5">
+                      <h4 className="text-sm font-semibold">@nextjs</h4>
+                    </div>
+                  </HoverCardContent>
+                </HoverCard>
               </TabsTrigger>
               <TabsTrigger
-                className="text-md mt-5 hover:bg-transparent hover:underline"
-                value="d"
+                className="text-md hover:bg-transparent hover:underline "
+                value="account"
               >
-                <Avatar>
-                  <AvatarImage
-                    src="https://github.com/shadcn.png"
-                    alt="@shadcn"
-                  />
-                  <AvatarFallback>CN</AvatarFallback>
-                </Avatar>
-              </TabsTrigger> */}
+                <HoverCard>
+                  <HoverCardTrigger asChild>
+                    <Avatar>
+                      <AvatarImage
+                        src="https://github.com/shadcn.png"
+                        alt="@shadcn"
+                      />
+                      <AvatarFallback>CN</AvatarFallback>
+                    </Avatar>
+                  </HoverCardTrigger>
+                  <HoverCardContent>
+                    <div className="flex justify-center pl-5 pr-5">
+                      <h4 className="text-sm font-semibold">@nextjs</h4>
+                    </div>
+                  </HoverCardContent>
+                </HoverCard>
+              </TabsTrigger>
             </TabsList>
           </div>
-
-          <TabsContent value="account" className="w-screen">
+          <TabsContent value="Friends" className="w-screen">
+            <div className="flex flex-row gap-4 w-full h-10 bg-gray-50 bg-opacity-10">
+              <p>Group Name</p>
+            </div>
             <div>
-              <CardHeader>
-                {/* <CardTitle>Group</CardTitle>
-                <CardDescription>
-                  abc@gmail.com, hi@gmail.com, test@gmail.com
-                </CardDescription> */}
-              </CardHeader>
-              <CardContent>
-                <Events></Events>
-                {/* <div className="space-y-1">
-                      <Label htmlFor="name">Name</Label>
-                      <Input id="name" defaultValue="Pedro Duarte" />
-                    </div>
-                    <div className="space-y-1">
-                      <Label htmlFor="username">Username</Label>
-                      <Input id="username" defaultValue="@peduarte" />
-                    </div> */}
-              </CardContent>
-              <CardFooter></CardFooter>
+              <Friends />
             </div>
           </TabsContent>
-          {/* <TabsContent value="password">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Password</CardTitle>
-                    <CardDescription>
-                      Change your password here. After saving, you'll be logged
-                      out.
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-2">
-                    <div className="space-y-1">
-                      <Label htmlFor="current">Current password</Label>
-                      <Input id="current" type="password" />
-                    </div>
-                    <div className="space-y-1">
-                      <Label htmlFor="new">New password</Label>
-                      <Input id="new" type="password" />
-                    </div>
-                  </CardContent>
-                  <CardFooter>
-                    <Button>Save password</Button>
-                  </CardFooter>
-                </Card>
-              </TabsContent> */}
+          <TabsContent value="account" className="w-screen">
+            <div className="flex flex-row gap-4 w-full h-10 bg-gray-50 bg-opacity-10">
+              <p>Group Name</p>
+            </div>
+            <div>
+              <Events></Events>
+            </div>
+          </TabsContent>
         </Tabs>
       </div>
-      <ShiftingCountdown />
       {/* <div className="m-5 bg-dark-foreground border border-gray-50 border-opacity-25">
         <div className="justify-center flex">
           <h1 className="m-2.5 text-2xl font-medium text-white">Your Tools</h1>
