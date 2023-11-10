@@ -44,7 +44,7 @@ export const markEventAsCanAttend = mutation({
   args: { eventId: v.id("events") },
   handler: async (ctx, args) => {
     // Set the CanAttend column to true for the specified event
-    const test = await ctx.db.patch(args.eventId, { CanAttend: true });
+    const test = await ctx.db.patch(args.eventId, { canAttend: true });
 
     console.log("markeventasCanAttend", test);
   },
@@ -54,7 +54,7 @@ export const markEventAsCantAttend = mutation({
   args: { eventId: v.id("events") },
   handler: async (ctx, args) => {
     // Set the CantAttend column to true for the specified event
-    const test = await ctx.db.patch(args.eventId, { CantAttend: false });
+    const test = await ctx.db.patch(args.eventId, { canAttend: false });
   },
 });
 
@@ -113,11 +113,12 @@ export const createNewEvent = mutation({
       // const randomID = generateRandomID();
       const taskId = await ctx.db.insert("events", {
         name: args.name,
+        canAttend: null,
         // id: randomID,
         //the value args.date is def wrong
         date: args.date,
       });
-      // console.log("Task id: ", taskId);
+      return taskId;
     }
   },
 });

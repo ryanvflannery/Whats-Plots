@@ -6,12 +6,21 @@ import { api } from "../../../../../convex/_generated/api";
 
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css"; // Import the CSS
+import { addEventToGroup } from "convex/group";
 
 export default function CreateEvent() {
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [newEvent, setNewEvent] = useState("");
   const saveEvent = useMutation(api.event.createNewEvent);
 
+  const handleAddEvent = async () => {
+    // .then(() => {
+    //   await addEventToGroup({
+    //     groupId: 1213123,
+    //     eventId: event.id,
+    //   });
+    // });
+  };
   return (
     <>
       <div className="flex gap-2">
@@ -28,16 +37,6 @@ export default function CreateEvent() {
               ? "Save your event to the database"
               : "You must enter an event first"
           }
-          onClick={async () => {
-            if (startDate) {
-              await saveEvent({
-                name: newEvent.trim(),
-                id: 0,
-                date: startDate.getTime(),
-              });
-              setNewEvent("");
-            }
-          }}
           className="min-w-fit"
         >
           Save the Event

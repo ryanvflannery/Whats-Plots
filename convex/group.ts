@@ -41,6 +41,7 @@ export const createNewGroup = mutation({
       const taskId = await ctx.db.insert("groups", {
         name: args.name,
         groupMembers: [user.email],
+        events: [],
       });
     }
   },
@@ -156,5 +157,22 @@ export const deleteGroup = mutation({
     } else {
       console.log("Group not found:", args.groupID);
     }
+  },
+});
+
+export const addEventToGroup = mutation({
+  args: {
+    groupID: v.string(),
+    eventID: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const groupSelection = await ctx.db
+      .query("groups")
+      .filter((q) => q.eq(q.field("_id"), args.groupID))
+      .first();
+
+    // console.log("group Selection: ", groupSelection);
+    groupSelection.events.push(args.eventID);
+    ctx.db.replace(groupSelection._id, groupSelection);
   },
 });

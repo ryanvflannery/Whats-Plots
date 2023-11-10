@@ -15,6 +15,8 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import CreateEvent from "./components/CreateEvent";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { getGroupByID } from "convex/group";
+// import { AiFillCheckCircle, AiFillCloseCircle } from "react-icons/ai";
 
 function formatDateFromMillis(milliseconds: number): string {
   const date = new Date(milliseconds);
@@ -29,24 +31,25 @@ function formatDateFromMillis(milliseconds: number): string {
   };
   return date.toLocaleDateString(undefined, options);
 }
-import { AiFillCheckCircle, AiFillCloseCircle } from "react-icons/ai";
 
-export default function Events() {
+export default function Events(props: any) {
   const [isOpen, setIsOpen] = useState(false);
   const events = useQuery(api.event.getEvents);
   const addUser = useMutation(api.group.addUser);
   const markEventAsCanAttend = useMutation(api.event.markEventAsCanAttend);
-  // const markEventAsCantAttend = useMutation(
-  //   api.event.markEventAsCantAttend
-  // );
+  const markEventAsCantAttend = useMutation(api.event.markEventAsCantAttend);
+
   // const UpcomingEvents = useQuery(api.event.getUpcomingEvents) || [];
   const [confirmedEvents, setConfirmedEvents] = useState<any>(null);
 
   const confirmedEventsQuery = useQuery(api.event.getConfirmedEvents);
 
   useEffect(() => {
-    setConfirmedEvents(confirmedEventsQuery || []);
-  }, [confirmedEventsQuery]);
+    // const g = await getGroupByID({ groupID: props.group_id });
+  });
+  // useEffect(() => {
+  //   setConfirmedEvents(confirmedEventsQuery || []);
+  // }, [confirmedEventsQuery]);
 
   // const handleNotAttend = (props: any) => {
   //   // console.log("props, ", props);
@@ -54,13 +57,6 @@ export default function Events() {
   //     eventId: props,
   //   });
   // };
-
-  const handleAttend = (props: any) => {
-    // console.log("props, ", props);
-    void markEventAsCanAttend({
-      eventId: props,
-    });
-  };
 
   useEffect(() => {
     void addUser();
@@ -79,39 +75,22 @@ export default function Events() {
         <TabsContent value="upcoming">
           <Card>
             <CardHeader>
-              <CardTitle>Upcoming </CardTitle>
+              <CardTitle>Upcoming</CardTitle>
               <CardDescription>
                 Upcoming Events Will Appear Here. Click on an event to confirm
                 attendance.{" "}
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-5 p-2.5">
-                  {events?.map(({ _id, name, date }) => (
-                    <button>
-                      <Card key={_id} className=" rounded-md">
+                  {events
+                    ?.filter((event) => event.canAttend === null)
+                    .map(({ _id, name, date }) => (
+                      <Card
+                        key={_id}
+                        className="flex flex-col text-center rounded-md"
+                      >
                         <div className="flex gap-4 m-2.5">
                           <Avatar className="w-5 h-5">
                             <AvatarImage
                               src="https://github.com/shadcn.png"
-                              alt="@shadcn"
-                            />
-                            <AvatarFallback>CN</AvatarFallback>
-                          </Avatar>
-                          <Avatar className="w-5 h-5">
-                            <AvatarImage
-                              src="https://github.com/abccodes.png"
-                              alt="@shadcn"
-                            />
-                            <AvatarFallback>CN</AvatarFallback>
-                          </Avatar>
-                          <Avatar className="w-5 h-5">
-                            <AvatarImage
-                              src="https://github.com/RyanFlannery.png"
-                              alt="@shadcn"
-                            />
-                            <AvatarFallback>CN</AvatarFallback>
-                          </Avatar>
-                          <Avatar className="w-5 h-5">
-                            <AvatarImage
-                              src="https://github.com/SirKentut.png"
                               alt="@shadcn"
                             />
                             <AvatarFallback>CN</AvatarFallback>
@@ -127,8 +106,26 @@ export default function Events() {
                         <p className="mb-5 mt-5 text-md">
                           {formatDateFromMillis(date)}
                         </p>
-                        <div className="m-5 grid grid-cols-2 lg:grid-cols-4 gap-5">
-                          <div className="bg-gray-50 h-10 w-10 flex items-center justify-center">
+                        <div className="m-5 grid grid-cols-2 lg:grid-cols-2 gap-5">
+                          <Button
+                            onClick={() =>
+                              void markEventAsCanAttend({
+                                eventId: _id,
+                              })
+                            }
+                          >
+                            Confirm
+                          </Button>
+                          <Button
+                            onClick={() =>
+                              void markEventAsCantAttend({
+                                eventId: _id,
+                              })
+                            }
+                          >
+                            Deny
+                          </Button>
+                          {/* <div className="bg-gray-50 h-10 w-10 flex items-center justify-center">
                             <p>d</p>
                           </div>
                           <div className="bg-white h-10 w-10 flex items-center justify-center">
@@ -139,7 +136,7 @@ export default function Events() {
                           </div>
                           <div className="bg-white h-10 w-10 flex items-center justify-center">
                             <p>d</p>
-                          </div>
+                          </div> */}
                         </div>
 
                         {/* <div
@@ -151,8 +148,7 @@ export default function Events() {
                           }}
                         ></div> */}
                       </Card>
-                    </button>
-                  ))}
+                    ))}
                   {/* <Card className="h-40 rounded-md">Box 1</Card>
                   <Card className=" h-40 rounded-md">Box 1</Card>
                   <Card className=" h-40 rounded-md">Box 1</Card>
@@ -172,19 +168,49 @@ export default function Events() {
               <CardDescription>
                 Confirmed Events Will Appear Here. View Upcoming Events You Are
                 Attending.
-                <div className="mt-5">
-                  {/* {confirmedEvents?.map(({ _id, name, date }) => (
-                    <div key={_id}>
-                      <div className="flex flex-row items-start justify-start pb-5">
-                        <Card className="p-2">
-                          <div className="flex flex-col">
-                            <p>{name}</p>
-                            <p>{formatDateFromMillis(date)}</p>
-                          </div>
-                        </Card>
-                      </div>
-                    </div>
-                  ))} */}
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-5 p-2.5">
+                  {events
+                    ?.filter((event) => event.canAttend == true)
+                    .map(({ _id, name, date }) => (
+                      <Card
+                        key={_id}
+                        className="flex flex-col text-center rounded-md"
+                      >
+                        <div className="flex gap-4 m-2.5">
+                          <Avatar className="w-5 h-5">
+                            <AvatarImage
+                              src="https://github.com/shadcn.png"
+                              alt="@shadcn"
+                            />
+                            <AvatarFallback>CN</AvatarFallback>
+                          </Avatar>
+                        </div>
+                        <h1 className="text-lg">{name}</h1>
+                        <p className="flex text-left text-md text-muted-foreground m-2.5">
+                          Lorem ipsum dolor sit amet consectetur adipisicing
+                          elit.Lorem ipsum dolor sit amet consectetur
+                          adipisicing elit.Lorem ipsum dolor sit amet
+                          consectetur adipisicing elit.
+                        </p>
+                        <p className="mb-5 mt-5 text-md">
+                          {formatDateFromMillis(date)}
+                        </p>
+
+                        {/* <div
+                          className="w-full bg-cover bg-center opacity-50"
+                          style={{
+                            backgroundImage: `url(https://randompicturegenerator.com/img/national-park-generator/gafcf50a35932f2f891a05a6ab56b9d2f9604880cb201c8e34222d6afdc01ba0483c80fa80a805cfe779c84f8d2d71002_640.jpg)`,
+                            backgroundSize: "cover",
+                            backgroundPosition: "center",
+                          }}
+                        ></div> */}
+                      </Card>
+                    ))}
+                  {/* <Card className="h-40 rounded-md">Box 1</Card>
+                  <Card className=" h-40 rounded-md">Box 1</Card>
+                  <Card className=" h-40 rounded-md">Box 1</Card>
+                  <Card className=" h-40 rounded-md">Box 1</Card>
+                  <Card className=" h-40 rounded-md">Box 1</Card> */}
                 </div>
               </CardDescription>
             </CardHeader>

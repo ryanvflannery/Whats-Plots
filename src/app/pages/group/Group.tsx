@@ -34,6 +34,21 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
+import {
+  ContextMenu,
+  ContextMenuCheckboxItem,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuLabel,
+  ContextMenuRadioGroup,
+  ContextMenuRadioItem,
+  ContextMenuSeparator,
+  ContextMenuShortcut,
+  ContextMenuSub,
+  ContextMenuSubContent,
+  ContextMenuSubTrigger,
+  ContextMenuTrigger,
+} from "@/components/ui/context-menu";
 
 export default function GroupComponent() {
   const [group, setGroup] = useState<any>([]);
@@ -96,7 +111,8 @@ export default function GroupComponent() {
         <div className="justify-center">
           <Separator className="w-90 mr-10 ml-10" orientation="horizontal" />
         </div>{" "} */}
-        <Tabs className="flex" defaultValue="account">
+        <AddGroup></AddGroup>
+        <Tabs className="flex" defaultValue="Friends">
           <div>
             <TabsList className="grid gap-2 bg-transparent ">
               {/* <Input type="name" placeholder="Group Search" className="mb-10" /> */}
@@ -137,67 +153,56 @@ export default function GroupComponent() {
                 </TabsTrigger>
               </button>
               <Separator orientation="horizontal" />
-
-              <TabsTrigger
-                className="text-md hover:bg-transparent hover:underline "
-                value="account"
-              >
-                <HoverCard>
-                  <HoverCardTrigger asChild>
-                    <Avatar>
-                      <AvatarImage
-                        src="https://github.com/shadcn.png"
-                        alt="@shadcn"
-                      />
-                      <AvatarFallback>CN</AvatarFallback>
-                    </Avatar>
-                  </HoverCardTrigger>
-                  <HoverCardContent>
-                    <div className="flex justify-center pl-5 pr-5">
-                      <h4 className="text-sm font-semibold">@nextjs</h4>
-                    </div>
-                  </HoverCardContent>
-                </HoverCard>
-              </TabsTrigger>
-              <TabsTrigger
-                className="text-md hover:bg-transparent hover:underline "
-                value="account"
-              >
-                <HoverCard>
-                  <HoverCardTrigger asChild>
-                    <Avatar>
-                      <AvatarImage
-                        src="https://github.com/shadcn.png"
-                        alt="@shadcn"
-                      />
-                      <AvatarFallback>CN</AvatarFallback>
-                    </Avatar>
-                  </HoverCardTrigger>
-                  <HoverCardContent>
-                    <div className="flex justify-center pl-5 pr-5">
-                      <h4 className="text-sm font-semibold">@nextjs</h4>
-                    </div>
-                  </HoverCardContent>
-                </HoverCard>
-              </TabsTrigger>
+              {allGroups.map(
+                (group, index) => (
+                  console.log("group", group._id),
+                  (
+                    <TabsTrigger
+                      key={index}
+                      className="text-md hover:bg-transparent hover:underline "
+                      value={group._id}
+                    >
+                      <HoverCard>
+                        <HoverCardTrigger asChild>
+                          <Avatar>
+                            <AvatarImage
+                              src="https://github.com/shadcn.png"
+                              alt="@shadcn"
+                            />
+                            <AvatarFallback>CN</AvatarFallback>
+                          </Avatar>
+                        </HoverCardTrigger>
+                        <HoverCardContent>
+                          <div className="flex justify-center pl-5 pr-5">
+                            <h4 className="text-sm font-semibold">groupname</h4>
+                          </div>
+                        </HoverCardContent>
+                      </HoverCard>
+                    </TabsTrigger>
+                  )
+                )
+              )}
             </TabsList>
           </div>
           <TabsContent value="Friends" className="w-screen">
             <div className="flex flex-row gap-4 w-full h-10 bg-gray-50 bg-opacity-10">
-              <p>Group Name</p>
+              <p>Friends</p>
             </div>
             <div>
               <Friends />
             </div>
           </TabsContent>
-          <TabsContent value="account" className="w-screen">
-            <div className="flex flex-row gap-4 w-full h-10 bg-gray-50 bg-opacity-10">
-              <p>Group Name</p>
-            </div>
-            <div>
-              <Events></Events>
-            </div>
-          </TabsContent>
+          {allGroups.map((group, index) => (
+            // console.log(group.id), // Log group ID
+            <TabsContent key={index} value={group._id} className="w-screen">
+              <div className="flex flex-row gap-4 w-full h-10 bg-gray-50 bg-opacity-10">
+                <p>{group.name}</p>
+              </div>
+              <div>
+                <Events group_id={group._id}></Events>
+              </div>
+            </TabsContent>
+          ))}
         </Tabs>
       </div>
       {/* <div className="m-5 bg-dark-foreground border border-gray-50 border-opacity-25">
