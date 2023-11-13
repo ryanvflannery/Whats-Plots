@@ -41,7 +41,6 @@ export const createNewGroup = mutation({
       const taskId = await ctx.db.insert("groups", {
         name: args.name,
         groupMembers: [user.email],
-        events: [],
       });
     }
   },
@@ -69,7 +68,7 @@ export const getAllGroupsForUser = query({
   },
 });
 
-export const getGroupByID = query({
+export const getEventsInGroupByID = query({
   args: {
     groupID: v.string(),
   },
@@ -80,7 +79,9 @@ export const getGroupByID = query({
         .filter((q) => q.eq(q.field("_id"), args.groupID))
         .collect();
 
-      return groups;
+      if (groups.length > 0) {
+        return groups[0].events;
+      }
     }
   },
 });

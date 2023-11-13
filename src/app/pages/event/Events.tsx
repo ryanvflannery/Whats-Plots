@@ -15,7 +15,6 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import CreateEvent from "./components/CreateEvent";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { getGroupByID } from "convex/group";
 // import { AiFillCheckCircle, AiFillCloseCircle } from "react-icons/ai";
 
 function formatDateFromMillis(milliseconds: number): string {
@@ -32,31 +31,15 @@ function formatDateFromMillis(milliseconds: number): string {
   return date.toLocaleDateString(undefined, options);
 }
 
-export default function Events(props: any) {
+export default function Events(props: { groupID: string }) {
   const [isOpen, setIsOpen] = useState(false);
-  const events = useQuery(api.event.getEvents);
+  const events = useQuery(api.event.getEventsInGroup, {
+    groupID: props.groupID,
+  });
   const addUser = useMutation(api.group.addUser);
   const markEventAsCanAttend = useMutation(api.event.markEventAsCanAttend);
   const markEventAsCantAttend = useMutation(api.event.markEventAsCantAttend);
-
   // const UpcomingEvents = useQuery(api.event.getUpcomingEvents) || [];
-  const [confirmedEvents, setConfirmedEvents] = useState<any>(null);
-
-  const confirmedEventsQuery = useQuery(api.event.getConfirmedEvents);
-
-  useEffect(() => {
-    // const g = await getGroupByID({ groupID: props.group_id });
-  });
-  // useEffect(() => {
-  //   setConfirmedEvents(confirmedEventsQuery || []);
-  // }, [confirmedEventsQuery]);
-
-  // const handleNotAttend = (props: any) => {
-  //   // console.log("props, ", props);
-  //   void markEventAsCantAttend({
-  //     eventId: props,
-  //   });
-  // };
 
   useEffect(() => {
     void addUser();
@@ -284,7 +267,7 @@ export default function Events(props: any) {
           <></>
         ) : (
           <>
-            <CreateEvent />
+            <CreateEvent groupID={props.groupID} />
           </>
         )}
         <Button onClick={() => setIsOpen(!isOpen)}>

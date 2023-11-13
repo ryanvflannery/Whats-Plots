@@ -3,11 +3,19 @@ import { query, mutation, action, internalAction } from "./_generated/server";
 import { api } from "./_generated/api";
 import { sendExpiringMessage } from "./messages";
 
-//query for events
-export const getEvents = query({
-  args: {},
-  handler: async (ctx) => {
-    return await ctx.db.query("events").collect();
+//query for events in a group
+export const getEventsInGroup = query({
+  args: {
+    groupID: v.string(),
+  },
+  handler: async (ctx, args: { groupID: string }) => {
+    if (args.groupID) {
+      const events = await ctx.db
+        .query("events")
+        .filter((q) => q.eq(q.field("groupID"), args.groupID))
+        .collect();
+      return events;
+    }
   },
 });
 
@@ -102,8 +110,8 @@ export const getUpcomingEvents = query({
 //creating a new event
 export const createNewEvent = mutation({
   args: {
-    id: v.number(),
     name: v.string(),
+    groupID: v.string(),
     date: v.number(),
   },
   handler: async (ctx, args) => {
@@ -114,6 +122,7 @@ export const createNewEvent = mutation({
       const taskId = await ctx.db.insert("events", {
         name: args.name,
         canAttend: null,
+        groupID: args.groupID,
         // id: randomID,
         //the value args.date is def wrong
         date: args.date,

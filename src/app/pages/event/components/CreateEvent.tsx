@@ -6,20 +6,39 @@ import { api } from "../../../../../convex/_generated/api";
 
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css"; // Import the CSS
-import { addEventToGroup } from "convex/group";
+import { add } from "date-fns";
+import { start } from "repl";
 
-export default function CreateEvent() {
+export default function CreateEvent(props: { groupID: string }) {
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [newEvent, setNewEvent] = useState("");
   const saveEvent = useMutation(api.event.createNewEvent);
+  const addEventToGroup = useMutation(api.group.addEventToGroup);
 
-  const handleAddEvent = async () => {
-    // .then(() => {
-    //   await addEventToGroup({
-    //     groupId: 1213123,
-    //     eventId: event.id,
-    //   });
-    // });
+  const handleCreateEvent = async () => {
+    try {
+      if (startDate) {
+        const savedEvent = await saveEvent({
+          name: newEvent.trim(),
+          groupID: props.groupID,
+          date: startDate.getTime(),
+        });
+
+        console.log("Event saved: ", savedEvent);
+        // if (savedEvent) {
+        //   console.log("props.groupID", props.groupID);
+        //   console.log("eventID", savedEvent);
+        //   const addEventToGroupResult = await addEventToGroup({
+        //     groupID: props.groupID,
+        //     eventID: savedEvent,
+        //   });
+
+        //   console.log("addEventToGroupResult", addEventToGroupResult);
+        // }
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
   };
   return (
     <>
@@ -38,6 +57,7 @@ export default function CreateEvent() {
               : "You must enter an event first"
           }
           className="min-w-fit"
+          onClick={handleCreateEvent}
         >
           Save the Event
         </Button>

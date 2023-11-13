@@ -199,7 +199,7 @@ export default function GroupComponent() {
                 <p>{group.name}</p>
               </div>
               <div>
-                <Events group_id={group._id}></Events>
+                <Events groupID={group._id}></Events>
               </div>
             </TabsContent>
           ))}
