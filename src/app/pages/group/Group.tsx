@@ -12,6 +12,8 @@ import { Separator } from "@/components/ui/separator";
 import "react-datepicker/dist/react-datepicker.css"; // Import the CSS
 import Friends from "../friends/Friends";
 import AITable from "./AI/AITable";
+import { BsFillGearFill } from "react-icons/bs";
+
 import {
   Card,
   CardContent,
@@ -49,11 +51,9 @@ import {
   ContextMenuSubTrigger,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
+import Settings from "../settings/settings";
 
 export default function GroupComponent() {
-  const [group, setGroup] = useState<any>([]);
-  const [name, setName] = useState<string>("");
-
   const allGroups = useQuery(api.group.getAllGroupsForUser) || [];
   const deleteGroupMutation = useMutation(api.group.deleteGroup); // Assuming this is your delete group mutation
 
@@ -65,31 +65,27 @@ export default function GroupComponent() {
     }
   };
 
-  const handleGroupClick = () => {
-    console.log("Group Clicked");
-  };
-
   return (
     <>
       {/* grid-cols-1 lg:grid-cols-5 gap-4 */}
       <div className="pb-5">
         <div>
-          <div className="flex justify-between m-10 ">
+          <div className="flex justify-between m-5 ">
             <h1 className="text-left text-2xl font-medium text-white">
               Dashboard
             </h1>
+
             <div className="text-right">
               <UserButton />
             </div>
           </div>
-          {/* <ShiftingCountdown /> */}
 
           <div className="justify-center">
             <Separator className="w-90" orientation="horizontal" />
           </div>
         </div>
         <div
-          className="grid mt-5 mr-5 ml-5 grid-cols-6 overflow-x-auto gap-4 border-gray-50 border-opacity-50 h-screen"
+          className="grid mt-5 mr-5 ml-5 grid-cols-6 gap-4 border-gray-50 border-opacity-50 "
           style={{ height: "20vh" }}
         >
           <Card className="mt-2.5  bg-blue-50"></Card>
@@ -100,69 +96,88 @@ export default function GroupComponent() {
           <Card className="mt-2.5  bg-purple-200"></Card>
         </div>
       </div>
-      <div className="h-full m-2.5 bg-dark-foreground border border-gray-50 border-opacity-25">
-        {/* <div className="flex justify-between m-10 ">
-          <h1 className="text-left text-2xl font-medium text-white">Groups</h1>
-          <p className="text-right">Options</p>
-        </div>
-        <RemoveGroupMember></RemoveGroupMember>
-        <AddGroupMember></AddGroupMember>
-        <AddGroup></AddGroup>
-        <div className="justify-center">
-          <Separator className="w-90 mr-10 ml-10" orientation="horizontal" />
-        </div>{" "} */}
-        <AddGroup></AddGroup>
-        <Tabs className="flex" defaultValue="Friends">
-          <div>
-            <TabsList className="grid gap-2 bg-transparent ">
-              {/* <Input type="name" placeholder="Group Search" className="mb-10" /> */}
+      <Tabs
+        className="flex m-5 bg-dark-foreground border border-gray-50 border-opacity-25"
+        style={{ height: "100vh" }}
+        defaultValue="Friends"
+      >
+        <TabsList className="flex  flex-col items-start justify-start h-100 gap-2">
+          <ContextMenu>
+            <TabsTrigger
+              className="text-md hover:bg-transparent hover:underline "
+              value="Friends"
+            >
+              <HoverCard>
+                <ContextMenuTrigger>
+                  <HoverCardTrigger asChild>
+                    <Avatar>
+                      <AvatarImage
+                        src="https://github.com/benriekes.png"
+                        alt="@shadcn"
+                      />
+                      <AvatarFallback>CN</AvatarFallback>
+                    </Avatar>
+                  </HoverCardTrigger>
+                </ContextMenuTrigger>
 
-              {/* {allGroups.map((group) => (
+                <ContextMenuContent>
+                  <ContextMenuItem inset>
+                    <button>Hello Friends</button>
+                  </ContextMenuItem>
+                </ContextMenuContent>
+                <HoverCardContent>
+                  <div className="flex justify-center text-center pl-5 pr-5">
+                    <h4 className="text-sm font-semibold">Friends</h4>
+                  </div>
+                </HoverCardContent>
+              </HoverCard>
+            </TabsTrigger>
+          </ContextMenu>
+          <TabsTrigger className="text-md " value="Settings">
+            <HoverCard>
+              <HoverCardTrigger asChild>
+                <Avatar>
+                  <BsFillGearFill size={40} />
+                  {/* <AvatarFallback>ST</AvatarFallback> */}
+                </Avatar>
+              </HoverCardTrigger>
+
+              <HoverCardContent>
+                <div className="flex justify-center text-center pl-5 pr-5">
+                  <h4 className="text-sm font-semibold">Settings</h4>
+                </div>
+              </HoverCardContent>
+            </HoverCard>
+          </TabsTrigger>
+          <TabsTrigger
+            className="text-md hover:bg-transparent hover:underline "
+            value=""
+          >
+            <HoverCard>
+              <HoverCardTrigger>
+                <AddGroup></AddGroup>
+              </HoverCardTrigger>
+
+              <HoverCardContent>
+                <div className="flex justify-center text-center pl-5 pr-5">
+                  <h4 className="text-sm font-semibold">Create Group</h4>
+                </div>
+              </HoverCardContent>
+            </HoverCard>
+          </TabsTrigger>
+          <Separator className="bg-white" orientation="horizontal" />
+          {allGroups.map(
+            (group, index) => (
+              console.log("group", group._id),
+              (
                 <TabsTrigger
+                  key={index}
                   className="text-md hover:bg-transparent hover:underline "
-                  value="account"
+                  value={group._id}
                 >
-                  {group.name}
-                </TabsTrigger>
-              ))} */}
-              <button
-                onClick={() => {
-                  console.log("clicked");
-                }}
-              >
-                <TabsTrigger
-                  className="text-md hover:bg-transparent hover:underline "
-                  value="Friends"
-                >
-                  <HoverCard>
-                    <HoverCardTrigger asChild>
-                      <Avatar>
-                        <AvatarImage
-                          src="https://github.com/abccodes.png"
-                          alt="@shadcn"
-                        />
-                        <AvatarFallback>CN</AvatarFallback>
-                      </Avatar>
-                    </HoverCardTrigger>
-                    <HoverCardContent>
-                      <div className="flex justify-center pl-5 pr-5">
-                        <h4 className="text-sm font-semibold">Friends</h4>
-                      </div>
-                    </HoverCardContent>
-                  </HoverCard>
-                </TabsTrigger>
-              </button>
-              <Separator orientation="horizontal" />
-              {allGroups.map(
-                (group, index) => (
-                  console.log("group", group._id),
-                  (
-                    <TabsTrigger
-                      key={index}
-                      className="text-md hover:bg-transparent hover:underline "
-                      value={group._id}
-                    >
-                      <HoverCard>
+                  <ContextMenu>
+                    <HoverCard>
+                      <ContextMenuTrigger>
                         <HoverCardTrigger asChild>
                           <Avatar>
                             <AvatarImage
@@ -172,39 +187,56 @@ export default function GroupComponent() {
                             <AvatarFallback>CN</AvatarFallback>
                           </Avatar>
                         </HoverCardTrigger>
-                        <HoverCardContent>
-                          <div className="flex justify-center pl-5 pr-5">
-                            <h4 className="text-sm font-semibold">groupname</h4>
-                          </div>
-                        </HoverCardContent>
-                      </HoverCard>
-                    </TabsTrigger>
-                  )
-                )
-              )}
-            </TabsList>
+                      </ContextMenuTrigger>
+                      <ContextMenuContent>
+                        <ContextMenuItem inset>
+                          <button
+                            onClick={() => {
+                              handleDeleteGroup(group._id);
+                            }}
+                          >
+                            Delete Group
+                          </button>
+                        </ContextMenuItem>
+                      </ContextMenuContent>
+                      <HoverCardContent>
+                        <div className="flex justify-center pl-5 pr-5">
+                          <h4 className="text-sm font-semibold">
+                            {group.name}
+                          </h4>
+                        </div>
+                      </HoverCardContent>
+                    </HoverCard>
+                  </ContextMenu>
+                </TabsTrigger>
+              )
+            )
+          )}
+        </TabsList>
+        <TabsContent value="Friends" className="w-screen">
+          <div className="flex flex-row gap-4 w-full h-10 ">
+            <p>Friends</p>
           </div>
-          <TabsContent value="Friends" className="w-screen">
-            <div className="flex flex-row gap-4 w-full h-10 bg-gray-50 bg-opacity-10">
-              <p>Friends</p>
-            </div>
-            <div>
-              <Friends />
-            </div>
+          <div>
+            <Friends />
+          </div>
+        </TabsContent>
+        <TabsContent value="Settings" className="w-screen">
+          <div className="flex flex-row gap-4 w-full h-10 ">
+            <p>Settings</p>
+          </div>
+          <div>
+            <Settings />
+          </div>
+        </TabsContent>
+        {allGroups.map((group, index) => (
+          // console.log(group.id), // Log group ID
+          <TabsContent key={index} value={group._id} className="w-screen">
+            <Events group={group}></Events>
           </TabsContent>
-          {allGroups.map((group, index) => (
-            // console.log(group.id), // Log group ID
-            <TabsContent key={index} value={group._id} className="w-screen">
-              <div className="flex flex-row gap-4 w-full h-10 bg-gray-50 bg-opacity-10">
-                <p>{group.name}</p>
-              </div>
-              <div>
-                <Events groupID={group._id}></Events>
-              </div>
-            </TabsContent>
-          ))}
-        </Tabs>
-      </div>
+        ))}
+      </Tabs>
+
       {/* <div className="m-5 bg-dark-foreground border border-gray-50 border-opacity-25">
         <div className="justify-center flex">
           <h1 className="m-2.5 text-2xl font-medium text-white">Your Tools</h1>
@@ -243,7 +275,9 @@ export default function GroupComponent() {
 }
 // <div className="justify-center">
 //   <div className="m-5 px-6">
-//     <AddGroup />
+{
+  /* <AddGroup />; */
+}
 //   </div>
 //   <Card>
 //     <Table>

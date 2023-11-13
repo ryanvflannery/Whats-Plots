@@ -49,9 +49,9 @@ const ShiftingCountdown = () => {
     <div className="ml-15 mr-15 p-10">
       <div className=" mx-auto flex items-center ">
         <CountdownItem num={remaining.days} text="days" />
-        <CountdownItem num={remaining.hours} text="hours" />
-        <CountdownItem num={remaining.minutes} text="minutes" />
-        <CountdownItem num={remaining.seconds} text="seconds" />
+        <CountdownItem num={remaining.hours} text="" />
+        <CountdownItem num={remaining.minutes} text="" />
+        <CountdownItem num={remaining.seconds} text="" />
       </div>
     </div>
   );

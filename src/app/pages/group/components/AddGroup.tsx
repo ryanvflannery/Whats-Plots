@@ -15,6 +15,8 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { BsPlusCircleFill } from "react-icons/bs";
 
 export default function AddGroup() {
   const [groupName, setGroupName] = useState("");
@@ -40,7 +42,9 @@ export default function AddGroup() {
     <>
       <Sheet>
         <SheetTrigger asChild>
-          <Button>Create Group</Button>
+          <Avatar>
+            <BsPlusCircleFill size="40" />
+          </Avatar>
         </SheetTrigger>
         <SheetContent>
           <SheetHeader>

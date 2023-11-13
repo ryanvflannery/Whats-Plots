@@ -31,10 +31,10 @@ function formatDateFromMillis(milliseconds: number): string {
   return date.toLocaleDateString(undefined, options);
 }
 
-export default function Events(props: { groupID: string }) {
+export default function Events(props: { group: any }) {
   const [isOpen, setIsOpen] = useState(false);
   const events = useQuery(api.event.getEventsInGroup, {
-    groupID: props.groupID,
+    groupID: props.group._id,
   });
   const addUser = useMutation(api.group.addUser);
   const markEventAsCanAttend = useMutation(api.event.markEventAsCanAttend);
@@ -49,11 +49,12 @@ export default function Events(props: { groupID: string }) {
 
   return (
     <>
-      <Tabs defaultValue="upcoming">
-        <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="upcoming">Upcoming Events</TabsTrigger>
-          <TabsTrigger value="confirmed">Confirmed Events</TabsTrigger>
-          <TabsTrigger value="past">Past Events</TabsTrigger>
+      {/* <Tabs defaultValue="upcoming">
+        <TabsList className="grid w-full grid-cols-4 gap-4 ">
+          <h1>{props.group.name}</>
+          <TabsTrigger value="upcoming">Upcoming</TabsTrigger>
+          <TabsTrigger value="confirmed">Confirmed </TabsTrigger>
+          <TabsTrigger value="past">Past </TabsTrigger>
         </TabsList>
         <TabsContent value="upcoming">
           <Card>
@@ -108,35 +109,9 @@ export default function Events(props: { groupID: string }) {
                           >
                             Deny
                           </Button>
-                          {/* <div className="bg-gray-50 h-10 w-10 flex items-center justify-center">
-                            <p>d</p>
-                          </div>
-                          <div className="bg-white h-10 w-10 flex items-center justify-center">
-                            <p>d</p>
-                          </div>
-                          <div className="bg-white h-10 w-10 flex items-center justify-center">
-                            <p>d</p>
-                          </div>
-                          <div className="bg-white h-10 w-10 flex items-center justify-center">
-                            <p>d</p>
-                          </div> */}
                         </div>
-
-                        {/* <div
-                          className="w-full bg-cover bg-center opacity-50"
-                          style={{
-                            backgroundImage: `url(https://randompicturegenerator.com/img/national-park-generator/gafcf50a35932f2f891a05a6ab56b9d2f9604880cb201c8e34222d6afdc01ba0483c80fa80a805cfe779c84f8d2d71002_640.jpg)`,
-                            backgroundSize: "cover",
-                            backgroundPosition: "center",
-                          }}
-                        ></div> */}
                       </Card>
                     ))}
-                  {/* <Card className="h-40 rounded-md">Box 1</Card>
-                  <Card className=" h-40 rounded-md">Box 1</Card>
-                  <Card className=" h-40 rounded-md">Box 1</Card>
-                  <Card className=" h-40 rounded-md">Box 1</Card>
-                  <Card className=" h-40 rounded-md">Box 1</Card> */}
                 </div>
               </CardDescription>
             </CardHeader>
@@ -178,31 +153,12 @@ export default function Events(props: { groupID: string }) {
                         <p className="mb-5 mt-5 text-md">
                           {formatDateFromMillis(date)}
                         </p>
-
-                        {/* <div
-                          className="w-full bg-cover bg-center opacity-50"
-                          style={{
-                            backgroundImage: `url(https://randompicturegenerator.com/img/national-park-generator/gafcf50a35932f2f891a05a6ab56b9d2f9604880cb201c8e34222d6afdc01ba0483c80fa80a805cfe779c84f8d2d71002_640.jpg)`,
-                            backgroundSize: "cover",
-                            backgroundPosition: "center",
-                          }}
-                        ></div> */}
                       </Card>
                     ))}
-                  {/* <Card className="h-40 rounded-md">Box 1</Card>
-                  <Card className=" h-40 rounded-md">Box 1</Card>
-                  <Card className=" h-40 rounded-md">Box 1</Card>
-                  <Card className=" h-40 rounded-md">Box 1</Card>
-                  <Card className=" h-40 rounded-md">Box 1</Card> */}
                 </div>
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-2">
-              {/* <div className="space-y-1">
-                  <Label htmlFor="current">Current password</Label>
-                  <Input id="current" type="password" />
-                </div> */}
-            </CardContent>
+            <CardContent className="space-y-2"></CardContent>
             <CardFooter></CardFooter>
           </Card>
         </TabsContent>
@@ -214,97 +170,25 @@ export default function Events(props: { groupID: string }) {
                 Past Events You Have Attended Will Appear Here
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-2">
-              {/* <div className="mt-5">
-                <div>
-                  <div className="flex flex-row items-start justify-start pb-5">
-                    <Card className="p-2">
-                      <div className="flex flex-col">
-                        <p>Shopping</p>
-                        <p>October 25, 2023 at 5:00:00 PM</p>
-                      </div>
-                    </Card>
-                  </div>
-                  <div>
-                    <div className="flex flex-row items-start justify-start pb-5">
-                      <Card className="p-2">
-                        <div className="flex flex-col">
-                          <p>Picnic</p>
-                          <p>October 15, 2023 at 8:00:00 PM</p>
-                        </div>
-                      </Card>
-                    </div>
-                  </div>
-                  <div>
-                    <div className="flex flex-row items-start justify-start pb-5">
-                      <Card className="p-2">
-                        <div className="flex flex-col">
-                          <p>Franks Birthday</p>
-                          <p>October 6, 2023 at 9:00:00 AM</p>
-                        </div>
-                      </Card>
-                    </div>
-                  </div>
-                  <div>
-                    <div className="flex flex-row items-start justify-start pb-5">
-                      <Card className="p-2">
-                        <div className="flex flex-col">
-                          <p>Picnic</p>
-                          <p>August 26, 2023 at 11:00:00 AM</p>
-                        </div>
-                      </Card>
-                    </div>
-                  </div>
-                </div>
-              </div> */}
-            </CardContent>
+            <CardContent className="space-y-2"></CardContent>
             <CardFooter></CardFooter>
           </Card>
         </TabsContent>
-      </Tabs>
-      <div className="mt-2">
+      </Tabs> */}
+
+      {/* CREATE EVENT */}
+      {/* <div className="mt-2">
         {!isOpen ? (
           <></>
         ) : (
           <>
-            <CreateEvent groupID={props.groupID} />
+            <CreateEvent groupID={props.group._id} />
           </>
         )}
         <Button onClick={() => setIsOpen(!isOpen)}>
           {isOpen ? "Close" : "Create Event"}
         </Button>
-      </div>
+      </div> */}
     </>
   );
 }
-
-// Upcoming Events
-// <div className="mt-5">
-// {events?.map(({ _id, name, date }) => (
-//   <div key={_id}>
-//     <div className="flex flex-row items-start justify-start pb-5">
-//       <Card className="p-2">
-//         <div className="flex items-center">
-//           <div className="m-1">
-//             <AiFillCheckCircle
-//               onClick={() => handleAttend(_id)}
-//               size="25"
-//             />
-//           </div>
-//           {/* <div className="m-1">
-//               <AiFillCloseCircle
-//                 onClick={() => handleNotAttend(_id)}
-//                 size="25"
-//               />
-//             </div> */}
-//         </div>
-
-//         <div className="flex flex-col">
-//           <p>{name}</p>
-//           <p>{formatDateFromMillis(date)}</p>
-//         </div>
-//       </Card>
-//     </div>
-//   </div>
-// ))}
-// </div>

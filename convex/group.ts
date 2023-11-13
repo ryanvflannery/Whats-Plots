@@ -177,3 +177,19 @@ export const addEventToGroup = mutation({
     ctx.db.replace(groupSelection._id, groupSelection);
   },
 });
+
+export const getGroupByID = query({
+  args: {
+    groupID: v.string(),
+  },
+  handler: async (ctx, args: { groupID: string }) => {
+    if (args.groupID) {
+      const groups = await ctx.db
+        .query("groups")
+        .filter((q) => q.eq(q.field("_id"), args.groupID))
+        .collect();
+
+      return groups;
+    }
+  },
+});
