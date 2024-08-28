@@ -1,3 +1,74 @@
+# What's Plots
+
+**What's Plots** is a web application designed to simplify event planning and coordination among groups of friends. If you've ever found yourself stuck in endless back-and-forths about what to do and when to do it, this app is here to help. By transforming vague plans into concrete, achievable events, What's Plots makes sure your social ideas become memorable experiences.
+
+## Features
+
+- **Group Event Planning:** Create and join groups, and within each group, members can input their availabilities and suggest potential activities.
+- **Automated Scheduling:** The app analyzes the group's input to determine the best possible time for an event, maximizing participation and minimizing conflicts.
+- **Streamlined Decision-Making:** Say goodbye to endless "What's the plan?" messages. What's Plots makes it easy for groups to quickly agree on a schedule that works for everyone.
+- **Strengthening Social Connections:** By ensuring that plans are not just discussed but actually happen, What's Plots fosters stronger bonds within your social circle.
+
+## How It Works
+
+1. **Create a Group:** Start by creating a group with your friends or colleagues.
+2. **Input Availability:** Each group member can input their availability and suggest activities they'd like to do.
+3. **Automated Scheduling:** The app processes the inputs to find the most suitable day and time for the proposed activities.
+4. **Finalize Plans:** Once the app suggests the best schedule, the group can quickly agree and lock in the plan.
+
+## Technology Stack
+
+- **Frontend:** React with TypeScript for a dynamic and responsive user interface.
+- **Backend:** Convex for efficient data management and cloud-based storage.
+- **User Authentication:** Clerk for seamless and secure user authentication.
+- **Styling:** Tailwind CSS for modern and responsive design.
+
+## Challenges We Overcame
+
+- **Learning Curve with Convex:** We adapted to Convex's unique approach to data management, which required a deep understanding of its libraries and components.
+- **Environment Setup:** Configuring Clerk for user authentication presented challenges, especially with outdated documentation, but we ensured a smooth setup for the team.
+- **Data Handling:** Understanding Convex's data model and storing functions as data required careful consideration and experimentation.
+
+## Accomplishments
+
+- **Leveraging Convex's Power:** We successfully harnessed Convex's innovative data management to drive the app's functionality.
+- **Seamless User Authentication:** Integrating Clerk enhanced the security and user experience of our platform.
+- **Team Growth:** Our primarily beginner team overcame significant challenges, mastering new tools and techniques along the way.
+
+## Future Plans
+
+- **AI-Driven Event Recommendations:** We plan to implement AI algorithms to provide personalized event suggestions based on users' locations and preferences.
+- **Payment Integration:** We'll integrate a payment system for purchasing tickets to paid events directly through the platform.
+- **Calendar Syncing:** Future updates will include syncing with popular calendars like Google Calendar and Outlook, allowing users to export and archive their plans.
+
+## Getting Started
+
+To get started with What's Plots, follow these steps:
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/whats-plots.git
+   ```
+2. Install dependencies:
+   ```bash
+   cd whats-plots
+   npm install
+   ```
+3. Run the development server:
+   ```bash
+   npm start
+   ```
+
+## Contributing
+
+We welcome contributions! If you'd like to contribute, please fork the repository and submit a pull request.
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+---
+
 # Convex + TypeScript + ESLint + Vite + React + Clerk + Tailwind + shadcn/ui
 
 This template provides a minimal setup to get Convex working, with TypeScript,
